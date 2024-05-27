@@ -10,6 +10,7 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
+  overflow: scroll;
   background-size: cover;
 }
 
