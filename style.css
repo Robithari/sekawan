@@ -1,183 +1,4 @@
-
-/* navbar */
-.custom-navbar {
-  background-color: #571ec9;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 5px;
-  padding-top: 0px;
-}
-
-.navbar-brand {
-  color: whitesmoke;
-  padding-left: 0px;
-  padding-right: 5px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-}
-
-.icon-img {
-  border-radius: 10px;
-}
-
-/* end navbar */
-
-/* slide */
-
-#carouselExampleDark {
-  margin-top: 5px;
-}
-
-.carousel-item {
-  margin-top: 0px;
-}
-
-.custom-carousel-image {
-  margin-top: 10px;
-  padding-left: 30px;
-  padding-right: 30px;
-  height: 150px;
-  width: 250px;
-  border-radius: 10%;
-  filter: drop-shadow(0px 3px 5px rgb(255, 7, 7, 7));
-}
-
-.carousel-item:hover {
-  background: #e1e1e1;
-  box-shadow: 0 0 0 2px #d0d0d0;
-}
-
-/* end slide */
-
-/* button */
-.container {
-  margin-top: 25px;
-  padding-left: 30px;
-  padding-right: 30px;
-  border-radius: 9px;
-}
-
-.custom-btn {
-  width: 100%;
-  height: 35px;
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background-color: #121b67;
-  padding: 0;
-  line-height: 1;
-  border-width: 2px;
-  border-style: solid;
-  border-color: #06713f;
-  box-shadow: 2px 2px 6px 2px rgba(255, 162, 1, 0.3);
-}
-
-/* end button */
-
-
-/* jadwal pertandingan */
-.container-box {
-  margin-top: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.countdown-box {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  font-size: 12px;
-  width: 180px;
-  background-color: #b1ffbe;
-  border-radius: 10px;
-  box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
-  -webkit-box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
-  -moz-box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
-  text-align: center;
-  margin: 0 auto;
-  font-weight: bold;
-  font-size: 9px;
-}
-
-.countdown-box hr {
-  margin-top: 1px;
-  margin-bottom: 1px;
-}
-
-.countdown-box h3,
-.countdown-box p {
-  margin: 0px 0;
-  font-size: 12px;
-  color: #333;
-}
-
-.waktu-mundur {
-  font-family: Tahoma, Geneva, sans-serif;
-  font-size: 9px;
-  word-spacing: 2px;
-  color: #FF0000;
-  font-weight: 700;
-  text-decoration: none;
-  font-style: normal;
-  font-variant: normal;
-  text-transform: none;
-}
-
-/*end jadwal pertandingan */
-
-/* berita terkini */
-.berita {
-  font-size: 20px;
-  color: #06713f;
-  font-weight: bold;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-bottom: -5px;
-  margin-top: -15px;
-
-}
-
-.informasi {
-  color: none;
-  padding-left: 20px;
-  padding-right: 20px;
-  border: none;
-  background: none;
-}
-
-.custom-image {
-  width: 75px;
-  /* Ukuran gambar mengikuti lebar parent element */
-  height: 75px;
-  /* Tinggi gambar disesuaikan agar proporsi tetap terjaga */
-}
-
-.custom-title {
-  border: none;
-  width: 100%;
-}
-
-
-.no-border {
-  border: none !important;
-  border-radius: 0 !important;
-  width: auto;
-  margin-top: 10px;
-
-}
-
-.card-body {
-  padding: 10px;
-  /* Tambahkan padding pada card-body */
-  width: 110%;
-}
-
-.card {
-  border: none;
-}
-
+/* Universal Styles */
 *,
 html {
   margin: 0;
@@ -189,35 +10,25 @@ body {
   margin: 0;
   padding: 0;
   background-size: cover;
-  overflow-x: hidden; /* Hanya sembunyikan overflow horizontal */
-  /* Hapus atau sesuaikan height jika diperlukan */
+  overflow-x: hidden;
 }
 
-/* navbar */
+/* Navbar */
 .custom-navbar {
   background-color: #571ec9;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 5px;
-  padding-top: 0px;
+  padding: 0 5px 5px 5px;
 }
 
 .navbar-brand {
   color: whitesmoke;
-  padding-left: 0px;
-  padding-right: 5px;
-  padding-bottom: 0px;
-  padding-left: 0px;
+  padding: 0 5px 0 0;
 }
 
 .icon-img {
   border-radius: 10px;
 }
 
-/* end navbar */
-
-/* slide */
-
+/* Carousel */
 #carouselExampleDark {
   margin-top: 5px;
 }
@@ -228,8 +39,7 @@ body {
 
 .custom-carousel-image {
   margin-top: 10px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 0 30px;
   height: 150px;
   width: 250px;
   border-radius: 10%;
@@ -241,13 +51,10 @@ body {
   box-shadow: 0 0 0 2px #d0d0d0;
 }
 
-/* end slide */
-
-/* button */
+/* Button */
 .container {
   margin-top: 25px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 0 30px;
   border-radius: 9px;
 }
 
@@ -262,16 +69,11 @@ body {
   background-color: #121b67;
   padding: 0;
   line-height: 1;
-  border-width: 2px;
-  border-style: solid;
-  border-color: #06713f;
+  border: 2px solid #06713f;
   box-shadow: 2px 2px 6px 2px rgba(255, 162, 1, 0.3);
 }
 
-/* end button */
-
-
-/* jadwal pertandingan */
+/* Jadwal Pertandingan */
 .container-box {
   margin-top: 15px;
   display: flex;
@@ -280,29 +82,24 @@ body {
 }
 
 .countdown-box {
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding: 0;
   font-size: 12px;
   width: 180px;
   background-color: #b1ffbe;
   border-radius: 10px;
   box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
-  -webkit-box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
-  -moz-box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
   text-align: center;
   margin: 0 auto;
   font-weight: bold;
-  font-size: 9px;
 }
 
 .countdown-box hr {
-  margin-top: 1px;
-  margin-bottom: 1px;
+  margin: 1px 0;
 }
 
 .countdown-box h3,
 .countdown-box p {
-  margin: 0px 0;
+  margin: 0;
   font-size: 12px;
   color: #333;
 }
@@ -314,61 +111,47 @@ body {
   color: #FF0000;
   font-weight: 700;
   text-decoration: none;
-  font-style: normal;
-  font-variant: normal;
-  text-transform: none;
 }
 
-/*end jadwal pertandingan */
-
-/* berita terkini */
+/* Berita Terkini */
 .berita {
   font-size: 20px;
   color: #06713f;
   font-weight: bold;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-bottom: -5px;
-  margin-top: -15px;
-
+  padding: 0 20px;
+  margin: -15px 0 -5px 0;
 }
 
 .informasi {
-  color: none;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 0 20px;
   border: none;
   background: none;
 }
 
 .custom-image {
-  width: 75px;
-  /* Ukuran gambar mengikuti lebar parent element */
-  height: 75px;
-  /* Tinggi gambar disesuaikan agar proporsi tetap terjaga */
+  width: 70px;
+  height: 70px;
+  border-radius: 6px;
 }
 
 .custom-title {
   border: none;
-  width: 100%;
+  width: 110%;
 }
-
 
 .no-border {
   border: none !important;
   border-radius: 0 !important;
   width: auto;
-  margin-top: 10px;
-
+  margin-top: 2px;
 }
 
 .card-body {
   padding: 10px;
-  /* Tambahkan padding pada card-body */
   width: 110%;
 }
 
 .card {
   border: none;
 }
-/* end berita terkini */
+
