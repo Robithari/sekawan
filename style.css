@@ -19,6 +19,10 @@ a {
 }
 
 /* Navbar */
+.navbar-toggler {
+  margin-top: 3px;
+  color: navy;
+}
 .custom-navbar {
   background-color: #571ec9;
   padding: 0 5px 5px 5px;
@@ -31,6 +35,7 @@ a {
 
 .icon-img {
   border-radius: 10px;
+margin-top: 3px;
 }
 
 /* Carousel */
@@ -182,4 +187,18 @@ a {
 
 .container {
   text-align: center;
+}
+
+
+.navbar-toggler-icon {
+  background-color: rgb(199, 184, 184);
+  border-radius: 5px;
+}
+
+.element.style {
+  color: #571ec9;
+}
+
+.navbar-toggler {
+  color: #571ec9;
 }
