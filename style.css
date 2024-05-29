@@ -3,14 +3,19 @@
 html {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+
 }
 
 body {
   margin: 0;
   padding: 0;
   background-size: cover;
-  overflow-x: hidden;
+  height: 100vh;
+
+}
+
+a {
+  text-decoration: none;
 }
 
 /* Navbar */
@@ -131,27 +136,50 @@ body {
 .custom-image {
   width: 70px;
   height: 70px;
-  border-radius: 6px;
+  border-radius: 5px;
 }
 
 .custom-title {
   border: none;
   width: 110%;
+  text-align: center;
 }
 
-.no-border {
-  border: none !important;
-  border-radius: 0 !important;
-  width: auto;
-  margin-top: 2px;
-}
+
 
 .card-body {
   padding: 10px;
   width: 110%;
+  border: none;
+  
 }
 
 .card {
+  display: flex;
+  justify-content: center;
   border: none;
+
 }
 
+.cek {
+  background-color: #06713f;
+}
+
+.card-img-top {
+  height: 100x;
+  width: 150px;
+  margin: auto;
+  display: block;
+
+}
+
+.container-artikel {
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+
+.container {
+  text-align: center;
+}

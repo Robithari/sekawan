@@ -141,57 +141,95 @@
     <!-- end button -->
 
     <hr>
+    <!-- berita  -->
     <di class="container-berita">
       <p class="berita">Berita Terkini</p>
-  </div>
-  <div class="informasi">
-    <div class="card mb-30 no-border">
-      <div class="row g-0 align-items-center">
-        <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
-          <img src="contoh.jpg" class="img-fluid rounded-start custom-image" alt="Sekawan FC Logo">
-        </div>
-        <div class="col-md-8 col-sm-8 col-8">
-          <div class="card-body">
-            <h6 class="card-title custom-title text-start mb-0">Pemain Sekawan FC sedang on firesedang on fire</h6>
-            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+      <div class="informasi">
+        <a href="sekawan-fc-vs-ukhwa-fc.html">
+          <div class="card mb-30 no-border">
+              <div class="row g-0 align-items-center">
+                  <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
+                      <img src="sekawanvsukhwa.jpg" class="custom-image" alt="Sekawan FC Logo">
+                  </div>
+                  <div class="col-md-8 col-sm-8 col-8">
+                      <div class="card-body">
+                          <h6 class="card-title custom-title text-start mb-0">Sekawan FC Raih Kemenangan Dramatis Atas Ukhwa FC dengan Skor 5-3 di Stadion BTB</h6>
+                          <p class="card-text"><small class="text-body-secondary">26 Mei 2024</small></p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </a>      
+        <div class="card mb-30 no-border">
+          <div class="row g-0 align-items-center">
+            <div class="col-md-4 col-sm-4 col-4" style="width: auto;">
+              <img src="SekawanFC.jpg" class="custom-image" alt="Sekawan FC Logo">
+            </div>
+            <div class="col-md-8 col-sm-8 col-8">
+              <div class="card-body">
+                <h6 class="card-title custom-title text-start mb-0">Pemain Sekawan FC sedang on fire</h6>
+                <p class="card-text"><small class="text-body-secondary">26 Mei 2024</small></p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="card mb-30 no-border">
-      <div class="row g-0 align-items-center">
-        <div class="col-md-4 col-sm-4 col-4" style="width: auto;">
-          <img src="SekawanFC.jpg" class="img-fluid rounded-start custom-image" alt="Sekawan FC Logo">
-        </div>
-        <div class="col-md-8 col-sm-8 col-8">
-          <div class="card-body">
-            <h6 class="card-title custom-title text-start mb-0">Pemain Sekawan FC sedang on fire</h6>
-            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+      <!-- end berita -->
+      <hr>
+      <!-- artikel  -->
+      <di class="container-berita">
+        <p class="berita">Artikel Terbaru</p>
+        <div class="informasi">
+          <div class="card mb-30 no-border">
+            <div class="row g-0 align-items-center">
+              <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
+                <img src="sekawanvsukhwa.jpg" class="custom-image" alt="Sekawan FC Logo">
+              </div>
+              <div class="col-md-8 col-sm-8 col-8">
+                <div class="card-body">
+                  <h6 class="card-title custom-title text-start mb-0">Sekawan FC Raih Kemenangan Dramatis Atas Ukhwa FC dengan Skor 5-3 di Stadion BTB</h6>
+                  <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-30 no-border">
+            <div class="row g-0 align-items-center">
+              <div class="col-md-4 col-sm-4 col-4" style="width: auto;">
+                <img src="SekawanFC.jpg" class="custom-image" alt="Sekawan FC Logo">
+              </div>
+              <div class="col-md-8 col-sm-8 col-8">
+                <div class="card-body">
+                  <h6 class="card-title custom-title text-start mb-0">Pemain Sekawan FC sedang on fire</h6>
+                  <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <script>
-      // Delete existing cookies
-      function deleteAllCookies() {
-          const cookies = document.cookie.split(";");
-          for (let i = 0; i < cookies.length; i++) {
+        <!-- end artikel -->
+
+        <script>
+          // Delete existing cookies
+          function deleteAllCookies() {
+            const cookies = document.cookie.split(";");
+            for (let i = 0; i < cookies.length; i++) {
               const cookie = cookies[i];
               const eqPos = cookie.indexOf("=");
               const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
               document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+            }
           }
-      }
 
-      // Prevent setting new cookies
-      Object.defineProperty(document, 'cookie', {
-          get: function() { return ''; },
-          set: function() {}
-      });
+          // Prevent setting new cookies
+          Object.defineProperty(document, 'cookie', {
+            get: function () { return ''; },
+            set: function () { }
+          });
 
-      // Call the function to delete cookies
-      deleteAllCookies();
-  </script>
+          // Call the function to delete cookies
+          deleteAllCookies();
+        </script>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
