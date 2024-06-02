@@ -1,10 +1,9 @@
-
 /* Universal Styles */
 *,
 html {
   margin: 0;
   padding: 0;
-
+  box-sizing: border-box; /* Tambahkan ini */
 }
 
 body {
@@ -12,22 +11,18 @@ body {
   padding: 0;
   background-size: cover;
   height: 100vh;
-
-
 }
 
 /* Navbar */
 .custom-navbar {
   background-color: #571ec9;
   padding: 0 5px 5px 5px;
+  display: flex; /* Tambahkan ini */
 }
 
 .navbar-brand {
   color: whitesmoke;
   padding: 0 5px 0 0;
-}
-
-.icon-img {
 }
 
 /* Carousel */
@@ -44,7 +39,7 @@ body {
   padding: 0 30px;
   height: 150px;
   width: 250px;
-  filter: drop-shadow(0px 3px 5px rgb(255, 7, 7, 7));
+  filter: drop-shadow(0px 3px 5px rgba(255, 7, 7, 0.7)); /* Perbaiki nilai rgba */
 }
 
 .carousel-item:hover {
@@ -52,14 +47,13 @@ body {
   box-shadow: 0 0 0 2px #d0d0d0;
 }
 
-
 /* Berita Terkini */
 .berita {
   font-size: 20px;
   color: #06713f;
   font-weight: bold;
   padding: 0 20px;
-  margin: -15px 0 -5px 0;
+  margin: 15px 0; /* Ubah margin menjadi positif */
 }
 
 .informasi {
@@ -79,20 +73,16 @@ body {
   text-align: center;
 }
 
-
-
 .card-body {
   padding: 10px;
-  width: 110%;
+  width: 100%; /* Ubah menjadi 100% */
   border: none;
-  
 }
 
 .card {
   display: flex;
   justify-content: center;
   border: none;
-
 }
 
 .cek {
@@ -100,39 +90,33 @@ body {
 }
 
 .card-img-top {
-  height: 100x;
+  height: 100px; /* Ubah nilai menjadi 100px */
   width: 150px;
   margin: auto;
   display: block;
-
 }
 
 .container-artikel {
   padding-left: 10px;
   padding-right: 10px;
-
 }
-
 
 .container {
   text-align: center;
 }
 
-
 /* foto */
 .container-foto {
-    margin-left: 10px;
-    margin-right: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 /* Styling for the image */
-.custom-image {
-    width: 100vw;
-    height: auto;
-    border-radius: 0px;
-
-  }
-  
+.custom-foto {
+  width: 100%; /* Ubah menjadi 100% */
+  height: auto;
+  border-radius: 0;
+}
