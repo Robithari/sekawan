@@ -1,5 +1,5 @@
 // Tetapkan tanggal pernikahan
-const weddingDate = new Date("2024-06-02T15:30:00");
+const weddingDate = new Date("2024-06-09T21:30:00");
 const endMatchDate = new Date(weddingDate.getTime() + 1.5 * 60 * 60 * 1000);
 
 // Perbarui hitungan mundur setiap detik
@@ -27,7 +27,7 @@ const updateCountdown = () => {
     } else if (endDistance <= 0) {
         // Jika sudah lebih dari 1,5 jam setelah tanggal pernikahan
         document.getElementById("countdown").innerHTML = "Pertandingan sudah berakhir";
-        clearInterval(updateInterval);
+        let updateInterval;
     }
 };
 
