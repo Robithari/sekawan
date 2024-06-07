@@ -30,8 +30,8 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: 50;
-  transition: opacity 0.9s ease;
+  opacity: 1;
+  transition: opacity 2s ease;
 }
 
 .loading-logo {
@@ -44,6 +44,8 @@ a {
   width: 500px;
   height: 300px;
 }
+
+
 
 /* END LOADING SCREEN ____________________________________________________________________________________________________________________________*/
 

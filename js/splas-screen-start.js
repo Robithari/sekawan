@@ -1,16 +1,25 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Cek apakah halaman sedang dimuat pertama kali atau di-refresh
-    if (performance.navigation.type === 1) {
-      // Halaman dimuat pertama kali, tampilkan loading screen
-      document.getElementById('loading-screen').style.display = 'flex';
+  // Cek apakah ini adalah kunjungan pertama ke halaman
+  var isFirstVisit = !sessionStorage.getItem('visited');
+
+  if (isFirstVisit) {
+    // Kunjungan pertama, tampilkan loading screen
+    document.getElementById('loading-screen').style.display = 'flex';
+    
+    // Tandai bahwa halaman telah dikunjungi
+    sessionStorage.setItem('visited', 'true');
+
+    // Setelah semua konten dimuat, mulai transisi loading screen
+    window.addEventListener('load', function () {
       setTimeout(function () {
         document.getElementById('loading-screen').style.opacity = 0;
         setTimeout(function () {
           document.getElementById('loading-screen').style.display = 'none';
-        }, 500); // Waktu untuk menunggu transisi selesai (0,5 detik)
-      }, 3000); // Waktu tampilan loading screen (3 detik)
-    } else {
-      // Halaman di-refresh, tidak perlu tampilkan loading screen
-      document.getElementById('loading-screen').style.display = 'none';
-    }
-  });
+        }, 2000); // Waktu untuk menunggu transisi selesai (0.9 detik, sesuai dengan CSS)
+      }, 4500); // Waktu tampilan loading screen setelah semua konten dimuat
+    });
+  } else {
+    // Bukan kunjungan pertama (refresh atau navigasi kembali), sembunyikan loading screen
+    document.getElementById('loading-screen').style.display = 'none';
+  }
+});
