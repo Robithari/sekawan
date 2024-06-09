@@ -167,9 +167,11 @@ a {
 
 /* Menghilangkan outline dan shadow saat focus dan hover */
 .no-outline:focus,
-.no-outline:hover {
+.no-outline:hover,
+.no-outline:active {
   outline: none !important;
   box-shadow: none !important;
+  border: none !important;
 }
 
 /* Menghilangkan default outline pada browser */
@@ -177,13 +179,16 @@ a {
   outline: none !important;
 }
 
-/* Tambahkan ini untuk memastikan box-shadow dan border juga dihilangkan */
+/* Pastikan semua keadaan diatur dengan benar */
+a.no-outline,
 a.no-outline:hover,
 a.no-outline:focus,
 a.no-outline:active {
+  outline: none !important;
   box-shadow: none !important;
   border: none !important;
 }
+
 
 
 /* END BUTTON ________________________________________________________________________________________________________________________________________*/
