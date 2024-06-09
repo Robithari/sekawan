@@ -81,7 +81,7 @@ a {
 }
 
 .custom-carousel-image {
-  padding: 0 10px;
+  padding: 0 25px;
   object-fit: cover;
   width: auto;
   height: 200px;
@@ -143,6 +143,7 @@ a {
 /* END BOX ___________________________________________________________________________________________________________________________________________*/
 
 /* BUTTON */
+/* BUTTON */
 .container-button {
   margin-top: 25px;
   padding: 0 30px;
@@ -161,9 +162,29 @@ a {
   background-color: #121b67;
   padding: 0;
   line-height: 1;
-  border: 2px solid #06713f;
   box-shadow: 2px 2px 6px 2px rgba(255, 162, 1, 0.3);
 }
+
+/* Menghilangkan outline dan shadow saat focus dan hover */
+.no-outline:focus,
+.no-outline:hover {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Menghilangkan default outline pada browser */
+.no-outline {
+  outline: none !important;
+}
+
+/* Tambahkan ini untuk memastikan box-shadow dan border juga dihilangkan */
+a.no-outline:hover,
+a.no-outline:focus,
+a.no-outline:active {
+  box-shadow: none !important;
+  border: none !important;
+}
+
 
 /* END BUTTON ________________________________________________________________________________________________________________________________________*/
 
@@ -260,3 +281,51 @@ a {
 /* END BERITA DAN ARTIKEL _________________________________________________________________________________________________________________________*/
 
 
+.kisi-card {
+  border-radius: 5px;
+  height: 190px;
+  border: 1px solid #ccc;
+}
+
+.kisi-card-img-top {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;}
+
+
+
+.kisi-card-title {
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 5px;
+}
+
+.kisi-card-text {
+  margin-top: auto;
+  font-size: 12px;
+  padding: 5px;
+}
+
+
+.g-4,
+.gy-4 {
+  --bs-gutter-y: 0, 5rem;
+}
+
+.container-kisi {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.row-cols-2>* {
+  flex: 0 0 auto;
+  width: 50%;
+  height: 200px;
+}
+
+.container-kisi .col {
+  padding: 5px;
+
+}
