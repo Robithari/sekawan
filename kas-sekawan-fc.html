@@ -29,25 +29,31 @@
     <!-- end icon -->
     <title> Sekawan FC - Kas Sekawan FC </title>
 
-
     <style>
+.responsive-iframe-container {
+  margin-top: 79px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: calc(200% - 20px);
+  padding: 10px;
+}
 
-        .responsive-iframe-container {
-            transform: scale(0.5);
-            transform-origin: top left;
-            width: 200%;
-            /* Atur ulang lebar menjadi dua kali ukuran asli */
-            height: 200%;
-            /* Atur ulang tinggi menjadi dua kali ukuran asli */
-            padding: 10px;
+.iframe-detail {
+  position: absolute;
+  top: -52px;
+  transform: scale(0.40);
+  transform-origin: top left;
+  width: calc(200%); /* Menghilangkan tambahan lebar dari padding */
+  height: calc(200%); /* Menghilangkan tambahan tinggi dari padding */
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+}
 
-        }
 
-        .iframe-detail {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
     </style>
 
 </head>
@@ -99,10 +105,10 @@
     <!-- FRAME -->
 
     <!-- FRAME -->
-        <div class="responsive-iframe-container">
-            <iframe class="iframe-detail"
-                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQI6CNi55BdIH0zWw4cVEfwS_KszBceHrUqILrjj75Wr7g6o8oj_xpWCtSytmQJjUEh2s59Spx-o09n/pubhtml?widget=true&amp;headers=false"></iframe>
-        </div>
+    <div class="responsive-iframe-container">
+        <iframe class="iframe-detail"
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQI6CNi55BdIH0zWw4cVEfwS_KszBceHrUqILrjj75Wr7g6o8oj_xpWCtSytmQJjUEh2s59Spx-o09n/pubhtml?widget=true&amp;headers=false"></iframe>
+    </div>
     <!-- END FRAME -->
 
     <!-- KUMPULAN SCRIPT JS -->
