@@ -540,13 +540,81 @@ a {
 }
 
 
-/* iframe */
+/* footer -----------------------------------------------------------------------------------------------------------------------------------*/
+/* CSS untuk footer */
+.custom-footer {
+  background-color: #3b44fc;
+  padding: 5px;
+  color: #ffffff;
+  font-size: 14px;
+  text-align: center;
+  bottom: 0;
+}
+
+
+/* Gaya tautan */
+.custom-footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.custom-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Gaya ikon media sosial */
+.social-icons {
+  margin-top: 10px;
+}
+
+.social-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+/* Gaya kolom */
+.footer-section {
+  padding: 0 10px;
+}
+
+/* Responsif pada perangkat berbeda */
+@media (max-width: 768px) {
+  .footer-section {
+      padding: 0;
+  }
+}
 
 
 
+.social-icons {
+  margin-top: 10px;
+}
 
+.social-icon {
+  display: inline-block;
+  margin: 0 10px;
+  font-size: 24px;
+}
 
+.icon-image {
+  width: 40px; /* Adjust the size as needed */
+  height: 40px; /* Adjust the size as needed */
+  border-radius: 9px;
+}
 
+.social-icon i {
+  transition: color 0.3s;
+}
 
+.social-icon:hover i {
+  color: #C13584; /* Warna saat ikon Instagram di-hover */
+}
 
+/* Warna khusus untuk ikon Instagram */
+.social-icon .fa-instagram {
+  color: #E1306C;
+}
 
+.social-icon:hover .fa-instagram {
+  color: #C13584;
+}
