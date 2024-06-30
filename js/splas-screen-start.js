@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(function () {
           document.getElementById('loading-screen').style.display = 'none';
         }, 2000); // Waktu untuk menunggu transisi selesai (0.9 detik, sesuai dengan CSS)
-      }, 4500); // Waktu tampilan loading screen setelah semua konten dimuat
+      }, 2700); // Waktu tampilan loading screen setelah semua konten dimuat
     });
   } else {
     // Bukan kunjungan pertama (refresh atau navigasi kembali), sembunyikan loading screen

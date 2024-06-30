@@ -16,11 +16,9 @@ a {
   color: black;
 }
 
+/* END Universal Styles */
 
-
-/* END Universal Styles ___________________________________________________________________________________________________________________________________ */
-
-/* LOADING SCREEN */
+/* LOADING SCREEN ...........................................................................................................................*/
 #loading-screen {
   position: fixed;
   top: 0;
@@ -48,20 +46,17 @@ a {
   height: 300px;
 }
 
+/* END LOADING SCREEN */
 
-
-/* END LOADING SCREEN ____________________________________________________________________________________________________________________________*/
-
-/* NAVBAR */
+/* NAVBAR ...................................................................................................................................*/
 .custom-navbar {
   background-color: #571ec9;
   padding: 0 3.5px 3.5px 3.5px;
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000; /* Untuk memastikan navbar tampil di atas konten lain */
+  z-index: 1000;
 }
-
 
 .navbar-brand {
   color: whitesmoke;
@@ -78,9 +73,18 @@ a {
   color: navy;
 }
 
-/* END NAVBAR ________________________________________________________________________________________________________________________________________ */
+.navbar-toggler {
+  color: #571ec9;
+}
 
-/* SLIDE */
+.navbar-toggler-icon {
+  background-color: rgb(199, 184, 184);
+  border-radius: 5px;
+}
+
+/* END NAVBAR */
+
+/* SLIDE ...................................................................................................................................*/
 #carouselExampleDark {
   margin-top: 50px;
 }
@@ -105,9 +109,9 @@ a {
   box-shadow: 0 0 0 2px #d0d0d0;
 }
 
-/* END SLIDE __________________________________________________________________________________________________________________________________________ */
+/* END SLIDE */
 
-/* BOX */
+/* BOX ................................................................................................................................*/
 .container-box {
   margin-top: 15px;
   display: flex;
@@ -146,12 +150,11 @@ a {
   font-weight: 700;
   text-decoration: none;
   margin-top: -2px;
-
 }
 
-/* END BOX ___________________________________________________________________________________________________________________________________________*/
+/* END BOX */
 
-/* BUTTON */
+/* BUTTON ..................................................................................................................................*/
 .container-button {
   margin-top: 25px;
   padding: 0 30px;
@@ -178,10 +181,9 @@ a {
   border-radius: 5px;
 }
 
+/* END BUTTON */
 
-/* END BUTTON ________________________________________________________________________________________________________________________________________*/
-
-/* BERITA DAN ARTIKEL */
+/* BERITA DAN ARTIKEL .................................................................................................................*/
 .berita {
   font-size: 20px;
   color: #06713f;
@@ -258,22 +260,9 @@ a {
   padding-right: 10px;
 }
 
-.navbar-toggler-icon {
-  background-color: rgb(199, 184, 184);
-  border-radius: 5px;
-}
+/* END BERITA DAN ARTIKEL */
 
-.element.style {
-  color: #571ec9;
-}
-
-.navbar-toggler {
-  color: #571ec9;
-}
-
-/* END BERITA DAN ARTIKEL _________________________________________________________________________________________________________________________*/
-
-
+/* KISI-CARD */
 .kisi-card {
   border-radius: 5px;
   height: 185px;
@@ -285,9 +274,8 @@ a {
   height: 100px;
   object-fit: cover;
   border-top-left-radius: 5px;
-  border-top-right-radius: 5px;}
-
-
+  border-top-right-radius: 5px;
+}
 
 .kisi-card-title {
   font-size: 12px;
@@ -300,7 +288,6 @@ a {
   font-size: 12px;
   padding: 5px;
 }
-
 
 .g-4,
 .gy-4 {
@@ -320,232 +307,21 @@ a {
 
 .container-kisi .col {
   padding: 5px;
-
 }
 
+/* END KISI-CARD */
+
+/* LOADING .........................................................................................................................*/
 
 
+/* END LOADING */
 
-
-/* loading */
-
-@keyframes move {
-  100% {
-      transform: translate3d(0, 0, 1px) rotate(360deg);
-  }
-}
-
-.background {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  background: #3E1E68;
-  overflow: hidden;
-}
-
-.background span {
-  width: 9vmin;
-  height: 9vmin;
-  border-radius: 9vmin;
-  backface-visibility: hidden;
-  position: absolute;
-  animation: move;
-  animation-duration: 48;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-
-.background span:nth-child(0) {
-  color: #FFACAC;
-  top: 52%;
-  left: 77%;
-  animation-duration: 12s;
-  animation-delay: -2s;
-  transform-origin: 22vw 25vh;
-  box-shadow: 18vmin 0 3.1361297294558588vmin currentColor;
-}
-.background span:nth-child(1) {
-  color: #583C87;
-  top: 59%;
-  left: 65%;
-  animation-duration: 19s;
-  animation-delay: -14s;
-  transform-origin: 22vw -24vh;
-  box-shadow: -18vmin 0 2.526200015627623vmin currentColor;
-}
-.background span:nth-child(2) {
-  color: #E45A84;
-  top: 35%;
-  left: 93%;
-  animation-duration: 11s;
-  animation-delay: -9s;
-  transform-origin: 6vw 3vh;
-  box-shadow: 18vmin 0 3.170706748866781vmin currentColor;
-}
-.background span:nth-child(3) {
-  color: #583C87;
-  top: 35%;
-  left: 16%;
-  animation-duration: 18s;
-  animation-delay: -7s;
-  transform-origin: -18vw 1vh;
-  box-shadow: 18vmin 0 2.3130708576523107vmin currentColor;
-}
-.background span:nth-child(4) {
-  color: #FFACAC;
-  top: 18%;
-  left: 61%;
-  animation-duration: 18s;
-  animation-delay: -2s;
-  transform-origin: -18vw -24vh;
-  box-shadow: -18vmin 0 3.2071422243554357vmin currentColor;
-}
-.background span:nth-child(5) {
-  color: #E45A84;
-  top: 55%;
-  left: 24%;
-  animation-duration: 16s;
-  animation-delay: -11s;
-  transform-origin: -18vw -4vh;
-  box-shadow: 18vmin 0 2.4110670543434134vmin currentColor;
-}
-.background span:nth-child(6) {
-  color: #583C87;
-  top: 22%;
-  left: 45%;
-  animation-duration: 14s;
-  animation-delay: -20s;
-  transform-origin: -18vw 16vh;
-  box-shadow: 18vmin 0 2.2583789587323335vmin currentColor;
-}
-.background span:nth-child(7) {
-  color: #583C87;
-  top: 60%;
-  left: 12%;
-  animation-duration: 6s;
-  animation-delay: -2s;
-  transform-origin: 22vw 19vh;
-  box-shadow: -18vmin 0 2.5478546012091634vmin currentColor;
-}
-.background span:nth-child(8) {
-  color: #FFACAC;
-  top: 55%;
-  left: 48%;
-  animation-duration: 24s;
-  animation-delay: -1s;
-  transform-origin: 9vw 9vh;
-  box-shadow: 18vmin 0 2.46604445104229vmin currentColor;
-}
-.background span:nth-child(9) {
-  color: #E45A84;
-  top: 19%;
-  left: 86%;
-  animation-duration: 12s;
-  animation-delay: -7s;
-  transform-origin: -15vw -11vh;
-  box-shadow: 18vmin 0 2.6948857425662727vmin currentColor;
-}
-.background span:nth-child(10) {
-  color: #FFACAC;
-  top: 95%;
-  left: 54%;
-  animation-duration: 6s;
-  animation-delay: -6s;
-  transform-origin: -3vw -23vh;
-  box-shadow: 18vmin 0 2.3386132053008812vmin currentColor;
-}
-.background span:nth-child(11) {
-  color: #FFACAC;
-  top: 97%;
-  left: 4%;
-  animation-duration: 25s;
-  animation-delay: -18s;
-  transform-origin: 9vw -20vh;
-  box-shadow: 18vmin 0 2.9505145587504726vmin currentColor;
-}
-.background span:nth-child(12) {
-  color: #FFACAC;
-  top: 82%;
-  left: 28%;
-  animation-duration: 7s;
-  animation-delay: -16s;
-  transform-origin: -12vw -9vh;
-  box-shadow: 18vmin 0 2.325634881993465vmin currentColor;
-}
-.background span:nth-child(13) {
-  color: #E45A84;
-  top: 32%;
-  left: 75%;
-  animation-duration: 14s;
-  animation-delay: -9s;
-  transform-origin: -11vw -12vh;
-  box-shadow: 18vmin 0 3.1804792780995967vmin currentColor;
-}
-.background span:nth-child(14) {
-  color: #E45A84;
-  top: 34%;
-  left: 69%;
-  animation-duration: 25s;
-  animation-delay: -14s;
-  transform-origin: 22vw 19vh;
-  box-shadow: -18vmin 0 2.3087011869187117vmin currentColor;
-}
-.background span:nth-child(15) {
-  color: #E45A84;
-  top: 89%;
-  left: 21%;
-  animation-duration: 25s;
-  animation-delay: -15s;
-  transform-origin: -6vw 8vh;
-  box-shadow: -18vmin 0 2.66461200852131vmin currentColor;
-}
-.background span:nth-child(16) {
-  color: #FFACAC;
-  top: 68%;
-  left: 27%;
-  animation-duration: 10s;
-  animation-delay: -15s;
-  transform-origin: 18vw -5vh;
-  box-shadow: -18vmin 0 3.1580983842623973vmin currentColor;
-}
-.background span:nth-child(17) {
-  color: #E45A84;
-  top: 74%;
-  left: 7%;
-  animation-duration: 13s;
-  animation-delay: -8s;
-  transform-origin: 23vw 3vh;
-  box-shadow: 18vmin 0 2.4879544108828506vmin currentColor;
-}
-.background span:nth-child(18) {
-  color: #583C87;
-  top: 90%;
-  left: 71%;
-  animation-duration: 15s;
-  animation-delay: -4s;
-  transform-origin: 3vw 17vh;
-  box-shadow: 18vmin 0 2.8691342802567354vmin currentColor;
-}
-.background span:nth-child(19) {
-  color: #E45A84;
-  top: 60%;
-  left: 19%;
-  animation-duration: 25s;
-  animation-delay: -5s;
-  transform-origin: -1vw 23vh;
-  box-shadow: 18vmin 0 2.3648863553801744vmin currentColor;
-}
-
-
-/* footer -----------------------------------------------------------------------------------------------------------------------------------*/
+/* footer ----------------------------------------------------------------------------------------------------*/
 /* CSS untuk footer */
 .custom-footer {
-  background-color: #3b44fc;
-  padding: 5px;
-  color: #ffffff;
+  background-color: #808080;
+  padding: 1px;
+  color: black;
   font-size: 14px;
   text-align: center;
   bottom: 0;
@@ -574,20 +350,21 @@ a {
 
 /* Gaya kolom */
 .footer-section {
-  padding: 0 10px;
+  font-size: 12px;
+  margin-top: 10px;
 }
 
 /* Responsif pada perangkat berbeda */
 @media (max-width: 768px) {
   .footer-section {
-      padding: 0;
+    padding: 0;
   }
 }
 
 
 
 .social-icons {
-  margin-top: 10px;
+  margin-top: -5px;
 }
 
 .social-icon {
@@ -597,8 +374,10 @@ a {
 }
 
 .icon-image {
-  width: 40px; /* Adjust the size as needed */
-  height: 40px; /* Adjust the size as needed */
+  width: 40px;
+  /* Adjust the size as needed */
+  height: 40px;
+  /* Adjust the size as needed */
   border-radius: 9px;
 }
 
@@ -607,7 +386,8 @@ a {
 }
 
 .social-icon:hover i {
-  color: #C13584; /* Warna saat ikon Instagram di-hover */
+  color: #C13584;
+  /* Warna saat ikon Instagram di-hover */
 }
 
 /* Warna khusus untuk ikon Instagram */
@@ -617,4 +397,14 @@ a {
 
 .social-icon:hover .fa-instagram {
   color: #C13584;
+}
+
+.footer-bottom {
+  font-size: 12px;
+  color: black;
+  font-weight: bold;
+}
+
+.section-isi {
+  margin-top: -5px;
 }
