@@ -433,3 +433,15 @@ a {
     display: block;
   }
 }
+
+/* end mobile onli */
+
+/* kunci layar */
+/* CSS untuk menetapkan tata letak konten dalam mode portrait */
+
+@media screen and (orientation: landscape) {
+  body {
+      transform: rotate(90deg); /* Mengatur tata letak konten untuk mode landscape */
+      transform-origin: top left; /* Menetapkan titik asal transformasi */
+  }
+}
