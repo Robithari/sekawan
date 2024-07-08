@@ -408,3 +408,28 @@ a {
 .section-isi {
   margin-top: -5px;
 }
+
+
+/* mobile onli */
+/* CSS untuk menyembunyikan konten di perangkat non-seluler */
+.mobile-only {
+  display: block;
+}
+
+.desktop-message {
+  display: none;
+  text-align: center;
+  margin-top: 20%;
+  font-size: 24px;
+  color: red;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+
+  .desktop-message {
+    display: block;
+  }
+}
