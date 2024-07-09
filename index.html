@@ -31,6 +31,20 @@
   <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
   <!-- end icon -->
+  <link rel="manifest" href="/manifest.json">
+  <!-- servis worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+          console.log('Service Worker terdaftar dengan scope:', registration.scope);
+        }, function(err) {
+          console.log('Pendaftaran Service Worker gagal:', err);
+        });
+      });
+    }
+  </script>
+    <!-- end servis worker -->
   <title>Sekawan FC</title>
 </head>
 
