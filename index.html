@@ -10,7 +10,6 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="css/loading.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
   <!-- icon -->
   <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
@@ -31,20 +30,22 @@
   <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
   <!-- end icon -->
-  <link rel="manifest" href="/manifest.json">
   <!-- servis worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-          console.log('Service Worker terdaftar dengan scope:', registration.scope);
-        }, function(err) {
-          console.log('Pendaftaran Service Worker gagal:', err);
-        });
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(function(registration) {
+            console.log('Service Worker terdaftar dengan scope:', registration.scope);
+          })
+          .catch(function(err) {
+            console.log('Pendaftaran Service Worker gagal:', err);
+          });
       });
     }
   </script>
-    <!-- end servis worker -->
+  
+  <!-- end servis worker -->
   <title>Sekawan FC</title>
 </head>
 
