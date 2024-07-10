@@ -3,8 +3,8 @@
     "short_name": "SekawanFC",
     "start_url": "/index.html",
     "display": "standalone",
-    "background_color": "#4a90e2",
-    "theme_color": "#4a90e2",
+    "background_color": "#000000",
+    "theme_color": "#000000",
     "icons": [
       {
         "src": "/icon/android-icon-192x192.png",
