@@ -1,5 +1,5 @@
 // Tetapkan tanggal pernikahan
-const weddingDate = new Date("2024-06-09T21:30:00");
+const weddingDate = new Date("2024-07-14T15:30:00");
 const endMatchDate = new Date(weddingDate.getTime() + 1.5 * 60 * 60 * 1000);
 
 // Perbarui hitungan mundur setiap detik
