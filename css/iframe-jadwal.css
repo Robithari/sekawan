@@ -1,9 +1,9 @@
 .responsive-iframe-container {
-    margin-top: 20px;
+    margin-top: 45px;
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: 100vh;
+    height: 80vh;
     /* Menggunakan 100% dari tinggi viewport */
     padding: 10px;
   }
