@@ -1,27 +1,172 @@
-.responsive-iframe-container {
-    margin-top: 50px;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    height: 100vh;
-    /* Menggunakan 100% dari tinggi viewport */
-    padding: 10px;
-  }
 
-  .iframe-detail {
-    position: absolute;
-    padding: 10px;
-    top: -1px;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-    transform-origin: top left;
-    width: calc(200%);
-    /* Menghilangkan tambahan lebar dari padding */
-    height: calc(140%);
-    /* Menghilangkan tambahan tinggi dari padding */
-    transform: scale(0.5);
-    /* Skala default */
-  }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    text-align: center; /* Rata tengah untuk header */
+}
+
+td {
+    text-align: left; /* Rata kiri untuk data */
+}
+
+/* Atur lebar kolom Pemasukan, Pengeluaran, dan Saldo secara konsisten */
+th:nth-child(3),
+td:nth-child(3),
+/* Kolom PEMASUKAN */
+th:nth-child(4),
+td:nth-child(4),
+/* Kolom PENGELUARAN */
+th:nth-child(5),
+td:nth-child(5)
+
+/* Kolom SALDO */
+    {
+    width: 20%;
+    white-space: nowrap;
+    /* Mencegah teks berpindah baris */
+    overflow: hidden;
+    /* Menghindari teks memanjang keluar kotak */
+    text-overflow: ellipsis;
+    /* Menambahkan ... di akhir teks panjang */
+}
+
+@media (max-width: 600px) {
+
+    table,
+    th,
+    td {
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 400px) {
+
+    table,
+    th,
+    td {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 4px 8px;
+    }
+}
+
+@media (orientation: portrait) {
+
+    table,
+    th,
+    td {
+        font-size: 9px;
+    }
+
+    th,
+    td {
+        padding: 4px 6px;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+        /* Kolom TANGGAL */
+        width: 20%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        /* Kolom KETERANGAN */
+        width: 40%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3),
+    /* Kolom PEMASUKAN */
+    th:nth-child(4),
+    td:nth-child(4),
+    /* Kolom PENGELUARAN */
+    th:nth-child(5),
+    td:nth-child(5)
+
+    /* Kolom SALDO */
+        {
+        width: 13.333%;
+    }
+}
+
+@media (orientation: landscape) {
+
+    table,
+    th,
+    td {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 4px 6px;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+        /* Kolom TANGGAL */
+        width: 15%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        /* Kolom KETERANGAN */
+        width: 50%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3),
+    /* Kolom PEMASUKAN */
+    th:nth-child(4),
+    td:nth-child(4),
+    /* Kolom PENGELUARAN */
+    th:nth-child(5),
+    td:nth-child(5)
+
+    /* Kolom SALDO */
+        {
+        width: 11.6667%;
+    }
+}
+
+.container-kas {
+    padding-right: 5px;
+    padding-left: 5px;
+}
