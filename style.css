@@ -31,19 +31,20 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: 1;
-  transition: opacity 2s ease;
+  opacity: 10;
+  transition: opacity 3s ease;
 }
 
 .loading-logo {
-  width: 300px;
-  height: 300px;
-  margin-bottom: 5px;
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .loading-wait {
-  width: 500px;
-  height: 300px;
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 /* END LOADING SCREEN */
@@ -420,3 +421,4 @@ padding-bottom: 2px;
 .section-isi {
   margin-top: -5px;
 }
+
