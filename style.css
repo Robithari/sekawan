@@ -31,14 +31,17 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: 1; /* Menggunakan opacity yang benar */
-  transition: opacity 3s ease; /* Transisi halus untuk fade out */
+  opacity: 1;
+  /* Menggunakan opacity yang benar */
+  transition: opacity 3s ease;
+  /* Transisi halus untuk fade out */
 }
 
 /* CSS untuk konten utama */
 #main-content {
   opacity: 0;
-  transition: opacity 3s ease; /* Transisi halus untuk fade in */
+  transition: opacity 3s ease;
+  /* Transisi halus untuk fade in */
 }
 
 /* Konten utama ditampilkan */
@@ -131,6 +134,7 @@ a {
   justify-content: center;
   align-items: center;
 }
+
 .underline-text {
   padding-top: 3px;
 }
@@ -140,9 +144,10 @@ a {
 }
 
 #event-data {
-margin-top: -6px;
-padding-bottom: 2px;
+  margin-top: -6px;
+  padding-bottom: 2px;
 }
+
 .countdown-box {
   padding: 0;
   font-size: 12px;
@@ -164,9 +169,11 @@ padding-bottom: 2px;
   margin: -3px 0;
   font-size: 11px;
 }
+
 .underline-text {
   color: black;
 }
+
 .waktu-mundur {
   font-family: Tahoma, Geneva, sans-serif;
   font-size: 9px;
@@ -344,22 +351,13 @@ padding-bottom: 2px;
 /* CSS untuk footer */
 .custom-footer {
   background-color: #808080;
-  padding: 1px;
   color: black;
   font-size: 14px;
   text-align: center;
-  bottom: 0;
 }
 
-
-/* Gaya tautan */
-.custom-footer a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.custom-footer a:hover {
-  text-decoration: underline;
+.footer-content {
+  padding-top: 0.1px;
 }
 
 /* Gaya ikon media sosial */
@@ -374,6 +372,7 @@ padding-bottom: 2px;
 
 /* Gaya kolom */
 .footer-section {
+  padding-top: 1px;
   font-size: 12px;
   margin-top: 10px;
 }
@@ -427,9 +426,23 @@ padding-bottom: 2px;
   font-size: 12px;
   color: black;
   font-weight: bold;
+  margin-top: -10px;
 }
 
-.section-isi {
+.footer-bottom p {
+  margin-top: 1px; /* Atur jarak atas */
+  margin-bottom: 1px; /* Atur jarak bawah */
+}
+
+.footer-telephone {
+  margin-top: 0px;
+}
+
+.footer-email {
   margin-top: -5px;
+  margin-bottom: 0rem;
 }
 
+.footer-email-link {
+  text-decoration: underline !important;
+}
