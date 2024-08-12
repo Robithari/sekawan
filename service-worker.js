@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = 'cache-v3'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v5'; // Ubah versi cache untuk memaksa update
 
 // Event 'install'
 self.addEventListener('install', function(event) {
@@ -8,6 +8,7 @@ self.addEventListener('install', function(event) {
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll([
         '/',
+        '/kas.html',
         '/index.html',
         '/styles.css',
         '/script.js',
