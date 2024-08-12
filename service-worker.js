@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = 'cache-v2'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v3'; // Ubah versi cache untuk memaksa update
 
 // Event 'install'
 self.addEventListener('install', function(event) {
@@ -28,10 +28,13 @@ self.addEventListener('activate', function(event) {
       return Promise.all(
         cacheNames.map(function(cacheName) {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
+            // Hapus cache yang tidak ada dalam whitelist
             return caches.delete(cacheName);
           }
         })
       );
+    }).catch(function(error) {
+      console.error('Failed to delete old caches:', error);
     })
   );
 });
@@ -39,13 +42,14 @@ self.addEventListener('activate', function(event) {
 // Event 'fetch'
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.match(event.request).then(function(response) {
-        var fetchPromise = fetch(event.request).then(function(networkResponse) {
+    caches.match(event.request).then(function(response) {
+      // Jika ada di cache, kembalikan dari cache
+      // Jika tidak ada di cache, ambil dari jaringan dan simpan ke cache
+      return response || fetch(event.request).then(function(networkResponse) {
+        return caches.open(CACHE_NAME).then(function(cache) {
           cache.put(event.request, networkResponse.clone());
           return networkResponse;
         });
-        return response || fetchPromise;
       });
     }).catch(function(error) {
       console.error('Failed to fetch:', error);
