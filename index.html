@@ -41,6 +41,36 @@
 </head>
 
 <body>
+
+      <!-- Notification element -->
+      <div id="notification">
+        <p>We have updated our site. Please <a href="#" id="clear-cache-link">click here</a> to clear your browser cache to see the latest changes.</p>
+        <button id="close-notification">Close</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Function to display notification
+        function showNotification() {
+            document.getElementById('notification').style.display = 'block';
+        }
+
+        // Event listener for clear cache link
+        document.getElementById('clear-cache-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            alert('To clear your browser cache, please follow these instructions:\n\n1. Open your browser settings.\n2. Go to Privacy and Security settings.\n3. Find the option to clear browsing data or cache.\n4. Clear the cache and reload the page.');
+        });
+
+        // Event listener for close button
+        document.getElementById('close-notification').addEventListener('click', function() {
+            document.getElementById('notification').style.display = 'none';
+        });
+
+        // Show notification on page load
+        window.onload = showNotification;
+    </script>
+
+    
   <div class="mobile-only">
     <!-- LOADING SCREEN -->
     <div id="loading-screen" class="background">
