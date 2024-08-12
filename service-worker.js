@@ -1,8 +1,5 @@
-// service-worker.js
+const CACHE_NAME = 'cache-v6'; // Ubah versi cache untuk memaksa update
 
-const CACHE_NAME = 'cache-v5'; // Ubah versi cache untuk memaksa update
-
-// Event 'install'
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
@@ -18,9 +15,9 @@ self.addEventListener('install', function(event) {
       console.error('Failed to open cache:', error);
     })
   );
+  self.skipWaiting(); // Memaksa service worker baru untuk segera aktif
 });
 
-// Event 'activate'
 self.addEventListener('activate', function(event) {
   var cacheWhitelist = [CACHE_NAME];
   
@@ -29,7 +26,6 @@ self.addEventListener('activate', function(event) {
       return Promise.all(
         cacheNames.map(function(cacheName) {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
-            // Hapus cache yang tidak ada dalam whitelist
             return caches.delete(cacheName);
           }
         })
@@ -38,14 +34,12 @@ self.addEventListener('activate', function(event) {
       console.error('Failed to delete old caches:', error);
     })
   );
+  self.clients.claim(); // Memastikan semua tab yang terbuka menggunakan SW yang baru
 });
 
-// Event 'fetch'
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request).then(function(response) {
-      // Jika ada di cache, kembalikan dari cache
-      // Jika tidak ada di cache, ambil dari jaringan dan simpan ke cache
       return response || fetch(event.request).then(function(networkResponse) {
         return caches.open(CACHE_NAME).then(function(cache) {
           cache.put(event.request, networkResponse.clone());
