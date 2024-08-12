@@ -354,6 +354,7 @@ a {
   color: black;
   font-size: 14px;
   text-align: center;
+  padding-bottom: 5px;
 }
 
 .footer-content {
@@ -431,7 +432,8 @@ a {
 
 .footer-bottom p {
   margin-top: 1px; /* Atur jarak atas */
-  margin-bottom: 1px; /* Atur jarak bawah */
+  margin-bottom: 0.5px; /* Atur jarak bawah */
+  padding-bottom: 2px;
 }
 
 .footer-telephone {
@@ -445,4 +447,8 @@ a {
 
 .footer-email-link {
   text-decoration: underline !important;
+}
+
+.footer-buttom-dibuat {
+  padding-bottom: 5px;
 }
