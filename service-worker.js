@@ -1,11 +1,10 @@
-const CACHE_NAME = 'cache-v7'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v1'; // Ubah versi cache untuk memaksa update
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll([
         '/',
-        '/kas.html',
         '/index.html',
         '/styles.css',
         '/script.js',
