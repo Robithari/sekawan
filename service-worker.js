@@ -1,24 +1,13 @@
-const CACHE_NAME = 'cache-v1'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v2'; // Ubah versi cache untuk memaksa update
 
 self.addEventListener('install', function(event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll([
-        '/',
-        '/styles.css',
-        '/script.js',
-        // Tambahkan file lain yang perlu dicache
-      ]);
-    }).catch(function(error) {
-      console.error('Failed to open cache:', error);
-    })
-  );
+  // Tidak ada file yang dicache selama proses instalasi
   self.skipWaiting(); // Memaksa service worker baru untuk segera aktif
 });
 
 self.addEventListener('activate', function(event) {
   var cacheWhitelist = [CACHE_NAME];
-  
+
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
@@ -37,6 +26,7 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', function(event) {
   const url = new URL(event.request.url);
+
   if (url.pathname.startsWith('/api/')) {
     // Bypass service worker for API requests
     event.respondWith(fetch(event.request));
@@ -50,17 +40,9 @@ self.addEventListener('fetch', function(event) {
       })
     );
   } else {
-    event.respondWith(
-      caches.match(event.request).then(function(response) {
-        return response || fetch(event.request).then(function(networkResponse) {
-          return caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
-          });
-        });
-      }).catch(function(error) {
-        console.error('Failed to fetch:', error);
-      })
-    );
+    // Selalu mengambil file dari jaringan, tidak menyimpan cache
+    event.respondWith(fetch(event.request).catch(function(error) {
+      console.error('Failed to fetch:', error);
+    }));
   }
 });
