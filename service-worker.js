@@ -1,11 +1,10 @@
-const CACHE_NAME = 'cache-v1'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v7'; // Ubah versi cache untuk memaksa update
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll([
         '/',
-        '/index.html',
         '/styles.css',
         '/script.js',
         // Tambahkan file lain yang perlu dicache
@@ -40,6 +39,9 @@ self.addEventListener('fetch', function(event) {
   const url = new URL(event.request.url);
   if (url.pathname.startsWith('/api/')) {
     // Bypass service worker for API requests
+    event.respondWith(fetch(event.request));
+  } else if (url.pathname === '/kas.html' || url.pathname === '/index.html') {
+    // Bypass caching for specific files
     event.respondWith(fetch(event.request));
   } else {
     event.respondWith(
