@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cache-v2'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v1'; // Ubah versi cache untuk memaksa update
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
