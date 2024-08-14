@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cache-v6'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v7'; // Ubah versi cache untuk memaksa update
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -38,16 +38,22 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request).then(function(networkResponse) {
-        return caches.open(CACHE_NAME).then(function(cache) {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
+  const url = new URL(event.request.url);
+  if (url.pathname.startsWith('/api/')) {
+    // Bypass service worker for API requests
+    event.respondWith(fetch(event.request));
+  } else {
+    event.respondWith(
+      caches.match(event.request).then(function(response) {
+        return response || fetch(event.request).then(function(networkResponse) {
+          return caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
         });
-      });
-    }).catch(function(error) {
-      console.error('Failed to fetch:', error);
-    })
-  );
+      }).catch(function(error) {
+        console.error('Failed to fetch:', error);
+      })
+    );
+  }
 });
