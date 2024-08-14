@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cache-v7'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v2'; // Ubah versi cache untuk memaksa update
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -41,8 +41,14 @@ self.addEventListener('fetch', function(event) {
     // Bypass service worker for API requests
     event.respondWith(fetch(event.request));
   } else if (url.pathname === '/kas.html' || url.pathname === '/index.html') {
-    // Bypass caching for specific files to ensure they are always up-to-date
-    event.respondWith(fetch(event.request));
+    // Always fetch the latest version from the network for specific files
+    event.respondWith(
+      fetch(event.request).then(function(networkResponse) {
+        return networkResponse;
+      }).catch(function(error) {
+        console.error('Failed to fetch:', error);
+      })
+    );
   } else {
     event.respondWith(
       caches.match(event.request).then(function(response) {
