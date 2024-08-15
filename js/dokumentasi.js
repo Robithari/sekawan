@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 link.textContent = value; // Tampilkan teks dari 'LINK FOTO'
                                 link.target = '_blank'; // Buka link di tab baru
                                 link.rel = 'noopener noreferrer'; // Untuk keamanan
+                                link.classList.add('purple-link'); // Tambahkan kelas CSS untuk warna ungu
                                 cell.appendChild(link);
                             } else {
                                 cell.textContent = value || '-';
@@ -53,3 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error fetching data:', error);
         });
 });
+
+// Tambahkan CSS untuk warna ungu
+const style = document.createElement('style');
+style.textContent = `
+    .purple-link {
+        color: purple;
+    }
+`;
+document.head.appendChild(style);
