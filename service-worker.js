@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cache-v2'; // Ubah versi cache untuk memaksa update
+const CACHE_NAME = 'cache-v2'; // Versi cache, sesuaikan jika diperlukan
 
 self.addEventListener('install', function(event) {
   // Tidak ada file yang dicache selama proses instalasi
@@ -25,24 +25,14 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  const url = new URL(event.request.url);
-
-  if (url.pathname.startsWith('/api/')) {
-    // Bypass service worker for API requests
-    event.respondWith(fetch(event.request));
-  } else if (url.pathname === '/kas.html' || url.pathname === '/index.html') {
-    // Always fetch the latest version from the network for specific files
-    event.respondWith(
-      fetch(event.request).then(function(networkResponse) {
+  // Always fetch the latest version from the network for all files
+  event.respondWith(
+    fetch(event.request)
+      .then(function(networkResponse) {
         return networkResponse;
-      }).catch(function(error) {
+      })
+      .catch(function(error) {
         console.error('Failed to fetch:', error);
       })
-    );
-  } else {
-    // Selalu mengambil file dari jaringan, tidak menyimpan cache
-    event.respondWith(fetch(event.request).catch(function(error) {
-      console.error('Failed to fetch:', error);
-    }));
-  }
+  );
 });
