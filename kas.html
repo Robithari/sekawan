@@ -2,7 +2,16 @@
 <html lang="en">
 
 <head>
+  <!-- google analitic -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K8RETE6TH7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
+    gtag('config', 'G-K8RETE6TH7');
+  </script>
+  <!-- end google analitic -->
 
   <meta property="og:title" content="Kas Sekawan FC" />
   <meta property="og:description" content="Laporan Kas Sekawan FC Realtime" />
@@ -31,94 +40,95 @@
   <div class="mobile-only">
     <!-- LOADING SCREEN -->
     <div id="loading-screen" class="background">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
-        <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
+      <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
     </div>
     <!-- END LOADING SCREEN -->
     <div id="main-content" style="display: none;">
 
 
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg custom-navbar">
-    <div class="container-fluid">
-      <a class="navbar-brand text-white fw-bold" href="index.html">
-        <div class="d-flex align-items-center">
-          <img src="SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
-          <span class="ml-2" style="margin-left: 5px;">SEKAWAN FC</span>
-        </div>
-      </a>
+      <!-- NAVBAR -->
+      <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container-fluid">
+          <a class="navbar-brand text-white fw-bold" href="index.html">
+            <div class="d-flex align-items-center">
+              <img src="SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
+              <span class="ml-2" style="margin-left: 5px;">SEKAWAN FC</span>
+            </div>
+          </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active text-white" aria-current="page" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="profil.html">Profil</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Informasi
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item text-dark" href="proses.html">Berita</a></li>
-              <li><a class="dropdown-item text-dark" href="proses.html">Artikel</a></li>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-white" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="profil.html">Profil</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Informasi
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item text-dark" href="proses.html">Berita</a></li>
+                  <li><a class="dropdown-item text-dark" href="proses.html">Artikel</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled text-white" aria-disabled="true">Contact</a>
+              </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled text-white" aria-disabled="true">Contact</a>
-          </li>
-        </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVBAR -->
+      <!-- DATA KAS -->
+      <div class="container-kas">
+        <h5>DATA KAS</h5>
+        <div class="table-container">
+          <table id="data-table">
+            <thead>
+              <tr>
+                <th>TANGGAL</th>
+                <th>KETERANGAN</th>
+                <th>PEMASUKAN</th>
+                <th>PENGELUARAN</th>
+                <th>SALDO/SISA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Data akan ditampilkan di sini -->
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </nav>
-  <!-- END NAVBAR -->
-   <!-- DATA KAS -->
-  <div class="container-kas">
-    <h5>DATA KAS</h5>
-    <div class="table-container">
-      <table id="data-table">
-        <thead>
-          <tr>
-            <th>TANGGAL</th>
-            <th>KETERANGAN</th>
-            <th>PEMASUKAN</th>
-            <th>PENGELUARAN</th>
-            <th>SALDO/SISA</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data akan ditampilkan di sini -->
-        </tbody>
-      </table>
-    </div>
-  </div>
       <!-- FOOTER -->
       <footer class="custom-footer">
         <div class="footer-content">
@@ -152,16 +162,16 @@
       <!-- END FOOTER -->
 
 
-        <script>
-          window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=2tlFh9Em-8BrR_JjPx3aQ-sDEIKEdwQg10yiCU4zf1Jm29nmzTv4VR3T4bxmPw6fVV-SfjjVjaVaquOJGIwOrRDz7Gy6GvlWm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnDQ3-UM55TGsEMEgUfElc6Of-3K5ZS9UOYTk0rvMmc-MD610LTi-I75zKPOseyOUEg7-xfGCRrZHesQ3EUd0MNPacrY_wOGqBA&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
+      <script>
+        window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=2tlFh9Em-8BrR_JjPx3aQ-sDEIKEdwQg10yiCU4zf1Jm29nmzTv4VR3T4bxmPw6fVV-SfjjVjaVaquOJGIwOrRDz7Gy6GvlWm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnDQ3-UM55TGsEMEgUfElc6Of-3K5ZS9UOYTk0rvMmc-MD610LTi-I75zKPOseyOUEg7-xfGCRrZHesQ3EUd0MNPacrY_wOGqBA&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
       </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
-  <script src="js/kas.js"></script>
-  <script src="js/splas-screen-start.js"></script>
-</div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+      <script src="js/kas.js"></script>
+      <script src="js/splas-screen-start.js"></script>
+    </div>
 </body>
 
 </html>
