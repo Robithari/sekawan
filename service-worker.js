@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cache-v2'; // Versi cache, sesuaikan jika diperlukan
+const CACHE_NAME = 'cache-v3'; // Versi cache, sesuaikan jika diperlukan
 
 self.addEventListener('install', function(event) {
   // Tidak ada file yang dicache selama proses instalasi
