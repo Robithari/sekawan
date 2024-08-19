@@ -398,7 +398,7 @@
       <!-- Pendaftaran Service Worker -->
       <script>
         if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('js/firebase-messaging-sw.js')
+          navigator.serviceWorker.register('/firebase-messaging-sw.js')
             .then(function(registration) {
               console.log('Service Worker terdaftar dengan cakupan:', registration.scope);
             }).catch(function(error) {
