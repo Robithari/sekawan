@@ -2,6 +2,11 @@
 <html lang="en" translate="no">
 
 <head>
+  <!-- Firebase SDK and Messaging -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-messaging.js"></script>
+  
   <!-- Google Analytics and Firebase -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
   <script>
@@ -9,7 +14,7 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    // Configure Firebase Analytics only
+    // Configure Firebase Analytics
     gtag('config', 'G-CD0MHD1RBP');
   </script>
 
@@ -54,10 +59,6 @@
   <div class="mobile-only">
     <!-- LOADING SCREEN -->
     <div id="loading-screen" class="background">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
       <span></span>
       <span></span>
       <span></span>
@@ -343,49 +344,76 @@
         </script>
       </div>
       <!-- END SCRIPTS -->
-    </div>
 
-    <!-- Firebase and Event Tracking -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
+      <!-- Firebase and FCM Setup -->
+      <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-messaging.js";
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
-        authDomain: "sekawan-fc-427414.firebaseapp.com",
-        projectId: "sekawan-fc-427414",
-        storageBucket: "sekawan-fc-427414.appspot.com",
-        messagingSenderId: "399174955835",
-        appId: "1:399174955835:web:c681f8681c474420e8fd1e",
-        measurementId: "G-CD0MHD1RBP"
-      };
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+          authDomain: "sekawan-fc-427414.firebaseapp.com",
+          projectId: "sekawan-fc-427414",
+          storageBucket: "sekawan-fc-427414.appspot.com",
+          messagingSenderId: "399174955835",
+          appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+          measurementId: "G-CD0MHD1RBP"
+        };
 
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-    </script>
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const messaging = getMessaging(app);
 
-    <!-- Custom Event (outside the module) -->
-    <script>
-      gtag('event', 'custom_test_event', {
-        'event_category': 'testing',
-        'event_label': 'test_label'
-      });
-    </script>
-    <!-- end firebase -->
-
-    <!-- Service Worker -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-            console.log('Service Worker registered with scope:', registration.scope);
-          }, function(error) {
-            console.log('Service Worker registration failed:', error);
+        // Request permission to send notifications
+        function requestPermission() {
+          console.log('Requesting notification permission...');
+          Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+              console.log('Notification permission granted.');
+              // Get the token
+              getToken(messaging, { vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeK' }).then((currentToken) => {
+                if (currentToken) {
+                  console.log('FCM Registration Token:', currentToken);
+                  // Send the token to the server or store it as needed
+                } else {
+                  console.log('No registration token available. Request permission to generate one.');
+                }
+              }).catch((err) => {
+                console.error('An error occurred while retrieving token. ', err);
+              });
+            } else {
+              console.log('Notification permission denied.');
+            }
           });
+        }
+
+        // Listen for incoming messages
+        onMessage(messaging, (payload) => {
+          console.log('Message received. ', payload);
+          // Customize notification here
         });
-      }
-    </script>
-    <!-- end service worker -->
+
+        // Call the request permission function on page load
+        requestPermission();
+      </script>
+
+      <!-- Service Worker Registration -->
+      <script>
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then(function(registration) {
+              console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function(error) {
+              console.error('Service Worker registration failed:', error);
+            });
+        }
+      </script>
+
+    </div>
   </div>
 </body>
 
