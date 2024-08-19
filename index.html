@@ -69,8 +69,6 @@
       <span></span>
       <span></span>
       <span></span>
-      <span></span>
-      <span></span>
       <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
       <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
     </div>
@@ -334,7 +332,6 @@
         <script src="js/hapus-cookie.js"></script>
         <script src="js/splas-screen-start.js"></script>
         <script src="js/kunci-layar.js"></script>
-        <script src="js/firebase-messaging-sw.js"></script>
 
         <script src="js/data-pertandingan.js"></script>
         <script>
@@ -401,7 +398,7 @@
       <!-- Pendaftaran Service Worker -->
       <script>
         if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/firebase-messaging-sw.js')
+          navigator.serviceWorker.register('js/firebase-messaging-sw.js')
             .then(function(registration) {
               console.log('Service Worker terdaftar dengan cakupan:', registration.scope);
             }).catch(function(error) {
