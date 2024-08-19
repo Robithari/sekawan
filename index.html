@@ -2,31 +2,35 @@
 <html lang="en" translate="no">
 
 <head>
-  <!-- google analitic -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K8RETE6TH7"></script>
+  <!-- Google Analytics and Firebase -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
+    // Configure Firebase Analytics
+    gtag('config', 'G-CD0MHD1RBP');
+    // Optionally configure Google Analytics as well
     gtag('config', 'G-K8RETE6TH7');
   </script>
-  <!-- end google analitic -->
-  <!-- hapus cach -->
+
+  <!-- Cache Control -->
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="-5">
-  <!-- end hapus cach -->
-  <!-- kunci rotasi -->
+
+  <!-- Viewport and Meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <!-- end kunci rotasi -->
   <meta charset="UTF-8">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="css/loading.css" />
   <meta name="google" content="notranslate">
-  <!-- icon -->
+
+  <!-- Bootstrap and Styles -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/loading.css">
+
+  <!-- Icons -->
   <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="icon/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="icon/apple-icon-72x72.png">
@@ -44,10 +48,8 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
-  <!-- end icon -->
+
   <title>Sekawan FC</title>
-
-
 </head>
 
 <body>
@@ -394,9 +396,7 @@
       <!-- END FOOTER -->
       <!-- KUMPULAN SCRIPT JS -->
       <div class="container-js">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-          crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="js/pencarian.js"></script>
         <script src="js/hapus-cookie.js"></script>
         <script src="js/splas-screen-start.js"></script>
@@ -409,56 +409,37 @@
       <!-- END KUMPULAN SCRIPT JS -->
     </div>
     <!-- firebase -->
-<!-- Firebase Configuration -->
-<!-- Firebase Configuration -->
-<!-- Load gtag.js for Firebase Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
 
-  gtag('config', 'G-CD0MHD1RBP');
-</script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+        authDomain: "sekawan-fc-427414.firebaseapp.com",
+        projectId: "sekawan-fc-427414",
+        storageBucket: "sekawan-fc-427414.appspot.com",
+        messagingSenderId: "399174955835",
+        appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+        measurementId: "G-CD0MHD1RBP"
+      };
 
-<!-- Firebase Configuration -->
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
-    authDomain: "sekawan-fc-427414.firebaseapp.com",
-    projectId: "sekawan-fc-427414",
-    storageBucket: "sekawan-fc-427414.appspot.com",
-    messagingSenderId: "399174955835",
-    appId: "1:399174955835:web:c681f8681c474420e8fd1e",
-    measurementId: "G-CD0MHD1RBP"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  // Custom event to test Firebase Analytics
-  gtag('event', 'custom_test_event', {
-    'event_category': 'testing',
-    'event_label': 'test_label'
-  });
-</script>
-
-
-
+      // Custom event to test Firebase Analytics
+      gtag('event', 'custom_test_event', {
+        'event_category': 'testing',
+        'event_label': 'test_label'
+      });
+    </script>
     <!-- end firebase -->
     <!-- servis worker -->
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
             console.log('Service Worker registered with scope:', registration.scope);
-          }, function (error) {
+          }, function(error) {
             console.log('Service Worker registration failed:', error);
           });
         });
