@@ -1,9 +1,10 @@
 // firebase-messaging-sw.js
+
 importScripts('https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js');
 
 // Inisialisasi Firebase di Service Worker
-firebase.initializeApp({
+const firebaseConfig = {
   apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
   authDomain: "sekawan-fc-427414.firebaseapp.com",
   projectId: "sekawan-fc-427414",
@@ -11,17 +12,18 @@ firebase.initializeApp({
   messagingSenderId: "399174955835",
   appId: "1:399174955835:web:c681f8681c474420e8fd1e",
   measurementId: "G-CD0MHD1RBP"
-});
+};
 
-// Dapatkan instance Firebase Messaging untuk menangani pesan latar belakang
+firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
+// Menangani pesan latar belakang
 messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Pesan latar belakang diterima ', payload);
-  // Sesuaikan notifikasi latar belakang di sini
-  const notificationTitle = 'Latar Belakang Notifikasi';
+  console.log('Pesan latar belakang diterima: ', payload);
+  // Kustomisasi notifikasi di sini
+  const notificationTitle = 'Background Message Title';
   const notificationOptions = {
-    body: payload.notification.body,
+    body: 'Background Message body.',
     icon: '/firebase-logo.png'
   };
 
