@@ -369,7 +369,7 @@
         Notification.requestPermission().then((permission) => {
           if (permission === 'granted') {
             console.log('Izin notifikasi diberikan.');
-            getToken(messaging, { vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1Qzeme' }).then((currentToken) => {
+            getToken(messaging, { vapidKey: 'dc69543d8f9e5d46dd68f45551745638ccbe0f0b' }).then((currentToken) => {
               if (currentToken) {
                 console.log('Token Pendaftaran FCM:', currentToken);
               } else {
