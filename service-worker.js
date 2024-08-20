@@ -4,7 +4,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('activate', function(event) {
-  // Menghapus semua cache yang ada kecuali cache tertentu
+  // Menghapus semua cache yang ada
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
@@ -20,12 +20,7 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  // Mengecualikan firebase-messaging-sw.js dari proses caching
-  if (event.request.url.includes('firebase-messaging-sw.js')) {
-    return;
-  }
-
-  // Proses permintaan fetch normal
+  // Always fetch the latest version from the network for all requests
   event.respondWith(
     fetch(event.request)
       .then(function(networkResponse) {
