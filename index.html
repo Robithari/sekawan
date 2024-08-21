@@ -69,14 +69,12 @@
       <span></span>
       <span></span>
       <span></span>
-      <span></span>
-      <span></span>
       <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
       <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
     </div>
     <!-- END LOADING SCREEN -->
 
-    <div id="main-content" style="display: none;"> <!-- Loading Proses -->
+    <div id="main-content" style="display: none;">
       <!-- NAVBAR -->
       <nav class="navbar navbar-expand-lg custom-navbar">
         <div class="container-fluid">
@@ -306,8 +304,8 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p class="footer-buttom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
-          <p class="footer-buttom-dibuat">Dibuat oleh BithDev</p>
+          <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
+          <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
         </div>
       </footer>
       <!-- END FOOTER -->
@@ -320,6 +318,7 @@
         <script src="js/splas-screen-start.js"></script>
         <script src="js/kunci-layar.js"></script>
         <script src="js/data-pertandingan.js"></script>
+        <script type="module" src="firebase-config.js"></script>
         <script>
           window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
         </script>
@@ -327,32 +326,13 @@
       <!-- END SCRIPTS -->
     </div>
 
-    <!-- Firebase -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-analytics.js";
-
-      const firebaseConfig = {
-        apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
-        authDomain: "sekawan-fc-427414.firebaseapp.com",
-        projectId: "sekawan-fc-427414",
-        storageBucket: "sekawan-fc-427414.appspot.com",
-        messagingSenderId: "399174955835",
-        appId: "1:399174955835:web:c681f8681c474420e8fd1e",
-        measurementId: "G-CD0MHD1RBP"
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-    </script>
-
     <!-- Service Worker -->
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
             console.log('Service Worker registered with scope:', registration.scope);
-          }, function(error) {
+          }, function (error) {
             console.log('Service Worker registration failed:', error);
           });
         });
