@@ -1,6 +1,6 @@
 // Mengimpor modul yang dibutuhkan dari Firebase SDK
-importScripts('https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/10.12.3/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js');
 
 // Konfigurasi Firebase untuk aplikasi Anda
 const firebaseConfig = {
