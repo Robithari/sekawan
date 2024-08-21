@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   };
 
+  // === Tambahkan Kode Pengujian di Sini ===
+  console.log('Test log'); // Ini harus terlihat di konsol
+  console.log('API Response: Test'); // Ini harus disembunyikan di konsol jika modifikasi berhasil
+  // =====================================
+
   // Fungsi untuk memeriksa apakah API siap
   function checkAPIStatus() {
     if (!apiUrl) {
