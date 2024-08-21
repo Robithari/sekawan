@@ -1,13 +1,13 @@
 // Mengimpor modul yang dibutuhkan dari Firebase SDK
 importScripts('https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js');
+importScripts('https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging.js');
 
 // Konfigurasi Firebase untuk aplikasi Anda
 const firebaseConfig = {
   apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
   authDomain: "sekawan-fc-427414.firebaseapp.com",
   projectId: "sekawan-fc-427414",
-  storageBucket: "sekawan-fc-427414.appspot.com",
+  storageBucket: "sekawan-fc-427414",
   messagingSenderId: "399174955835",
   appId: "1:399174955835:web:c681f8681c474420e8fd1e",
   measurementId: "G-CD0MHD1RBP"
@@ -46,8 +46,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   // List of URLs to allow caching (add other files if necessary)
   const urlsToCache = [
-    'https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js',
-    'https://www.gstatic.com/firebasejs/10.12.3/firebase-messaging.js',
+    'https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js',
+    'https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging.js',
     '/firebase-messaging-sw.js'  // Service worker file
   ];
 
