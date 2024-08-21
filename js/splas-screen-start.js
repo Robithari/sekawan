@@ -12,15 +12,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Modifikasi console.log untuk menyembunyikan pesan tertentu
   console.log = function (...args) {
-    if (!args[0] || !args[0].includes('API Response:')) {
+    if (!args[0] || typeof args[0] !== 'string' || !args[0].includes('API Response:')) {
       originalConsoleLog.apply(console, args);
     }
   };
 
-  // === Tambahkan Kode Pengujian di Sini ===
-  console.log('Test log'); // Ini harus terlihat di konsol
-  console.log('API Response: Test'); // Ini harus disembunyikan di konsol jika modifikasi berhasil
-  // =====================================
+  // Tes log untuk memastikan modifikasi diterapkan
+  console.log('Test log'); // Ini tidak akan disembunyikan
 
   // Fungsi untuk memeriksa apakah API siap
   function checkAPIStatus() {
@@ -33,8 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
-        // Log data untuk debugging
-        console.log('API Response:', data); // Pesan ini akan disembunyikan
+        console.log('API Response:', data); // Pesan ini akan disembunyikan jika modifikasi berhasil
 
         // Validasi respons API
         if (data && Object.keys(data).length > 0) {
