@@ -7,6 +7,16 @@ document.addEventListener('DOMContentLoaded', function () {
   // Ambil URL API dari elemen data atau variabel global
   const apiUrl = window.splashScreenApiUrl || '';
 
+  // Simpan referensi asli dari console.log
+  const originalConsoleLog = console.log;
+
+  // Modifikasi console.log untuk menyembunyikan pesan tertentu
+  console.log = function (...args) {
+    if (!args[0] || !args[0].includes('API Response:')) {
+      originalConsoleLog.apply(console, args);
+    }
+  };
+
   // Fungsi untuk memeriksa apakah API siap
   function checkAPIStatus() {
     if (!apiUrl) {
@@ -19,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(response => response.json())
       .then(data => {
         // Log data untuk debugging
-        console.log('API Response:', data);
+        console.log('API Response:', data); // Pesan ini akan disembunyikan
 
         // Validasi respons API
         if (data && Object.keys(data).length > 0) {
