@@ -17,9 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   };
 
-  // Tes log untuk memastikan modifikasi diterapkan
-  console.log('Test log'); // Ini tidak akan disembunyikan
-
   // Fungsi untuk memeriksa apakah API siap
   function checkAPIStatus() {
     if (!apiUrl) {
