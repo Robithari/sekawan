@@ -1,20 +1,17 @@
-// Mengimpor modul yang dibutuhkan dari Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+import { getMessaging } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging.js";
 
-// Konfigurasi Firebase untuk aplikasi Anda
 const firebaseConfig = {
   apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
   authDomain: "sekawan-fc-427414.firebaseapp.com",
   projectId: "sekawan-fc-427414",
-  storageBucket: "sekawan-fc-427414.appspot.com",
+  storageBucket: "sekawan-fc-427414",
   messagingSenderId: "399174955835",
   appId: "1:399174955835:web:c681f8681c474420e8fd1e",
   measurementId: "G-CD0MHD1RBP"
 };
 
-// Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
-
-// Inisialisasi Google Analytics
 const analytics = getAnalytics(app);
+const messaging = getMessaging(app);
