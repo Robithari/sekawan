@@ -336,26 +336,21 @@
 
     <!-- Service Worker -->
     <script>
-const messaging = firebase.messaging();
+// Pastikan deklarasi `messaging` hanya ada di salah satu file, seperti di `firebase.js`
+// Di `index.html`, tidak perlu mendeklarasikan ulang `messaging`
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/firebase-messaging-sw.js')
     .then((registration) => {
       console.log('Service Worker registered with scope:', registration.scope);
-      messaging.useServiceWorker(registration);
-    })
-    .catch((err) => {
-      console.error('Service Worker registration failed:', err);
+      // Anda tidak perlu memanggil `messaging.useServiceWorker` karena sudah digunakan di dalam `firebase.js`
     });
 }
-
 
     </script>
     <!-- END Service Worker -->
   </div>
-  <script>
-    const messaging = firebase.messaging();
-  </script>  
+
 </body>
 
 </html>
