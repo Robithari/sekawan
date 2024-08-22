@@ -49,34 +49,51 @@
   <title>Sekawan FC</title>
 
   <style>
-    /* Media Queries untuk Desktop */
-    @media (min-width: 1024px) {
-      .content-wrapper {
-        background-color: black; /* Background hitam di luar area padding */
-        padding-left: 10%; /* Padding kiri untuk wrapper */
-        padding-right: 10%; /* Padding kanan untuk wrapper */
-        box-sizing: border-box; /* Memastikan padding dihitung dalam ukuran elemen */
-      }
+/* Media Queries untuk Desktop */
+@media (min-width: 1024px) {
+  .content-wrapper {
+    background-color: white;
+    padding-left: 10%;
+    padding-right: 10%;
+    box-sizing: border-box;
+  }
 
-      .wrapper {
-        background-color: white; /* Background putih di dalam area padding */
-        padding: 0 10%; /* Sesuaikan padding di sini untuk konten internal */
-        border-left: 2px solid #000; /* Garis tepi kiri */
-        border-right: 2px solid #000; /* Garis tepi kanan */
-      }
+  .wrapper {
+    background-color: white;
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    box-sizing: border-box;
+  }
 
-      /* Reset padding dan margin yang tidak perlu */
-      .custom-navbar,
-      .container-box,
-      .container-button,
-      .container-berita,
-      .container-artikel,
-      footer {
-        padding-left: 0;
-        padding-right: 0;
-        margin: 0;
-      }
-    }
+  /* Reset padding dan margin yang tidak perlu */
+  .custom-navbar,
+  .container-box,
+  .container-button,
+  .container-berita,
+  .container-artikel {
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+  }
+
+  /* Memastikan footer memiliki lebar penuh yang sama dengan wrapper */
+  .custom-footer {
+    color: aliceblue;
+    margin-left: -12.5%; /* Posisikan agar sesuai dengan padding content-wrapper */
+    margin-right: -12.5%; /* Posisikan agar sesuai dengan padding content-wrapper */
+    background-color: #252bc2; /* Gunakan warna transparan atau ganti sesuai kebutuhan */
+    box-sizing: border-box;
+  }
+
+  .footer-bottom p {
+    margin-top: 1px;
+    margin-bottom: 0.5px;
+    padding-bottom: 2px;
+    color: white;
+  }
+  
+}
+
   </style>
 </head>
 
@@ -168,22 +185,16 @@
               <div class="carousel-item active">
                 <img src="img/pemain2.jpg" class="d-block w-100 custom-carousel-image" alt="First slide">
                 <div class="carousel-caption d-none d-md-block">
-                  <h5>First slide label</h5>
-                  <p>Some representative placeholder content for the first slide.</p>
                 </div>
               </div>
               <div class="carousel-item">
                 <img src="img/pemain1.jpg" class="d-block w-100 custom-carousel-image" alt="Second slide">
                 <div class="carousel-caption d-none d-md-block">
-                  <h5>Second slide label</h5>
-                  <p>Some representative placeholder content for the second slide.</p>
                 </div>
               </div>
               <div class="carousel-item">
                 <img src="img/bersih-bersih1.jpg" class="d-block w-100 custom-carousel-image" alt="Third slide">
                 <div class="carousel-caption d-none d-md-block">
-                  <h5>Third slide label</h5>
-                  <p>Some representative placeholder content for the third slide.</p>
                 </div>
               </div>
             </div>
@@ -336,7 +347,6 @@
                 </div>
               </a>
             </div>
-            <hr>
           </div>
           <!-- END ARTIKEL -->
 
@@ -370,7 +380,7 @@
             </div>
           </footer>
           <!-- END FOOTER -->
-
+        </div>
           <!-- SCRIPTS -->
           <div class="container-js">
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -387,7 +397,7 @@
             </script>
           </div>
           <!-- END SCRIPTS -->
-        </div>
+
 
         <!-- Service Worker -->
         <script>
