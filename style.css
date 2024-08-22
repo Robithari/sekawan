@@ -452,3 +452,116 @@ a {
 .footer-buttom-dibuat {
   padding-bottom: 5px;
 }
+
+/* -------------------------- TAMPILAN DESKTOP---------------------------------------- */
+/* Media Queries untuk Desktop */
+@media (min-width: 1024px) {
+  body {
+    font-size: 16px;
+  }
+
+  .custom-navbar {
+    padding: 10px 20px;
+  }
+
+  .carousel-item {
+    height: 400px;
+  }
+
+  .custom-carousel-image {
+    height: 350px;
+  }
+
+  .container-box, .container-button, .container-berita, .container-artikel {
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .container-button .row .col-4 {
+    flex: 0 0 30%;
+  }
+
+  .container-berita .informasi {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .informasi .card {
+    flex: 0 0 48%;
+  }
+
+  footer {
+    padding: 20px;
+  }
+
+  .footer-section {
+    text-align: left;
+  }
+
+  /* Carousel Styles */
+.carousel-item {
+  position: relative;
+  height: 500px;
+  overflow: hidden;
+}
+
+.carousel-item img {
+  object-fit: cover;
+  width: 50%;
+  height: 100%;
+  filter: brightness(70%); /* Sedikit gelapkan gambar */
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item:hover img {
+  transform: scale(1.05); /* Zoom efek saat hover */
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-caption h5 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  animation: fadeInUp 1s ease-out;
+}
+
+.carousel-caption p {
+  font-size: 1.25rem;
+  animation: fadeInUp 1.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ffffff;
+}
+
+}
