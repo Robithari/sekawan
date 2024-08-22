@@ -32,16 +32,13 @@ a {
   justify-content: center;
   align-items: center;
   opacity: 1;
-  /* Menggunakan opacity yang benar */
   transition: opacity 3s ease;
-  /* Transisi halus untuk fade out */
 }
 
 /* CSS untuk konten utama */
 #main-content {
   opacity: 0;
   transition: opacity 3s ease;
-  /* Transisi halus untuk fade in */
 }
 
 /* Konten utama ditampilkan */
@@ -66,16 +63,11 @@ a {
 /* NAVBAR ...................................................................................................................................*/
 .custom-navbar {
   background-color: #571ec9;
-  padding: 0 3.5px 3.5px 3.5px;
+  padding: 0 3.5px 0px 3.5px; /* Padding semula untuk perangkat selain desktop */
   position: fixed;
   top: 0;
-  width: 100%;
+  width: 100%; /* Lebar penuh untuk perangkat selain desktop */
   z-index: 1000;
-}
-
-.navbar-brand {
-  color: whitesmoke;
-  padding: 0 5px 0 0;
 }
 
 .icon-img {
@@ -385,8 +377,6 @@ a {
   }
 }
 
-
-
 .social-icons {
   margin-top: -5px;
 }
@@ -399,9 +389,7 @@ a {
 
 .icon-image {
   width: 40px;
-  /* Adjust the size as needed */
   height: 40px;
-  /* Adjust the size as needed */
   border-radius: 9px;
 }
 
@@ -410,16 +398,6 @@ a {
 }
 
 .social-icon:hover i {
-  color: #C13584;
-  /* Warna saat ikon Instagram di-hover */
-}
-
-/* Warna khusus untuk ikon Instagram */
-.social-icon .fa-instagram {
-  color: #E1306C;
-}
-
-.social-icon:hover .fa-instagram {
   color: #C13584;
 }
 
@@ -431,8 +409,8 @@ a {
 }
 
 .footer-bottom p {
-  margin-top: 1px; /* Atur jarak atas */
-  margin-bottom: 0.5px; /* Atur jarak bawah */
+  margin-top: 1px;
+  margin-bottom: 0.5px;
   padding-bottom: 2px;
 }
 
@@ -453,115 +431,45 @@ a {
   padding-bottom: 5px;
 }
 
-/* -------------------------- TAMPILAN DESKTOP---------------------------------------- */
-/* Media Queries untuk Desktop */
+
+
+
+/* Media Queries untuk Desktop --------------------------------------------------------- */
+
 @media (min-width: 1024px) {
+  /* Wrapper untuk body dengan padding 10% dan border */
+  .wrapper {
+    padding-left: 10%;
+    padding-right: 10%;
+    border-left: 2px solid #000;
+    border-right: 2px solid #000;
+    box-sizing: border-box;
+  }
+
+  /* Wrapper untuk latar belakang hitam di luar padding */
+  .content-wrapper {
+    background-color: black;
+  }
+
+  /* Pastikan body memiliki latar belakang putih */
   body {
-    font-size: 16px;
+    background-color: white;
   }
 
+  /* Memastikan navbar berada di tengah dengan padding sesuai pada Desktop */
   .custom-navbar {
-    padding: 10px 20px;
+    padding-left: 10%;  /* Sesuaikan dengan padding body */
+    padding-right: 10%; /* Sesuaikan dengan padding body */
+    width: 80%; /* Kurangi lebar agar sesuai dengan area dalam border */
+    left: 10%; /* Pusatkan navbar dengan margin kiri */
   }
 
-  .carousel-item {
-    height: 400px;
-  }
-
-  .custom-carousel-image {
-    height: 350px;
-  }
-
-  .container-box, .container-button, .container-berita, .container-artikel {
-    max-width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-  }
-
-  .container-button .row .col-4 {
-    flex: 0 0 30%;
-  }
-
-  .container-berita .informasi {
-    display: flex;
+  .navbar-collapse {
     justify-content: space-between;
   }
 
-  .informasi .card {
-    flex: 0 0 48%;
+  .navbar-nav {
+    margin-left: auto;
+    margin-right: auto;
   }
-
-  footer {
-    padding: 20px;
-  }
-
-  .footer-section {
-    text-align: left;
-  }
-
-  /* Carousel Styles */
-.carousel-item {
-  position: relative;
-  height: 500px;
-  overflow: hidden;
-}
-
-.carousel-item img {
-  object-fit: cover;
-  width: 50%;
-  height: 100%;
-  filter: brightness(70%); /* Sedikit gelapkan gambar */
-  transition: transform 0.5s ease-in-out;
-}
-
-.carousel-item:hover img {
-  transform: scale(1.05); /* Zoom efek saat hover */
-}
-
-.carousel-caption {
-  position: absolute;
-  bottom: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  color: #ffffff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.carousel-caption h5 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-  animation: fadeInUp 1s ease-out;
-}
-
-.carousel-caption p {
-  font-size: 1.25rem;
-  animation: fadeInUp 1.5s ease-out;
-}
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-}
-
-.carousel-indicators [data-bs-target] {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #ffffff;
-}
-
 }
