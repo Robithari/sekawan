@@ -16,8 +16,6 @@ a {
   color: black;
 }
 
-/* END Universal Styles */
-
 /* LOADING SCREEN */
 #loading-screen {
   position: fixed;
@@ -145,7 +143,7 @@ a {
 }
 
 .countdown-box hr {
-  margin: 0px 0;
+  margin: 0;
 }
 
 .countdown-box h3,
@@ -201,7 +199,7 @@ a {
   color: #06713f;
   font-weight: bold;
   padding: 0 20px;
-  margin: -15px 0 -5px 0;
+  margin: -15px 0 -5px;
   margin-bottom: 5px;
 }
 
@@ -233,7 +231,6 @@ a {
 }
 
 .card-text {
-  font-size: 10px;
   font-size: 12px;
   position: absolute;
   top: 0;
@@ -300,7 +297,7 @@ a {
 
 .g-4,
 .gy-4 {
-  --bs-gutter-y: 0, 5rem;
+  --bs-gutter-y: 0.5rem;
 }
 
 .container-kisi {
@@ -308,7 +305,7 @@ a {
   padding-right: 20px;
 }
 
-.row-cols-2>* {
+.row-cols-2 > * {
   flex: 0 0 auto;
   width: 50%;
   height: 200px;
@@ -318,7 +315,7 @@ a {
   padding: 5px;
 }
 
-/* footer */
+/* FOOTER */
 .custom-footer {
   background-color: #808080;
   color: black;
@@ -436,17 +433,157 @@ a {
   }
 
   .navbar-collapse {
-    justify-content: flex-start !important; /* Menyusun item di sebelah kiri */
+    justify-content: flex-start !important;
   }
-  
-  .navbar-nav {
-    margin-left: 0; /* Menghapus margin otomatis */
-  }
-  
-  .navbar-nav .nav-item {
-    margin-right: 10px; /* Opsional: Memberi jarak antar item */
-  }
-  
-  
 
+  .navbar-nav {
+    margin-left: 0;
+  }
+
+  .navbar-nav .nav-item {
+    margin-right: 10px;
+  }
+
+  /* Wrapper and Content Styling */
+  .wrapper {
+    padding-left: 10%;
+    padding-right: 10%;
+    border-left: 4px solid purple;
+    border-right: 4px solid purple;
+    box-sizing: border-box;
+    background-color: white;
+  }
+
+  .content-wrapper {
+    background-color: white;
+    padding-left: 10%;
+    padding-right: 10%;
+    box-sizing: border-box;
+  }
+
+  /* Navbar Styling */
+  .custom-navbar,
+  .container-button,
+  .container-berita,
+  .container-artikel {
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+  }
+  #carouselExampleDark .carousel-item {
+    height: 300px; /* Atur tinggi gambar carousel sesuai kebutuhan */
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out; /* Efek transisi */
+    opacity: 0; /* Buat item tidak terlihat saat awal */
+    transform: scale(1.05); /* Sedikit zoom out */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  #carouselExampleDark .carousel-item.active {
+    opacity: 1; /* Item yang aktif terlihat */
+    transform: scale(1); /* Kembalikan zoom ke normal */
+    position: relative;
+  }
+
+  #carouselExampleDark .carousel-item-next,
+  #carouselExampleDark .carousel-item-prev {
+    position: relative;
+    opacity: 0;
+    transform: scale(1.05);
+  }
+
+  #carouselExampleDark .carousel-item-next.carousel-item-left,
+  #carouselExampleDark .carousel-item-prev.carousel-item-right {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  /* Mengatasi background saat transisi */
+  #carouselExampleDark {
+    background-color: #000; /* Tambahkan background hitam untuk transisi */
+    overflow: hidden; /* Sembunyikan elemen yang berada di luar container */
+  }
+
+  /* Carousel Image for Desktop */
+  #carouselExampleDark .carousel-item img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+
+  .custom-navbar {
+    padding-left: 10%;
+    padding-right: 10%;
+    width: 80%;
+    left: 10%;
+  }
+
+  .navbar-collapse {
+    justify-content: space-between;
+  }
+
+  .navbar-collapse {
+    justify-content: flex-start !important;
+  }
+
+  .navbar-nav {
+    margin-left: 0;
+  }
+
+  .navbar-nav .nav-item {
+    margin-right: 10px;
+  }
+
+  /* Box Margin for Desktop */
+  .container-box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .countdown-box {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+    width: 200px;
+    background-color: #b1ffbe;
+    border-radius: 10px;
+    box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
+    text-align: center;
+    margin: 0 auto;
+    font-weight: bold;
+  }
+
+  /* Carousel Image for Desktop */
+  #carouselExampleDark .carousel-item {
+    height: 300px; /* Atur tinggi gambar carousel sesuai kebutuhan */
+  }
+
+  #carouselExampleDark .carousel-item img {
+    object-fit: cover;
+    height: 100%; /* Gambar akan mengisi seluruh tinggi item carousel */
+  }
+
+  .custom-carousel-image {
+    width: 85px;
+    height: 85px;
+    object-fit: cover;
+  }
+
+  /* Footer Styling */
+  .custom-footer {
+    color: aliceblue;
+    margin-left: -13%; /* Posisikan agar sesuai dengan padding content-wrapper */
+    margin-right: -13%; /* Posisikan agar sesuai dengan padding content-wrapper */
+    background-color: #252bc2; /* Gunakan warna transparan atau ganti sesuai kebutuhan */
+    box-sizing: border-box;
+  }
+
+  .footer-bottom p {
+    margin-top: 1px;
+    margin-bottom: 0.5px;
+    padding-bottom: 2px;
+    color: white;
+  }
 }
