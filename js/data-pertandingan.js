@@ -10,7 +10,7 @@ function fetchData() {
   teamsElement.style.display = 'none';
   countdownElement.style.display = 'none';
 
-  fetch('https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV')
+  fetch('https://script.google.com/macros/s/AKfycbwtXuhClIYxe5ayLZ6NllNrW14fmYQvM21122XQ4v3EgzWetwygr9g0ToiEgcM1wyY/exec')
     .then(response => response.json())
     .then(data => {
       loadingMessage.style.display = 'none'; // Sembunyikan pesan loading

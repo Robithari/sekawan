@@ -85,7 +85,10 @@ a {
 
 /* SLIDE */
 #carouselExampleDark {
-  margin-top: 50px;
+  margin-top: 60px; /* Mengatur jarak atas */
+  overflow: hidden; /* Sembunyikan elemen yang berada di luar container */
+  border-radius: 20px; /* Menerapkan radius pada background carousel */
+  padding: 10px; /* Menambah padding agar konten tidak menempel pada radius */
 }
 
 .carousel-item {
@@ -408,13 +411,20 @@ a {
   .wrapper {
     padding-left: 10%;
     padding-right: 10%;
-    border-left: 2px solid purple;
-    border-right: 2px solid purple;
+    padding-top: 0; /* Reset padding-top di sini */
+    border-left: 4px solid purple;
+    border-right: 4px solid purple;
     box-sizing: border-box;
+    background-color: white;
   }
 
   .content-wrapper {
-    background-color: black;
+    background-color: white;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 0; /* Reset padding-top */
+    padding-bottom: 60px; /* Tambahkan padding-bottom untuk memberikan ruang */
+    box-sizing: border-box;
   }
 
   body {
@@ -432,10 +442,6 @@ a {
     justify-content: space-between;
   }
 
-  .navbar-collapse {
-    justify-content: flex-start !important;
-  }
-
   .navbar-nav {
     margin-left: 0;
   }
@@ -444,35 +450,16 @@ a {
     margin-right: 10px;
   }
 
-  /* Wrapper and Content Styling */
-  .wrapper {
-    padding-left: 10%;
-    padding-right: 10%;
-    border-left: 4px solid purple;
-    border-right: 4px solid purple;
-    box-sizing: border-box;
-    background-color: white;
+  /* Carousel Styling for Desktop */
+  #carouselExampleDark {
+    margin-top: 20px; /* Jarak atas yang sesuai tanpa memutus border */
+    overflow: hidden; /* Sembunyikan elemen yang berada di luar container */
+    border-radius: 20px; /* Menerapkan radius pada background carousel */
   }
 
-  .content-wrapper {
-    background-color: white;
-    padding-left: 10%;
-    padding-right: 10%;
-    box-sizing: border-box;
-  }
-
-  /* Navbar Styling */
-  .custom-navbar,
-  .container-button,
-  .container-berita,
-  .container-artikel {
-    padding-left: 0;
-    padding-right: 0;
-    margin: 0;
-  }
   #carouselExampleDark .carousel-item {
     height: 300px; /* Atur tinggi gambar carousel sesuai kebutuhan */
-    transition: opacity 1s ease-in-out, transform 1s ease-in-out; /* Efek transisi */
+    transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out; /* Efek transisi lebih halus */
     opacity: 0; /* Buat item tidak terlihat saat awal */
     transform: scale(1.05); /* Sedikit zoom out */
     position: absolute;
@@ -499,33 +486,54 @@ a {
     opacity: 1;
     transform: scale(1);
   }
-  
-  /* Mengatasi background saat transisi */
-  #carouselExampleDark {
-    background-color: #000; /* Tambahkan background hitam untuk transisi */
-    overflow: hidden; /* Sembunyikan elemen yang berada di luar container */
+
+/* Media Queries untuk Desktop */
+@media (min-width: 1024px) {
+  .wrapper {
+    position: relative; /* Pastikan wrapper dapat menampung pseudo-element */
+    padding-left: 10%;
+    padding-right: 10%;
+    border-left: 4px solid purple;
+    border-right: 4px solid purple;
+    box-sizing: border-box;
+    background-color: white;
   }
 
-  /* Carousel Image for Desktop */
-  #carouselExampleDark .carousel-item img {
-    object-fit: cover;
-    height: 100%;
-    width: 100%;
+  /* Pseudo-element untuk menjaga border tetap utuh */
+  .wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px; /* Sesuaikan dengan margin-top pada carousel */
+    border-left: 4px solid purple;
+    border-right: 4px solid purple;
+    z-index: -1; /* Tempatkan di belakang konten */
+  }
+
+  .content-wrapper {
+    background-color: white;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: white;
   }
 
   .custom-navbar {
     padding-left: 10%;
     padding-right: 10%;
     width: 80%;
+    height: 10%;
     left: 10%;
   }
 
   .navbar-collapse {
     justify-content: space-between;
-  }
-
-  .navbar-collapse {
-    justify-content: flex-start !important;
   }
 
   .navbar-nav {
@@ -534,6 +542,56 @@ a {
 
   .navbar-nav .nav-item {
     margin-right: 10px;
+  }
+
+  /* Carousel Styling for Desktop */
+  #carouselExampleDark {
+    margin-top: 60px; /* Terapkan margin-top pada carousel */
+    overflow: hidden;
+    border-radius: 20px;
+  }
+
+  #carouselExampleDark .carousel-item {
+    height: 300px;
+    transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+    opacity: 0;
+    transform: scale(1.05);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  #carouselExampleDark .carousel-item.active {
+    opacity: 1;
+    transform: scale(1);
+    position: relative;
+  }
+
+  #carouselExampleDark .carousel-item-next,
+  #carouselExampleDark .carousel-item-prev {
+    position: relative;
+    opacity: 0;
+    transform: scale(1.05);
+  }
+
+  #carouselExampleDark .carousel-item-next.carousel-item-left,
+  #carouselExampleDark .carousel-item-prev.carousel-item-right {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Carousel Image for Desktop */
+  #carouselExampleDark .carousel-item img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    transition: transform 1.5s ease, opacity 1.5s ease;
+  }
+
+  .custom-carousel-image {
+    transform: scale(1);
   }
 
   /* Box Margin for Desktop */
@@ -555,28 +613,12 @@ a {
     font-weight: bold;
   }
 
-  /* Carousel Image for Desktop */
-  #carouselExampleDark .carousel-item {
-    height: 300px; /* Atur tinggi gambar carousel sesuai kebutuhan */
-  }
-
-  #carouselExampleDark .carousel-item img {
-    object-fit: cover;
-    height: 100%; /* Gambar akan mengisi seluruh tinggi item carousel */
-  }
-
-  .custom-carousel-image {
-    width: 85px;
-    height: 85px;
-    object-fit: cover;
-  }
-
   /* Footer Styling */
   .custom-footer {
     color: aliceblue;
-    margin-left: -13%; /* Posisikan agar sesuai dengan padding content-wrapper */
-    margin-right: -13%; /* Posisikan agar sesuai dengan padding content-wrapper */
-    background-color: #252bc2; /* Gunakan warna transparan atau ganti sesuai kebutuhan */
+    margin-left: -13%;
+    margin-right: -13%;
+    background-color: #252bc2;
     box-sizing: border-box;
   }
 
@@ -586,4 +628,13 @@ a {
     padding-bottom: 2px;
     color: white;
   }
+
+  /* Carousel Control Styling */
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 10px;
+  }
+}
 }
