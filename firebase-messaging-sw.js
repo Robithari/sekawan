@@ -12,16 +12,17 @@ firebase.initializeApp({
   measurementId: "G-CD0MHD1RBP"
 });
 
-// Mengelola pesan background
+// Menginisialisasi Firebase Cloud Messaging dan mengambil instance messaging
 const messaging = firebase.messaging();
 
+// Menangani pesan yang diterima ketika aplikasi berada di latar belakang
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  // Customize notification here
+
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: 'icon/android-icon-48x48.png'  // Ubah ke path ikon Anda
+    icon: 'icon/android-icon-48x48.png'  // Ubah dengan path ikon Anda jika diperlukan
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
