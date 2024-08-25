@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js');
 
 // Inisialisasi Firebase
 firebase.initializeApp({
@@ -12,17 +12,15 @@ firebase.initializeApp({
   measurementId: "G-CD0MHD1RBP"
 });
 
-// Menginisialisasi Firebase Cloud Messaging dan mengambil instance messaging
+// Mengelola pesan background
 const messaging = firebase.messaging();
 
-// Menangani pesan yang diterima ketika aplikasi berada di latar belakang
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
-
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: 'icon/android-icon-48x48.png'  // Ubah dengan path ikon Anda jika diperlukan
+    icon: 'icon/android-icon-48x48.png'  // Sesuaikan path ikon Anda
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
