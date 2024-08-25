@@ -359,14 +359,24 @@
       <!-- Service Worker -->
       <script>
         if ('serviceWorker' in navigator) {
-          window.addEventListener('load', function () {
-            navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
-              // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
-            }, function (error) {
-              console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
+          navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then((registration) => {
+              console.log('Service Worker registered with scope:', registration.scope);
+
+              // Gunakan Service Worker ini dengan Firebase
+              messaging.useServiceWorker(registration);
+              return getToken(messaging, { vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeKOYC3U4yTI' });
+            })
+            .then((token) => {
+              console.log('FCM Token:', token);
+            })
+            .catch((err) => {
+              console.error('Failed to register Service Worker or get token:', err);
             });
-          });
+        } else {
+          console.warn('Service Worker is not supported in this browser.');
         }
+
       </script>
       <!-- END Service Worker -->
     </div>
