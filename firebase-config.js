@@ -1,11 +1,8 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// firebase-config.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Konfigurasi Firebase Anda
 const firebaseConfig = {
   apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
   authDomain: "sekawan-fc-427414.firebaseapp.com",
@@ -16,6 +13,26 @@ const firebaseConfig = {
   measurementId: "G-CD0MHD1RBP"
 };
 
-// Initialize Firebase
+// Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const messaging = getMessaging(app);
+
+// Minta izin notifikasi kepada pengguna
+messaging.requestPermission()
+  .then(() => {
+    console.log('Notification permission granted.');
+    return getToken(messaging, { vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeKOYC3U4yTI' });
+  })
+  .then((token) => {
+    console.log('FCM Token:', token);
+    // Simpan token ini ke server untuk digunakan dalam mengirim pesan
+  })
+  .catch((err) => {
+    console.error('Unable to get permission to notify.', err);
+  });
+
+// Menangani pesan yang diterima ketika aplikasi berjalan di latar depan
+onMessage(messaging, (payload) => {
+  console.log('Message received. ', payload);
+  // Tampilkan notifikasi atau perbarui UI
+});
