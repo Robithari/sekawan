@@ -17,22 +17,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-// Minta izin notifikasi kepada pengguna
-messaging.requestPermission()
-  .then(() => {
-    console.log('Notification permission granted.');
-    return getToken(messaging, { vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeKOYC3U4yTI' });
-  })
-  .then((token) => {
+// Minta izin notifikasi dan dapatkan token FCM
+function requestNotificationPermission() {
+  // Minta izin menggunakan API Notification dari browser
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      console.log('Notification permission granted.');
+      return getToken(messaging, { vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeKOYC3U4yTI' });
+    } else {
+      console.error('Notification permission not granted.');
+      throw new Error('Notification permission not granted');
+    }
+  }).then((token) => {
     console.log('FCM Token:', token);
     // Simpan token ini ke server untuk digunakan dalam mengirim pesan
-  })
-  .catch((err) => {
-    console.error('Unable to get permission to notify.', err);
+  }).catch((err) => {
+    console.error('Unable to get permission to notify or get token:', err);
   });
+}
+
+// Panggil fungsi ini ketika halaman dimuat untuk meminta izin notifikasi
+requestNotificationPermission();
 
 // Menangani pesan yang diterima ketika aplikasi berjalan di latar depan
 onMessage(messaging, (payload) => {
   console.log('Message received. ', payload);
-  // Tampilkan notifikasi atau perbarui UI
+  // Tampilkan notifikasi atau perbarui UI sesuai kebutuhan
 });
