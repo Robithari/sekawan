@@ -1,7 +1,6 @@
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 
-// Inisialisasi Firebase di Service Worker
 firebase.initializeApp({
   apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
   authDomain: "sekawan-fc-427414.firebaseapp.com",
@@ -12,7 +11,6 @@ firebase.initializeApp({
   measurementId: "G-CD0MHD1RBP"
 });
 
-// Mengelola pesan background
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {

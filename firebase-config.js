@@ -1,6 +1,6 @@
 // firebase-config.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js";
 
 // Konfigurasi Firebase Anda
 const firebaseConfig = {
@@ -33,7 +33,7 @@ function requestNotificationPermission() {
     }
   }).then((token) => {
     console.log('FCM Token:', token);
-    // Kirim token ke server Anda di sini jika diperlukan
+    // Simpan token ke server untuk pengiriman pesan
   }).catch((err) => {
     console.error('Unable to get permission to notify or get token:', err);
   });
