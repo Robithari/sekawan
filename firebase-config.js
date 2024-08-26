@@ -1,4 +1,3 @@
-// firebase-config.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js";
 
@@ -15,32 +14,29 @@ const firebaseConfig = {
 
 // Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
-
-// Inisialisasi Messaging
 const messaging = getMessaging(app);
 
-// Minta izin notifikasi dan dapatkan token FCM
-function requestNotificationPermission() {
-  Notification.requestPermission().then((permission) => {
-    if (permission === 'granted') {
-      console.log('Notification permission granted.');
-      return getToken(messaging, {
-        vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeKOYC3U4yTI'
-      });
-    } else {
-      console.error('Notification permission not granted.');
-      throw new Error('Notification permission not granted');
-    }
-  }).then((token) => {
-    console.log('FCM Token:', token);
-    // Simpan token ke server untuk pengiriman pesan
-  }).catch((err) => {
-    console.error('Unable to get permission to notify or get token:', err);
-  });
-}
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log('Service Worker registered with scope:', registration.scope);
 
-// Panggil fungsi ini ketika halaman dimuat
-requestNotificationPermission();
+      // Dapatkan token setelah Service Worker terdaftar
+      return getToken(messaging, {
+        vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeKOYC3U4yTI',
+        serviceWorkerRegistration: registration
+      });
+    })
+    .then((token) => {
+      console.log('FCM Token:', token);
+      // Kirim token ke server Anda jika diperlukan
+    })
+    .catch((err) => {
+      console.error('Failed to register Service Worker or get token:', err);
+    });
+} else {
+  console.warn('Service Worker is not supported in this browser.');
+}
 
 // Menangani pesan saat aplikasi berada di latar depan
 onMessage(messaging, (payload) => {
