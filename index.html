@@ -121,307 +121,250 @@
           </div>
           <!-- END NAVBAR -->
         </div>
+        
 
-
-        <!-- SLIDE -->
-        <div id="carouselExampleDark" class="carousel carousel-dark slide desktop-only" data-bs-ride="carousel"
-          data-bs-interval="5000">
-          <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
-              aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1"
-              aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2"
-              aria-label="Slide 3"></button>
-          </div>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="img/pemain2.jpg" class="d-block w-100 custom-carousel-image" alt="First slide">
-              <div class="carousel-caption d-none d-md-block">
-                <!-- Konten caption jika diperlukan -->
+          <!-- SLIDE -->
+          <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="img/pemain2.jpg" class="d-block w-100 custom-carousel-image" alt="First slide">
+                <div class="carousel-caption d-none d-md-block">
+                  <!-- Tambahkan konten caption di sini jika diperlukan -->
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="img/pemain1.jpg" class="d-block w-100 custom-carousel-image" alt="Second slide">
+                <div class="carousel-caption d-none d-md-block">
+                  <!-- Tambahkan konten caption di sini jika diperlukan -->
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="img/bersih-bersih1.jpg" class="d-block w-100 custom-carousel-image" alt="Third slide">
+                <div class="carousel-caption d-none d-md-block">
+                  <!-- Tambahkan konten caption di sini jika diperlukan -->
+                </div>
               </div>
             </div>
-            <div class="carousel-item">
-              <img src="img/pemain1.jpg" class="d-block w-100 custom-carousel-image" alt="Second slide">
-              <div class="carousel-caption d-none d-md-block">
-                <!-- Konten caption jika diperlukan -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          
+          <!-- END SLIDE -->
+
+          <!-- BOX -->
+          <div class="container-box">
+            <div class="countdown-box">
+              <p class="underline-text"><u>PERTANDINGAN TERDEKAT</u></p>
+              <p id="loading-message">Mohon tunggu...</p>
+              <p id="teams"></p>
+              <p id="event-data"></p>
+              <hr>
+              <div id="countdown" class="waktu-mundur"></div>
+            </div>
+          </div>
+          <!-- END BOX -->
+
+          <!-- BUTTON -->
+          <div class="container-button">
+            <div class="row justify-content-center">
+              <div class="col-4">
+                <a href="jadwal.html" class="custom-btn primary-btn" role="button">Jadwal Pertandingan</a>
+              </div>
+              <div class="col-4">
+                <a href="kas.html" class="custom-btn primary-btn" role="button">Laporan Kas</a>
+              </div>
+              <div class="col-4">
+                <a href="dokumentasi.html" class="custom-btn primary-btn" role="button">Dokumentasi</a>
               </div>
             </div>
-            <div class="carousel-item">
-              <img src="img/bersih-bersih1.jpg" class="d-block w-100 custom-carousel-image" alt="Third slide">
-              <div class="carousel-caption d-none d-md-block">
-                <!-- Konten caption jika diperlukan -->
+            <div class="row justify-content-center mt-3">
+              <div class="col-4">
+                <a href="proses.html" class="custom-btn primary-btn" role="button">Barang Inventaris</a>
+              </div>
+              <div class="col-4">
+                <a href="proses.html" class="custom-btn primary-btn" role="button">Pengurus dan Anggota</a>
+              </div>
+              <div class="col-4">
+                <a href="proses.html" class="custom-btn primary-btn" role="button">Lokasi Stadion</a>
               </div>
             </div>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </div>
+          <!-- END BUTTON -->
 
-        <!-- END SLIDE -->
+          <hr>
 
-        <!-- BOX -->
-        <div class="container-box">
-          <div class="countdown-box">
-            <p class="underline-text"><u>PERTANDINGAN TERDEKAT</u></p>
-            <p id="loading-message">Mohon tunggu...</p>
-            <p id="teams"></p>
-            <p id="event-data"></p>
-            <hr>
-            <div id="countdown" class="waktu-mundur"></div>
-          </div>
-        </div>
-        <!-- END BOX -->
-
-        <!-- BUTTON -->
-        <div class="container-button">
-          <div class="row justify-content-center">
-            <div class="col-4">
-              <a href="jadwal.html" class="custom-btn primary-btn" role="button">Jadwal Pertandingan</a>
-            </div>
-            <div class="col-4">
-              <a href="kas.html" class="custom-btn primary-btn" role="button">Laporan Kas</a>
-            </div>
-            <div class="col-4">
-              <a href="dokumentasi.html" class="custom-btn primary-btn" role="button">Dokumentasi</a>
-            </div>
-          </div>
-          <div class="row justify-content-center mt-3">
-            <div class="col-4">
-              <a href="proses.html" class="custom-btn primary-btn" role="button">Barang Inventaris</a>
-            </div>
-            <div class="col-4">
-              <a href="proses.html" class="custom-btn primary-btn" role="button">Pengurus dan Anggota</a>
-            </div>
-            <div class="col-4">
-              <a href="proses.html" class="custom-btn primary-btn" role="button">Lokasi Stadion</a>
-            </div>
-          </div>
-        </div>
-        <!-- END BUTTON -->
-
-        <hr>
-
-        <!-- BERITA -->
-        <div class="container-berita">
-          <p class="berita">Berita Terkini</p>
-          <div class="informasi">
-            <a href="bersih-bersih-29-5-2-04.html">
-              <div class="card no-border">
-                <div class="row g-0 align-items-center">
-                  <div class="col-md-4 col-sm-4 col-4" style="width: auto;">
-                    <img src="img/bersih-bersih1.jpg" class="custom-image"
-                      alt="Kegiatan Gotong Royong Sekawan FC di Stadion Sepak Bola BTB">
-                  </div>
-                  <div class="col-md-8 col-sm-8 col-8">
-                    <div class="card-body">
-                      <div class="container-title">
-                        <p class="card-title custom-title text-start mb-0">Kegiatan Gotong Royong Sekawan FC di
-                          Stadion
-                          Sepak Bola BTB</p>
+          <!-- BERITA -->
+          <div class="container-berita">
+            <p class="berita">Berita Terkini</p>
+            <div class="informasi">
+              <a href="bersih-bersih-29-5-2-04.html">
+                <div class="card no-border">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-md-4 col-sm-4 col-4" style="width: auto;">
+                      <img src="img/bersih-bersih1.jpg" class="custom-image"
+                        alt="Kegiatan Gotong Royong Sekawan FC di Stadion Sepak Bola BTB">
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-8">
+                      <div class="card-body">
+                        <div class="container-title">
+                          <p class="card-title custom-title text-start mb-0">Kegiatan Gotong Royong Sekawan FC di
+                            Stadion
+                            Sepak Bola BTB</p>
+                        </div>
+                        <p class="card-text"><small class="text-body-secondary">29 Mei 2024</small></p>
                       </div>
-                      <p class="card-text"><small class="text-body-secondary">29 Mei 2024</small></p>
                     </div>
                   </div>
                 </div>
-              </div>
-            </a>
-            <a href="sekawan-fc-vs-ukhwa-fc.html">
-              <div class="card no-border">
-                <div class="row g-0 align-items-center">
-                  <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
-                    <img src="img/sekawanfc-vs-ukhwafc.jpg" class="custom-image" alt="Sekawan FC Logo">
-                  </div>
-                  <div class="col-md-8 col-sm-8 col-8">
-                    <div class="card-body">
-                      <div class="container-title">
-                        <p class="card-title custom-title text-start mb-0">Sekawan FC Raih Kemenangan Dramatis Atas
-                          Ukhwa
-                          FC dengan Skor 5-2 di Stadion BTB</p>
+              </a>
+              <a href="sekawan-fc-vs-ukhwa-fc.html">
+                <div class="card no-border">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
+                      <img src="img/sekawanfc-vs-ukhwafc.jpg" class="custom-image" alt="Sekawan FC Logo">
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-8">
+                      <div class="card-body">
+                        <div class="container-title">
+                          <p class="card-title custom-title text-start mb-0">Sekawan FC Raih Kemenangan Dramatis Atas
+                            Ukhwa
+                            FC dengan Skor 5-2 di Stadion BTB</p>
+                        </div>
+                        <p class="card-text"><small class="text-body-secondary">26 Mei 2024</small></p>
                       </div>
-                      <p class="card-text"><small class="text-body-secondary">26 Mei 2024</small></p>
                     </div>
                   </div>
                 </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <!-- END BERITA -->
-
-        <hr>
-
-        <!-- ARTIKEL -->
-        <div class="container-berita">
-          <p class="berita">Artikel Terbaru</p>
-          <div class="informasi">
-            <a href="bersih-bersih-29-5-2-04.html">
-              <div class="card no-border">
-                <div class="row g-0 align-items-center">
-                  <div class="col-md-4 col-sm-4 col-4" style="width: auto;">
-                    <img src="img/bersih-bersih1.jpg" class="custom-image" alt="Sekawan FC Logo">
-                  </div>
-                  <div class="col-md-8 col-sm-8 col-8">
-                    <div class="card-body">
-                      <div class="container-title">
-                        <p class="card-title custom-title text-start mb-0">Kegiatan Gotong Royong Sekawan FC di
-                          Stadion
-                          Sepak Bola BTB</p>
-                      </div>
-                      <p class="card-text"><small class="text-body-secondary">29 Mei 2024</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="informasi">
-            <a href="Pentingnya-Pemanasan-Sebelum-Bermain-Sepak-Bola.html">
-              <div class="card no-border">
-                <div class="row g-0 align-items-center">
-                  <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
-                    <img src="img/pemanasan.png" class="custom-image" alt="Pemanasan">
-                  </div>
-                  <div class="col-md-8 col-sm-8 col-8">
-                    <div class="card-body">
-                      <div class="container-title">
-                        <p class="card-title custom-title text-start mb-0">Pentingnya Pemanasan Sebelum Bermain Sepak
-                          Bola
-                        </p>
-                      </div>
-                      <p class="card-text"><small class="text-body-secondary">7 Juli 2024</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <!-- END ARTIKEL -->
-
-        <!-- FOOTER -->
-        <footer class="custom-footer">
-          <div class="footer-content">
-            <div class="footer-section">
-              <h6>Ikuti Kami</h6>
-              <div class="social-icons">
-                <a href="proses.html" class="social-icon" target="_blank">
-                  <img
-                    src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
-                    alt="Ikon Facebook" class="icon-image">
-                </a>
-                <a href="proses.html" class="social-icon" target="_blank">
-                  <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
-                    alt="Ikon Instagram" class="icon-image">
-                </a>
-              </div>
-            </div>
-            <div class="footer-section">
-              <h6>Hubungi Kami</h6>
-              <p class="footer-email">Email: <a class="footer-email-link"
-                  href="mailto:admin@sekawanfc.com">admin@sekawanfc.com</a></p>
-              <p class="footer-telephone">Telepon: +62 813 363 06253</p>
+              </a>
             </div>
           </div>
-          <div class="footer-bottom">
-            <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
-            <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
+          <!-- END BERITA -->
+
+          <hr>
+
+          <!-- ARTIKEL -->
+          <div class="container-berita">
+            <p class="berita">Artikel Terbaru</p>
+            <div class="informasi">
+              <a href="bersih-bersih-29-5-2-04.html">
+                <div class="card no-border">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-md-4 col-sm-4 col-4" style="width: auto;">
+                      <img src="img/bersih-bersih1.jpg" class="custom-image" alt="Sekawan FC Logo">
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-8">
+                      <div class="card-body">
+                        <div class="container-title">
+                          <p class="card-title custom-title text-start mb-0">Kegiatan Gotong Royong Sekawan FC di
+                            Stadion
+                            Sepak Bola BTB</p>
+                        </div>
+                        <p class="card-text"><small class="text-body-secondary">29 Mei 2024</small></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="informasi">
+              <a href="Pentingnya-Pemanasan-Sebelum-Bermain-Sepak-Bola.html">
+                <div class="card no-border">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
+                      <img src="img/pemanasan.png" class="custom-image" alt="Pemanasan">
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-8">
+                      <div class="card-body">
+                        <div class="container-title">
+                          <p class="card-title custom-title text-start mb-0">Pentingnya Pemanasan Sebelum Bermain Sepak
+                            Bola
+                          </p>
+                        </div>
+                        <p class="card-text"><small class="text-body-secondary">7 Juli 2024</small></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
           </div>
-        </footer>
-        <!-- END FOOTER -->
-      </div>
-      <!-- SCRIPTS -->
-      <div class="container-js">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-          crossorigin="anonymous"></script>
-        <script src="js/pencarian.js"></script>
-        <script src="js/hapus-cookie.js"></script>
-        <script src="js/splas-screen-start.js"></script>
-        <script src="js/kunci-layar.js"></script>
-        <script src="js/data-pertandingan.js"></script>
-        <script type="module" src="firebase-config.js"></script>
+          <!-- END ARTIKEL -->
+
+          <!-- FOOTER -->
+          <footer class="custom-footer">
+            <div class="footer-content">
+              <div class="footer-section">
+                <h6>Ikuti Kami</h6>
+                <div class="social-icons">
+                  <a href="proses.html" class="social-icon" target="_blank">
+                    <img
+                      src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
+                      alt="Ikon Facebook" class="icon-image">
+                  </a>
+                  <a href="proses.html" class="social-icon" target="_blank">
+                    <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
+                      alt="Ikon Instagram" class="icon-image">
+                  </a>
+                </div>
+              </div>
+              <div class="footer-section">
+                <h6>Hubungi Kami</h6>
+                <p class="footer-email">Email: <a class="footer-email-link"
+                    href="mailto:admin@sekawanfc.com">admin@sekawanfc.com</a></p>
+                <p class="footer-telephone">Telepon: +62 813 363 06253</p>
+              </div>
+            </div>
+            <div class="footer-bottom">
+              <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
+              <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
+            </div>
+          </footer>
+          <!-- END FOOTER -->
+        </div>
+          <!-- SCRIPTS -->
+          <div class="container-js">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+              integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+              crossorigin="anonymous"></script>
+            <script src="js/pencarian.js"></script>
+            <script src="js/hapus-cookie.js"></script>
+            <script src="js/splas-screen-start.js"></script>
+            <script src="js/kunci-layar.js"></script>
+            <script src="js/data-pertandingan.js"></script>
+            <script type="module" src="firebase-config.js"></script>
+            <script>
+              window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
+            </script>
+          </div>
+          <!-- END SCRIPTS -->
+
+
+        <!-- Service Worker -->
         <script>
-          window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
-        </script>
-      </div>
-      <!-- END SCRIPTS -->
-
-
-      <!-- Service Worker -->
-      <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js";
-      
-        // Konfigurasi Firebase Anda
-        const firebaseConfig = {
-          apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
-          authDomain: "sekawan-fc-427414.firebaseapp.com",
-          projectId: "sekawan-fc-427414",
-          storageBucket: "sekawan-fc-427414.appspot.com",
-          messagingSenderId: "399174955835",
-          appId: "1:399174955835:web:c681f8681c474420e8fd1e",
-          measurementId: "G-CD0MHD1RBP"
-        };
-      
-        // Inisialisasi Firebase
-        const app = initializeApp(firebaseConfig);
-        const messaging = getMessaging(app);
-      
-        // Fungsi untuk konversi VAPID key
-        function urlBase64ToUint8Array(base64String) {
-          const padding = '='.repeat((4 - base64String.length % 4) % 4);
-          const base64 = (base64String + padding)
-            .replace(/\-/g, '+')
-            .replace(/_/g, '/');
-      
-          const rawData = window.atob(base64);
-          const outputArray = new Uint8Array(rawData.length);
-      
-          for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i);
-          }
-          return outputArray;
-        }
-      
-        const vapidKey = 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeKOYC3U4yTI';
-        const convertedVapidKey = urlBase64ToUint8Array(vapidKey);
-      
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/firebase-messaging-sw.js')
-            .then((registration) => {
-              console.log('Service Worker registered with scope:', registration.scope);
-      
-              // Dapatkan token FCM setelah Service Worker terdaftar
-              return getToken(messaging, {
-                vapidKey: convertedVapidKey,
-                serviceWorkerRegistration: registration
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+              navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+                // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
+              }, function (error) {
+                console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
               });
-            })
-            .then((token) => {
-              console.log('FCM Token:', token);
-              // Kirim token ke server Anda jika diperlukan
-            })
-            .catch((err) => {
-              console.error('Failed to get token:', err);
             });
-        } else {
-          console.warn('Service Worker is not supported in this browser.');
-        }
-      </script>
-      
-      
-      <!-- END Service Worker -->
+          }
+        </script>
+        <!-- END Service Worker -->
+      </div>
     </div>
-  </div>
   </div>
 </body>
 
