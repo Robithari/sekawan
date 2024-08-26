@@ -1,7 +1,7 @@
-importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 
-// Inisialisasi Firebase
+// Inisialisasi Firebase di Service Worker
 firebase.initializeApp({
   apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
   authDomain: "sekawan-fc-427414.firebaseapp.com",
@@ -20,7 +20,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: 'icon/android-icon-48x48.png'  // Sesuaikan path ikon Anda
+    icon: 'icon/android-icon-48x48.png'
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
