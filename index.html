@@ -376,6 +376,25 @@
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
       
+        // Fungsi untuk konversi VAPID key
+        function urlBase64ToUint8Array(base64String) {
+          const padding = '='.repeat((4 - base64String.length % 4) % 4);
+          const base64 = (base64String + padding)
+            .replace(/\-/g, '+')
+            .replace(/_/g, '/');
+      
+          const rawData = window.atob(base64);
+          const outputArray = new Uint8Array(rawData.length);
+      
+          for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+          }
+          return outputArray;
+        }
+      
+        const vapidKey = 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeKOYC3U4yTI';
+        const convertedVapidKey = urlBase64ToUint8Array(vapidKey);
+      
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.register('/firebase-messaging-sw.js')
             .then((registration) => {
@@ -383,7 +402,7 @@
       
               // Dapatkan token FCM setelah Service Worker terdaftar
               return getToken(messaging, {
-                vapidKey: 'BPAqQpY9sfUZKGfJVpq6HKFoQp4THJ-ESMjE94WnFEnOqp6H5VSEAGP1QzemeQ55Tj789flPvLAjeK',
+                vapidKey: convertedVapidKey,
                 serviceWorkerRegistration: registration
               });
             })
@@ -392,12 +411,13 @@
               // Kirim token ke server Anda jika diperlukan
             })
             .catch((err) => {
-              console.error('Failed to register Service Worker or get token:', err);
+              console.error('Failed to get token:', err);
             });
         } else {
           console.warn('Service Worker is not supported in this browser.');
         }
       </script>
+      
       
       <!-- END Service Worker -->
     </div>
