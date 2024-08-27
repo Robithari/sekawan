@@ -206,6 +206,15 @@ a {
   margin-bottom: 5px;
 }
 
+.custom-foto {
+  max-width: 100%;  /* Gambar tidak akan melebihi lebar kontainer */
+  height: auto;    /* Tinggi gambar akan otomatis disesuaikan dengan lebar */
+  display: block;  /* Menghapus space di bawah gambar */
+  margin: 0 auto;  /* Menyelaraskan gambar ke tengah */
+}
+
+
+
 .informasi {
   padding: 0 20px;
   border: none;
