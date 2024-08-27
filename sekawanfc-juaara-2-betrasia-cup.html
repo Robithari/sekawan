@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" translate="no">
-
 <head>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
@@ -11,9 +10,9 @@
     gtag('config', 'G-CD0MHD1RBP');
   </script>
   <!-- link preview -->
-  <meta property="og:title" id="og-title" content="" />
-  <meta property="og:description" id="og-description" content="" />
-  <meta property="og:image" id="og-image" content="" />
+  <meta property="og:title" id="og-title" content="Sekawan FC Raih Juara 2 di Trofeo Betrasia Cup 2024" />
+  <meta property="og:description" id="og-description" content="Tim sepak bola komunitas Sekawan FC berhasil meraih juara 2 dalam ajang pertandingan Trofeo Betrasia Cup 2024 yang berlangsung di Stadion BTB" />
+  <meta property="og:image" id="og-image" content="https://i.ibb.co.com/jgzJsDB/IMG-20240825-WA0028.jpg" />
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <!-- link preview -->
@@ -53,7 +52,7 @@
   <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
-  <title id="page-title">Sekawan FC</title>
+  <title id="page-title">Sekawan FC Raih Juara 2 di Trofeo Betrasia Cup 2024</title>
 
 </head>
 
@@ -126,12 +125,13 @@
 
         <!-- berita -->
         <div class="container mt-4 pt-5">
-            <h5 id="news-title"></h5>
+            <h5>Sekawan FC Raih Juara 2 di Trofeo Betrasia Cup 2024</h5>
             <div class="container-foto">
-                <img id="news-image" class="custom-foto" alt="News Image">
+                <img src="https://i.ibb.co.com/jgzJsDB/IMG-20240825-WA0028.jpg" class="custom-foto" alt="News Image">
             </div>
-            <p id="news-description" style="opacity: 0.5; padding-left: 10px; padding-right: 10px; font-size: 12px;"></p>
-            <div id="news-content"></div>
+            <p style="opacity: 0.5; padding-left: 10px; padding-right: 10px; font-size: 12px;">ini percobaan</p>
+            <div><p><strong>Jember, 24 Agustus 2024</strong> - Tim sepak bola komunitas Sekawan FC berhasil meraih juara 2 dalam ajang pertandingan Trofeo Betrasia Cup 2024 yang berlangsung di Stadion BTB, Tegal Besar, Jember. Pertandingan yang dimulai pada pukul 15.30 WIB ini diikuti oleh tiga tim, yaitu Sekawan FC, Betrasia FC, dan Jawara Express FC.</p><p>Pertandingan berjalan seru dengan masing-masing tim menampilkan permainan terbaiknya. Acara ini diselenggarakan sebagai bentuk penyaluran hobi bagi para pecinta sepak bola lokal dan didukung penuh oleh sponsor utama, PT. Benih Citra Asia. Betrasia FC keluar sebagai juara 1, sementara Sekawan FC harus puas di posisi ke-2, dan Jawara Express FC menempati posisi ke-3.</p><p>Meski gagal meraih gelar juara pertama, Sekawan FC tetap menunjukkan semangat juang yang luar biasa. Dukungan dari PT. Benih Citra Asia sebagai sponsor utama turut berperan besar dalam kesuksesan acara ini, yang tidak hanya menjadi ajang kompetisi tetapi juga mempererat tali persaudaraan antar komunitas sepak bola di Jember.</p><p>Dengan pencapaian ini, Sekawan FC berharap dapat terus berkembang dan meraih prestasi yang lebih baik di masa depan.</p></div>
+            
         </div>
         <!-- end berita -->
 
@@ -178,28 +178,6 @@
     <script src="js/splas-screen-start.js"></script>
     <script src="js/kunci-layar.js"></script>
     <script type="module" src="firebase-config.js"></script>
-    <script>
-      // Fetch data from API and update the HTML content
-      fetch('https://script.googleusercontent.com/macros/echo?user_content_key=ZmFe_bsHJoAEl-zVC4r9_y5kyD1M9lfpoz67rrO3zaY1ckIdaAufCMLM105O2ZJvVLCMrg75KsKfQ34Ih1UenjEdvbmv3h-ym5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFjwqs47oBaPH4kWmrQk0-TlBBSaaGYv7lGHQ25Vkd_4JMYJ_rjVr-eAIu7-YXUpgG_SMRY6PLPXs0tRlic9zLSV06CTj_j-jw&lib=MKPX_bhyrrHJngT7S2d3Aaw3C713IOBJS')
-        .then(response => response.json())
-        .then(data => {
-          // Assuming the first item in the array is the one we want to display
-          const newsData = data[0];
-
-          document.getElementById('og-title').content = newsData['TITLE'];
-          document.getElementById('og-description').content = newsData['DESKRIPSI SINGKAT'];
-          document.getElementById('og-image').content = newsData['LINK FOTO BERITA'];
-          document.getElementById('page-title').textContent = newsData['TITLE'];
-          document.getElementById('news-title').textContent = newsData['JUDUL BERITA'];
-          document.getElementById('news-image').src = newsData['LINK FOTO BERITA'];
-          document.getElementById('news-description').textContent = newsData['SUMBER FOTO BERITA'];
-          document.getElementById('news-content').innerHTML = newsData['ISI BERITA'];
-
-          document.getElementById('main-content').style.display = 'block';
-          document.getElementById('loading-screen').style.display = 'none';
-        })
-        .catch(error => console.error('Error fetching data:', error));
-    </script>
   </div>
   <!-- END SCRIPTS -->
 
@@ -217,5 +195,4 @@
   </script>
   <!-- END Service Worker -->
 </body>
-
 </html>

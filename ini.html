@@ -1,6 +1,6 @@
+
 <!DOCTYPE html>
 <html lang="en" translate="no">
-
 <head>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
@@ -11,9 +11,9 @@
     gtag('config', 'G-CD0MHD1RBP');
   </script>
   <!-- link preview -->
-  <meta property="og:title" id="og-title" content="" />
-  <meta property="og:description" id="og-description" content="" />
-  <meta property="og:image" id="og-image" content="" />
+  <meta property="og:title" id="og-title" content="Trofeo Betrasia Cup" />
+  <meta property="og:description" id="og-description" content="Pada hari ini, Trofeo Betrasia Cup 2024 resmi digelar di Stadion Mini Soccer BTB yang terletak di Perumahan Bumi Tegal Besar" />
+  <meta property="og:image" id="og-image" content="https://sekawanfc.fun/img/trofeo-betrasia-cup.jpg" />
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <!-- link preview -->
@@ -53,7 +53,7 @@
   <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
-  <title id="page-title">Sekawan FC</title>
+  <title id="page-title">Trofeo Betrasia Cup</title>
 
 </head>
 
@@ -126,12 +126,12 @@
 
         <!-- berita -->
         <div class="container mt-4 pt-5">
-            <h5 id="news-title"></h5>
+            <h5>Meriahkan Trofeo Betrasia Cup 2024, Tiga Tim Tangguh Siap Bertanding</h5>
             <div class="container-foto">
-                <img id="news-image" class="custom-foto" alt="News Image">
+                <img src="https://sekawanfc.fun/img/trofeo-betrasia-cup.jpg" class="custom-foto" alt="News Image">
             </div>
-            <p id="news-description" style="opacity: 0.5; padding-left: 10px; padding-right: 10px; font-size: 12px;"></p>
-            <div id="news-content"></div>
+            <p style="opacity: 0.5; padding-left: 10px; padding-right: 10px; font-size: 12px;">Poster Pertandingan Trofeo Betrasia Cup</p>
+            <div><p><strong>Jember, 24 Agustus 2024</strong> - Pada hari ini, Trofeo Betrasia Cup 2024 resmi digelar di Stadion Mini Soccer BTB yang terletak di Perumahan Bumi Tegal Besar, Kelurahan Tegal Besar, Kecamatan Kaliwates, Kabupaten Jember. Pertandingan ini merupakan ajang mini soccer bergengsi yang disponsori dan diselenggarakan oleh PT. Benih Citra Asia (BCA), yang bertujuan untuk mempererat tali persaudaraan dan menyalurkan hobi sepak bola di kalangan komunitas setempat.</p><p>Trofeo Betrasia Cup 2024 menghadirkan tiga tim sepak bola tangguh, yaitu Betrasia FC, Sekawan FC, dan Jawara FC, yang siap menunjukkan skill dan kerja sama tim mereka. Pertandingan ini dijadwalkan berlangsung pada pukul <strong>15.00 WIB</strong> hari ini. Ketiga tim ini diharapkan mampu memberikan penampilan terbaik mereka, menjunjung tinggi sportivitas, dan bermain dengan penuh semangat kebersamaan.</p><p>"Acara ini bukan hanya tentang memenangkan pertandingan, tetapi juga tentang menjalin kebersamaan dan memperkuat hubungan antar komunitas. Kami ingin semua peserta dan penonton merasakan keseruan dan keceriaan dari kegiatan ini," ujar salah satu perwakilan dari PT. Benih Citra Asia.</p><p>Pertandingan akan berlangsung seru, di mana ketiga tim akan saling berhadapan dalam format trofeo. Masing-masing pertandingan dipastikan akan berlangsung ketat, namun tetap dalam suasana penuh keceriaan dan sportivitas tinggi. Trofeo Betrasia Cup 2024 ini diharapkan bisa menjadi ajang rutin yang mempererat hubungan di antara warga dan komunitas di sekitar Kabupaten Jember.</p><p>Bagi para penggemar mini soccer dan warga setempat, ini adalah momen yang tepat untuk menyaksikan pertandingan seru sekaligus menikmati kebersamaan di sore hari. Mari datang dan dukung tim favorit Anda dengan tetap menjaga semangat sportivitas dan kebersamaan!</p><p><strong>Penutup:</strong> Dengan adanya kegiatan ini, PT. Benih Citra Asia berharap dapat terus berkontribusi dalam menciptakan suasana yang guyub dan rukun di masyarakat, sekaligus mendukung pengembangan minat olahraga di kalangan generasi muda. Selamat bertanding untuk semua tim yang berpartisipasi, semoga pertandingan berjalan lancar dan sukses!</p></div>
         </div>
         <!-- end berita -->
 
@@ -178,28 +178,6 @@
     <script src="js/splas-screen-start.js"></script>
     <script src="js/kunci-layar.js"></script>
     <script type="module" src="firebase-config.js"></script>
-    <script>
-      // Fetch data from API and update the HTML content
-      fetch('https://script.googleusercontent.com/macros/echo?user_content_key=ZmFe_bsHJoAEl-zVC4r9_y5kyD1M9lfpoz67rrO3zaY1ckIdaAufCMLM105O2ZJvVLCMrg75KsKfQ34Ih1UenjEdvbmv3h-ym5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFjwqs47oBaPH4kWmrQk0-TlBBSaaGYv7lGHQ25Vkd_4JMYJ_rjVr-eAIu7-YXUpgG_SMRY6PLPXs0tRlic9zLSV06CTj_j-jw&lib=MKPX_bhyrrHJngT7S2d3Aaw3C713IOBJS')
-        .then(response => response.json())
-        .then(data => {
-          // Assuming the first item in the array is the one we want to display
-          const newsData = data[0];
-
-          document.getElementById('og-title').content = newsData['TITLE'];
-          document.getElementById('og-description').content = newsData['DESKRIPSI SINGKAT'];
-          document.getElementById('og-image').content = newsData['LINK FOTO BERITA'];
-          document.getElementById('page-title').textContent = newsData['TITLE'];
-          document.getElementById('news-title').textContent = newsData['JUDUL BERITA'];
-          document.getElementById('news-image').src = newsData['LINK FOTO BERITA'];
-          document.getElementById('news-description').textContent = newsData['SUMBER FOTO BERITA'];
-          document.getElementById('news-content').innerHTML = newsData['ISI BERITA'];
-
-          document.getElementById('main-content').style.display = 'block';
-          document.getElementById('loading-screen').style.display = 'none';
-        })
-        .catch(error => console.error('Error fetching data:', error));
-    </script>
   </div>
   <!-- END SCRIPTS -->
 
@@ -217,5 +195,4 @@
   </script>
   <!-- END Service Worker -->
 </body>
-
 </html>
