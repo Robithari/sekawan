@@ -11,7 +11,7 @@
     gtag('config', 'G-CD0MHD1RBP');
   </script>
   <!-- link preview -->
-  <meta property="og:title" content="B3" id="og-title" />
+  <meta property="og:title" id="og-title" content="B3" />
   <meta property="og:description" id="og-description" content="D3" />
   <meta property="og:image" id="og-image" content="E3" />
   <meta property="og:image:width" content="1200">
@@ -194,13 +194,13 @@
         const data = await response.json();
         return data[key];
       }
-
+    
       async function updateContent() {
         const titleKey = document.getElementById('og-title').getAttribute('content');
         const descriptionKey = document.getElementById('og-description').getAttribute('content');
         const imageKey = document.getElementById('og-image').getAttribute('content');
         const contentKey = 'G' + titleKey.slice(1); // Menggunakan kunci berdasarkan kolom G
-
+    
         try {
           const [titleValue, descriptionValue, imageValue, contentValue] = await Promise.all([
             fetchData(titleKey),
@@ -208,13 +208,17 @@
             fetchData(imageKey),
             fetchData(contentKey)
           ]);
-
+    
+          // Update the title in h5
           document.getElementById('news-title').innerText = titleValue;
           document.getElementById('page-title').innerText = titleValue;
           document.getElementById('news-caption').innerText = descriptionValue;
           document.getElementById('news-image').src = imageValue;
           document.getElementById('news-content').innerHTML = contentValue; // Menampilkan data dari kolom G
-
+    
+          // Update og:title meta tag to match the news title
+          document.getElementById('og-title').setAttribute('content', titleValue);
+    
           // Tampilkan konten utama dan sembunyikan layar loading
           document.getElementById('main-content').style.display = 'block';
           document.getElementById('loading-screen').style.display = 'none';
@@ -223,9 +227,10 @@
           alert('Gagal memuat konten. Silakan coba lagi nanti.');
         }
       }
-
+    
       updateContent();
     </script>
+    
 
 
 
