@@ -645,5 +645,30 @@ a {
     border-radius: 50%;
     padding: 10px;
   }
+
+  #loading-screen {
+    width: 80vw; /* Menyesuaikan lebar konten */
+    padding-left: 10%; /* Menyesuaikan padding kiri */
+    padding-right: 10%; /* Menyesuaikan padding kanan */
+    left: 10%; /* Pusatkan elemen secara horizontal */
+    box-sizing: border-box; /* Pastikan padding dan lebar konsisten */
+    border-left: 4px solid purple; /* Border kiri sesuai dengan aturan wrapper */
+    border-right: 4px solid purple; /* Border kanan sesuai dengan aturan wrapper */
+  }
+
+  .loading-logo {
+    display: block;
+    max-width: 50%;
+    height: auto;
+    margin: 0 auto; /* Pusatkan secara horizontal */
+  }
+  
+  .loading-wait {
+    display: block;
+    max-width: 50%;
+    height: auto;
+    margin: 20px auto 0; /* Pusatkan secara horizontal, dan tambahkan margin-top */
+  }
+
 }
 }

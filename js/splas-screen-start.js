@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const mainContent = document.getElementById('main-content');
 
   splashScreen.style.display = 'block'; // Menampilkan splash screen saat halaman dimuat
+  mainContent.style.display = 'none'; // Sembunyikan konten utama sementara
 
   // Ambil URL API dari elemen data atau variabel global
   const apiUrl = window.splashScreenApiUrl || '';
@@ -26,30 +27,40 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     fetch(apiUrl)
-      .then(response => response.json())
+      .then(response => {
+        // Pastikan responsnya 200 OK
+        if (!response.ok) {
+          throw new Error('API response not OK');
+        }
+        return response.json();
+      })
       .then(data => {
         console.log('API Response:', data); // Pesan ini akan disembunyikan jika modifikasi berhasil
 
         // Validasi respons API
         if (data && Object.keys(data).length > 0) {
-          hideSplashScreen();
+          // Tambahkan buffer waktu 1 detik untuk memastikan data benar-benar siap
+          setTimeout(() => {
+            hideSplashScreen();
+          }, 1500); // Buffer tambahan untuk memastikan data siap
         } else {
+          console.warn('Data dari API belum siap, cek ulang dalam 2 detik');
           setTimeout(checkAPIStatus, 2000); // Cek setiap 2 detik
         }
       })
       .catch(error => {
         console.error('API Error:', error); // Log error untuk debugging
-        setTimeout(checkAPIStatus, 2000); // Cek setiap 2 detik
+        setTimeout(checkAPIStatus, 2000); // Cek setiap 2 detik jika terjadi error
       });
   }
 
   function hideSplashScreen() {
-    splashScreen.style.opacity = '0'; // Mulai transisi
+    splashScreen.style.opacity = '0'; // Mulai transisi menghilangkan splash screen
 
     // Menunggu transisi selesai sebelum menyembunyikan splash screen dan menampilkan konten utama
     setTimeout(() => {
-      splashScreen.style.display = 'none';
-      mainContent.style.display = 'block';
+      splashScreen.style.display = 'none'; // Sembunyikan splash screen
+      mainContent.style.display = 'block'; // Tampilkan konten utama
       // Menambahkan kelas untuk animasi pada konten utama
       setTimeout(() => {
         mainContent.classList.add('show');
