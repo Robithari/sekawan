@@ -2,13 +2,14 @@
 *,
 html {
   margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  padding: 0;
   background-size: cover;
   height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 a {
@@ -42,12 +43,7 @@ a {
   opacity: 1;
 }
 
-.loading-logo {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
+.loading-logo,
 .loading-wait {
   display: block;
   max-width: 100%;
@@ -74,10 +70,6 @@ a {
   color: navy;
 }
 
-.navbar-toggler {
-  color: #571ec9;
-}
-
 .navbar-toggler-icon {
   background-color: rgb(199, 184, 184);
   border-radius: 5px;
@@ -85,10 +77,10 @@ a {
 
 /* SLIDE */
 #carouselExampleDark {
-  margin-top: 60px; /* Mengatur jarak atas */
-  overflow: hidden; /* Sembunyikan elemen yang berada di luar container */
-  border-radius: 20px; /* Menerapkan radius pada background carousel */
-  padding: 10px; /* Menambah padding agar konten tidak menempel pada radius */
+  margin-top: 60px;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 10px;
 }
 
 .carousel-item {
@@ -122,6 +114,7 @@ a {
 
 .underline-text {
   padding-top: 3px;
+  color: black;
 }
 
 #teams {
@@ -153,10 +146,6 @@ a {
 .countdown-box p {
   margin: -3px 0;
   font-size: 11px;
-}
-
-.underline-text {
-  color: black;
 }
 
 .waktu-mundur {
@@ -197,28 +186,15 @@ a {
 }
 
 /* BERITA DAN ARTIKEL */
-.berita {
+.container-berita {
   font-size: 20px;
   color: #06713f;
   font-weight: bold;
-  padding: 0 20px;
-  margin: -15px 0 -5px;
-  margin-bottom: 5px;
-}
-
-.custom-foto {
-  max-width: 100%;  /* Gambar tidak akan melebihi lebar kontainer */
-  height: auto;    /* Tinggi gambar akan otomatis disesuaikan dengan lebar */
-  display: block;  /* Menghapus space di bawah gambar */
-  margin: 0 auto;  /* Menyelaraskan gambar ke tengah */
-}
-
-
-
-.informasi {
-  padding: 0 20px;
-  border: none;
-  background: none;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: left;
+  margin-top: -15px;
+  margin-bottom: -5px;
 }
 
 .custom-image {
@@ -264,76 +240,13 @@ a {
   margin-bottom: 10px;
 }
 
-.cek {
-  background-color: #06713f;
-}
-
-.card-img-top {
-  height: 100px;
-  width: 150px;
-  margin: auto;
-  display: block;
-}
-
-.container-artikel {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-/* KISI-CARD */
-.kisi-card {
-  border-radius: 5px;
-  height: 185px;
-  border: 1px solid #ccc;
-}
-
-.kisi-card-img-top {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-.kisi-card-title {
-  font-size: 12px;
-  font-weight: bold;
-  padding-left: 5px;
-}
-
-.kisi-card-text {
-  margin-top: auto;
-  font-size: 12px;
-  padding: 5px;
-}
-
-.g-4,
-.gy-4 {
-  --bs-gutter-y: 0.5rem;
-}
-
-.container-kisi {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-.row-cols-2 > * {
-  flex: 0 0 auto;
-  width: 50%;
-  height: 200px;
-}
-
-.container-kisi .col {
-  padding: 5px;
-}
-
 /* FOOTER */
 .custom-footer {
   background-color: #808080;
   color: black;
   font-size: 14px;
   text-align: center;
-  padding-bottom: 5px;
+  margin-bottom: -100%;
 }
 
 .footer-content {
@@ -359,16 +272,6 @@ a {
   .footer-section {
     padding: 0;
   }
-}
-
-.social-icons {
-  margin-top: -5px;
-}
-
-.social-icon {
-  display: inline-block;
-  margin: 0 10px;
-  font-size: 24px;
 }
 
 .icon-image {
@@ -420,105 +323,11 @@ a {
   .wrapper {
     padding-left: 10%;
     padding-right: 10%;
-    padding-top: 0; /* Reset padding-top di sini */
-    border-left: 4px solid purple;
-    border-right: 4px solid purple;
+    padding-top: 0;
+    border-left: 4px solid #571ec9;
+    border-right: 4px solid #571ec9;
     box-sizing: border-box;
     background-color: white;
-  }
-
-  .content-wrapper {
-    background-color: white;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 0; /* Reset padding-top */
-    padding-bottom: 60px; /* Tambahkan padding-bottom untuk memberikan ruang */
-    box-sizing: border-box;
-  }
-
-  body {
-    background-color: white;
-  }
-
-  .custom-navbar {
-    padding-left: 10%;
-    padding-right: 10%;
-    width: 80%;
-    left: 10%;
-  }
-
-  .navbar-collapse {
-    justify-content: space-between;
-  }
-
-  .navbar-nav {
-    margin-left: 0;
-  }
-
-  .navbar-nav .nav-item {
-    margin-right: 10px;
-  }
-
-  /* Carousel Styling for Desktop */
-  #carouselExampleDark {
-    margin-top: 20px; /* Jarak atas yang sesuai tanpa memutus border */
-    overflow: hidden; /* Sembunyikan elemen yang berada di luar container */
-    border-radius: 20px; /* Menerapkan radius pada background carousel */
-  }
-
-  #carouselExampleDark .carousel-item {
-    height: 300px; /* Atur tinggi gambar carousel sesuai kebutuhan */
-    transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out; /* Efek transisi lebih halus */
-    opacity: 0; /* Buat item tidak terlihat saat awal */
-    transform: scale(1.05); /* Sedikit zoom out */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  #carouselExampleDark .carousel-item.active {
-    opacity: 1; /* Item yang aktif terlihat */
-    transform: scale(1); /* Kembalikan zoom ke normal */
-    position: relative;
-  }
-
-  #carouselExampleDark .carousel-item-next,
-  #carouselExampleDark .carousel-item-prev {
-    position: relative;
-    opacity: 0;
-    transform: scale(1.05);
-  }
-
-  #carouselExampleDark .carousel-item-next.carousel-item-left,
-  #carouselExampleDark .carousel-item-prev.carousel-item-right {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-/* Media Queries untuk Desktop */
-@media (min-width: 1024px) {
-  .wrapper {
-    position: relative; /* Pastikan wrapper dapat menampung pseudo-element */
-    padding-left: 10%;
-    padding-right: 10%;
-    border-left: 4px solid purple;
-    border-right: 4px solid purple;
-    box-sizing: border-box;
-    background-color: white;
-  }
-
-  /* Pseudo-element untuk menjaga border tetap utuh */
-  .wrapper::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 80px; /* Sesuaikan dengan margin-top pada carousel */
-    border-left: 4px solid purple;
-    border-right: 4px solid purple;
-    z-index: -1; /* Tempatkan di belakang konten */
   }
 
   .content-wrapper {
@@ -526,6 +335,7 @@ a {
     padding-left: 10%;
     padding-right: 10%;
     padding-top: 0;
+    padding-bottom: 60px;
     box-sizing: border-box;
   }
 
@@ -537,7 +347,7 @@ a {
     padding-left: 10%;
     padding-right: 10%;
     width: 80%;
-    height: 10%;
+    height: 70px;
     left: 10%;
   }
 
@@ -553,9 +363,16 @@ a {
     margin-right: 10px;
   }
 
-  /* Carousel Styling for Desktop */
+  .navbar-nav .nav-link {
+    font-size: 20px;
+  }
+
+  .dropdown-menu .dropdown-item {
+    font-size: 24px;
+  }
+
   #carouselExampleDark {
-    margin-top: 60px; /* Terapkan margin-top pada carousel */
+    margin-top: 70px;
     overflow: hidden;
     border-radius: 20px;
   }
@@ -590,7 +407,6 @@ a {
     transform: scale(1);
   }
 
-  /* Carousel Image for Desktop */
   #carouselExampleDark .carousel-item img {
     object-fit: cover;
     height: 100%;
@@ -603,7 +419,6 @@ a {
     transform: scale(1);
   }
 
-  /* Box Margin for Desktop */
   .container-box {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -622,7 +437,6 @@ a {
     font-weight: bold;
   }
 
-  /* Footer Styling */
   .custom-footer {
     color: aliceblue;
     margin-left: -13%;
@@ -638,7 +452,6 @@ a {
     color: white;
   }
 
-  /* Carousel Control Styling */
   .carousel-control-prev-icon,
   .carousel-control-next-icon {
     background-color: rgba(0, 0, 0, 0.5);
@@ -647,28 +460,32 @@ a {
   }
 
   #loading-screen {
-    width: 80vw; /* Menyesuaikan lebar konten */
-    padding-left: 10%; /* Menyesuaikan padding kiri */
-    padding-right: 10%; /* Menyesuaikan padding kanan */
-    left: 10%; /* Pusatkan elemen secara horizontal */
-    box-sizing: border-box; /* Pastikan padding dan lebar konsisten */
-    border-left: 4px solid purple; /* Border kiri sesuai dengan aturan wrapper */
-    border-right: 4px solid purple; /* Border kanan sesuai dengan aturan wrapper */
+    width: 80vw;
+    padding-left: 10%;
+    padding-right: 10%;
+    left: 10%;
+    box-sizing: border-box;
+    border-left: 4px solid #571ec9;
+    border-right: 4px solid #571ec9;
   }
 
   .loading-logo {
-    display: block;
     max-width: 50%;
-    height: auto;
-    margin: 0 auto; /* Pusatkan secara horizontal */
-  }
-  
-  .loading-wait {
-    display: block;
-    max-width: 50%;
-    height: auto;
-    margin: 20px auto 0; /* Pusatkan secara horizontal, dan tambahkan margin-top */
+    margin: 0 auto;
   }
 
-}
+  .loading-wait {
+    max-width: 50%;
+    margin: 20px auto 0;
+  }
+
+  .text-yellow-bold {
+    color: #FFD700;
+    font-weight: bold;
+  }
+
+  .dropdown-item.text-yellow-bold {
+    color: #FFD700 !important;
+    font-weight: bold;
+  }
 }
