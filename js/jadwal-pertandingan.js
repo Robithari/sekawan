@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const apiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=CZfT4ukELTEw74U8y4_OVSdJA0MoRPTnbfrM_pEJnBf_yj0iY0f6c9xlI4u9RgHKuk3zOPedAt89EJiJW5Ng1pQVVtY5QfDsm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFp8IpH6vIoxlz6z1vHvBGveIMkwE5hxhRZgrX7pPlQO98dtL__CtYPa3KdNnIXbUm9WnqK1sm1dRh5mrQJuQ_bE78tZtLS8jw&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
+    const apiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=k3wU5zfK3-DW2Vo34Q6-ewmfpREpWbK0dfljFBd4BPzYkLMkFAR3SJh8mEDulwhwaN--kc1oialmNsXVayUS965zW5owxlZTm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnHDsBA6sOiRdcN-kLg6IjGxorAwSZE5V4kOENSFM87NWhh8eVEm3u2M2zCzCOQYoo7iDpELgRwTmAOBD0Lu6gwQafWUebtRFJA&lib=MzYoBrZdJ1ebCVURGRsyHWw3C713IOBJS';
 
     fetch(apiUrl)
         .then(response => {
@@ -11,38 +11,33 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log('Data yang diterima dari API:', data);
 
-            const dokumentasiData = data.DOKUMENTASI;
+            const jadwalData = data["JADWAL PERTANDINGAN"]; // Sesuaikan dengan nama data dalam API
 
-            if (Array.isArray(dokumentasiData)) {
+            if (Array.isArray(jadwalData)) {
                 const tableBody = document.querySelector('#data-table tbody');
+                tableBody.innerHTML = ''; // Bersihkan tabel sebelum menambahkan data
 
-                dokumentasiData.forEach((record, index) => {
-                    if (record.TANGGAL || record.PERTANDINGAN || record["LINK FOTO"] || record.KETERANGAN) {
+                jadwalData.forEach((record, index) => {
+                    // Lewatkan baris yang berisi header kolom dari API (biasanya di baris pertama)
+                    if (record.TANGGAL === "TANGGAL" && record.HARI === "HARI") {
+                        return; // Tidak menambahkan header kolom dua kali
+                    }
+
+                    if (record.TANGGAL || record.PERTANDINGAN || record.KETERANGAN) { // Cek jika data terisi
                         const row = document.createElement('tr');
 
                         // Daftar kolom yang ingin ditampilkan
-                        const columnsToShow = ['TANGGAL', 'PERTANDINGAN', 'LINK FOTO', 'KETERANGAN'];
+                        const columnsToShow = ['TANGGAL', 'HARI', 'PUKUL', 'PERTANDINGAN', 'KETERANGAN', 'LOKASI'];
 
                         columnsToShow.forEach(key => {
                             const cell = document.createElement('td');
                             const value = record[key];
 
-                            // Jika kolom adalah 'LINK FOTO', buat tautan yang mengarah ke 'SUMBER LINK'
-                            if (key === 'LINK FOTO' && value && record["SUMBER LINK"]) {
-                                const link = document.createElement('a');
-                                link.href = record["SUMBER LINK"]; // Tautkan ke 'SUMBER LINK'
-                                link.textContent = value; // Tampilkan teks dari 'LINK FOTO'
-                                link.target = '_blank'; // Buka link di tab baru
-                                link.rel = 'noopener noreferrer'; // Untuk keamanan
-                                link.classList.add('purple-link'); // Tambahkan kelas CSS untuk warna ungu
-                                cell.appendChild(link);
-                            } else {
-                                cell.textContent = value || '-';
-                            }
+                            cell.textContent = value || '-'; // Jika tidak ada nilai, tampilkan '-'
                             row.appendChild(cell);
                         });
 
-                        // Tambahkan latar belakang abu-abu pada baris ganjil
+                        // Tambahkan kelas 'gray-background' setiap baris ganjil (index 1, 3, 5, ...)
                         if (index % 2 === 0) {
                             row.classList.add('gray-background');
                         }
@@ -51,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             } else {
-                console.error('Data DOKUMENTASI tidak ditemukan atau tidak berbentuk array.');
+                console.error('Data JADWAL PERTANDINGAN tidak ditemukan atau tidak berbentuk array.');
             }
         })
         .catch(error => {
@@ -62,11 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Tambahkan CSS untuk warna abu-abu pada baris dan hijau muda pada header
 const style = document.createElement('style');
 style.textContent = `
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: auto; /* Biarkan kolom menyesuaikan lebar berdasarkan konten */
-    }
     .gray-background {
         background-color: #f0f0f0; /* Warna abu-abu untuk baris data */
     }
@@ -77,10 +67,6 @@ style.textContent = `
     }
     td {
         padding: 8px;
-        word-wrap: break-word; /* Membungkus teks panjang agar tidak memanjang ke luar kolom */
-    }
-    a.purple-link {
-        color: purple;
     }
 `;
 document.head.appendChild(style);

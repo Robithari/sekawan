@@ -59,26 +59,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// Tambahkan CSS untuk warna header hijau muda dan latar belakang abu-abu
+// Tambahkan CSS untuk warna abu-abu pada baris dan hijau muda pada header
 const style = document.createElement('style');
 style.textContent = `
-    .purple-link {
-        color: purple;
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto; /* Biarkan kolom menyesuaikan lebar berdasarkan konten */
     }
-
     .gray-background {
         background-color: #f0f0f0; /* Warna abu-abu untuk baris data */
     }
-
     thead th {
         background-color: #90ee90; /* Warna hijau muda untuk header */
         padding: 8px;
-        text-align: center; /* Sesuaikan dengan header */
+        text-align: left;
     }
-
     td {
         padding: 8px;
-        text-align: left; /* Data dirata kiri */
+        word-wrap: break-word; /* Membungkus teks panjang agar tidak memanjang ke luar kolom */
+    }
+    a.purple-link {
+        color: purple;
     }
 `;
 document.head.appendChild(style);
