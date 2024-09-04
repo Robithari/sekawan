@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -20,6 +19,7 @@ h5 {
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: auto; /* Biarkan browser mengatur lebar kolom secara otomatis */
 }
 
 th,
@@ -37,7 +37,7 @@ td {
     text-align: left; /* Rata kiri untuk data */
 }
 
-/* Atur lebar kolom Pemasukan, Pengeluaran, dan Saldo secara konsisten */
+/* Atur lebar kolom Pemasukan, Pengeluaran, dan Saldo dengan penyesuaian otomatis */
 th:nth-child(3),
 td:nth-child(3),
 /* Kolom PEMASUKAN */
@@ -46,20 +46,16 @@ td:nth-child(4),
 /* Kolom PENGELUARAN */
 th:nth-child(5),
 td:nth-child(5)
-
 /* Kolom SALDO */
     {
-    width: 20%;
     white-space: nowrap;
-    /* Mencegah teks berpindah baris */
     overflow: hidden;
-    /* Menghindari teks memanjang keluar kotak */
     text-overflow: ellipsis;
-    /* Menambahkan ... di akhir teks panjang */
+    /* Tambahkan ... di akhir teks panjang */
 }
 
+/* Media Queries untuk responsif */
 @media (max-width: 600px) {
-
     table,
     th,
     td {
@@ -73,7 +69,6 @@ td:nth-child(5)
 }
 
 @media (max-width: 400px) {
-
     table,
     th,
     td {
@@ -87,7 +82,6 @@ td:nth-child(5)
 }
 
 @media (orientation: portrait) {
-
     table,
     th,
     td {
@@ -98,36 +92,9 @@ td:nth-child(5)
     td {
         padding: 4px 6px;
     }
-
-    th:nth-child(1),
-    td:nth-child(1) {
-        /* Kolom TANGGAL */
-        width: 20%;
-    }
-
-    th:nth-child(2),
-    td:nth-child(2) {
-        /* Kolom KETERANGAN */
-        width: 40%;
-    }
-
-    th:nth-child(3),
-    td:nth-child(3),
-    /* Kolom PEMASUKAN */
-    th:nth-child(4),
-    td:nth-child(4),
-    /* Kolom PENGELUARAN */
-    th:nth-child(5),
-    td:nth-child(5)
-
-    /* Kolom SALDO */
-        {
-        width: 13.333%;
-    }
 }
 
 @media (orientation: landscape) {
-
     table,
     th,
     td {
@@ -137,32 +104,6 @@ td:nth-child(5)
     th,
     td {
         padding: 4px 6px;
-    }
-
-    th:nth-child(1),
-    td:nth-child(1) {
-        /* Kolom TANGGAL */
-        width: 15%;
-    }
-
-    th:nth-child(2),
-    td:nth-child(2) {
-        /* Kolom KETERANGAN */
-        width: 10%;
-    }
-
-    th:nth-child(3),
-    td:nth-child(3),
-    /* Kolom PEMASUKAN */
-    th:nth-child(4),
-    td:nth-child(4),
-    /* Kolom PENGELUARAN */
-    th:nth-child(5),
-    td:nth-child(5)
-
-    /* Kolom SALDO */
-        {
-        width: 11.6667%;
     }
 }
 

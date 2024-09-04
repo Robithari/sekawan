@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const kasData = data.KAS;
             const tableBody = document.querySelector('#data-table tbody');
 
-            kasData.forEach(record => {
+            kasData.forEach((record, index) => {
                 const row = document.createElement('tr');
                 
                 Object.keys(record).forEach(key => {
@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     row.appendChild(cell);
                 });
 
+                // Tambahkan latar belakang abu-abu pada baris ganjil
+                if (index % 2 === 0) {
+                    row.classList.add('gray-background');
+                }
+
                 tableBody.appendChild(row);
             });
         })
@@ -29,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error fetching data:', error);
         });
 
+    // Fungsi untuk format mata uang
     function formatCurrency(num) {
         if (num === null || num === undefined || isNaN(num) || num === '') {
             return '-';
@@ -40,3 +46,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Tambahkan CSS untuk warna abu-abu pada baris dan hijau muda pada header
+const style = document.createElement('style');
+style.textContent = `
+    .gray-background {
+        background-color: #f0f0f0; /* Warna abu-abu untuk baris data */
+    }
+    thead th {
+        background-color: #90ee90; /* Warna hijau muda untuk header */
+        padding: 8px;
+        text-align: left;
+    }
+    td {
+        padding: 8px;
+    }
+`;
+document.head.appendChild(style);

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (Array.isArray(dokumentasiData)) {
                 const tableBody = document.querySelector('#data-table tbody');
 
-                dokumentasiData.forEach(record => {
+                dokumentasiData.forEach((record, index) => {
                     if (record.TANGGAL || record.PERTANDINGAN || record["LINK FOTO"] || record.KETERANGAN) {
                         const row = document.createElement('tr');
 
@@ -39,9 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             } else {
                                 cell.textContent = value || '-';
                             }
-                            
                             row.appendChild(cell);
                         });
+
+                        // Tambahkan latar belakang abu-abu pada baris ganjil
+                        if (index % 2 === 0) {
+                            row.classList.add('gray-background');
+                        }
 
                         tableBody.appendChild(row);
                     }
@@ -55,11 +59,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// Tambahkan CSS untuk warna ungu
+// Tambahkan CSS untuk warna header hijau muda dan latar belakang abu-abu
 const style = document.createElement('style');
 style.textContent = `
     .purple-link {
         color: purple;
+    }
+
+    .gray-background {
+        background-color: #f0f0f0; /* Warna abu-abu untuk baris data */
+    }
+
+    thead th {
+        background-color: #90ee90; /* Warna hijau muda untuk header */
+        padding: 8px;
+        text-align: center; /* Sesuaikan dengan header */
+    }
+
+    td {
+        padding: 8px;
+        text-align: left; /* Data dirata kiri */
     }
 `;
 document.head.appendChild(style);
