@@ -75,10 +75,15 @@ a {
   border-radius: 5px;
 }
 
-.navbar-toggler:focus, .navbar-toggler:active {
+.navbar-toggler:focus,
+.navbar-toggler:active {
   outline: none;
   box-shadow: none;
 }
+.dropdown-item.text-dark {
+  color: black !important;
+}
+
 
 /* ======================================================= SLIDE =======================================================*/
 #carouselExampleDark {
@@ -243,6 +248,27 @@ a {
   border: none;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+/* CSS untuk container readmore */
+.container-readmore {
+  background-color: #9bbbd0;
+  /* Warna biru untuk latar belakang */
+  color: black;
+  /* Warna teks putih */
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  /* Membuat sudut melengkung */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Efek bayangan */
+  cursor: pointer;
+  width: 110px;
+  /* Mengatur lebar tombol */
+  height: auto;
+  padding: 1px 1px;
 }
 
 /*======================================================= FOOTER =======================================================*/
