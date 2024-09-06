@@ -10,6 +10,7 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
+
 }
 
 a {
@@ -51,9 +52,15 @@ a {
 }
 
 /*======================================================= NAVBAR =======================================================*/
+
+.navbar navbar-expand-lg custom-navbar {
+  background: rgb(38, 0, 255);
+  background: linear-gradient(90deg, rgba(38, 0, 255, 1) 0%, rgba(196, 60, 207, 0.9612219887955182) 74%, rgba(38, 0, 255, 1) 100%);
+}
+
 .custom-navbar {
-  background-color: #571ec9;
-  padding: 0 3.5px;
+  background: rgb(38,0,255);
+  background: linear-gradient(90deg, rgba(38,0,255,1) 0%, rgba(196,60,207,0.9612219887955182) 74%, rgba(38,0,255,1) 100%);  padding: 0 3.5px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -80,6 +87,7 @@ a {
   outline: none;
   box-shadow: none;
 }
+
 .dropdown-item.text-dark {
   color: black !important;
 }
@@ -273,7 +281,8 @@ a {
 
 /*======================================================= FOOTER =======================================================*/
 .custom-footer {
-  background-color: #808080;
+  background: rgb(38, 0, 255);
+  background: linear-gradient(90deg, rgba(38, 0, 255, 1) 0%, rgba(118, 25, 125, 0.9612219887955182) 50%, rgba(38, 0, 255, 1) 100%);
   color: black;
   font-size: 14px;
   text-align: center;
@@ -297,6 +306,9 @@ a {
   padding-top: 1px;
   font-size: 12px;
   margin-top: 10px;
+}
+.footer-section p {
+  color: white;
 }
 
 @media (max-width: 768px) {
@@ -330,19 +342,27 @@ a {
   margin-top: 1px;
   margin-bottom: 0.5px;
   padding-bottom: 2px;
+  color: white;
 }
 
 .footer-telephone {
   margin-top: 0px;
+}
+.footer-telephone p {
+  color: white;
 }
 
 .footer-email {
   margin-top: -5px;
   margin-bottom: 0rem;
 }
+.footer-email p {
+  color: white;
+}
 
 .footer-email-link {
   text-decoration: underline !important;
+  color: white;
 }
 
 .footer-buttom-dibuat {
