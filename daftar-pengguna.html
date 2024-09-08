@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Pengguna</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Daftar Pengguna Terdaftar</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Daftar nama pengguna -->
+                        <ul id="user-list" class="list-group"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+            authDomain: "sekawan-fc-427414.firebaseapp.com",
+            projectId: "sekawan-fc-427414",
+            storageBucket: "sekawan-fc-427414.appspot.com",
+            messagingSenderId: "399174955835",
+            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+            measurementId: "G-CD0MHD1RBP"
+        };
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Referensi ke layanan Firestore
+        var db = firebase.firestore();
+
+        // URL Web App dari Google Apps Script yang sudah Anda buat
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbztOow55JsjUgx4e39Grn34wyHPPDnNasWCkHGXIiEBYCbvwKNG8kKYPE0_6r0_utEn/exec'; // Ganti dengan URL Web App Anda
+
+        // Fungsi untuk mengirim data ke Google Sheets melalui Web App
+        async function sendDataToGoogleSheets(data) {
+            try {
+                const response = await fetch(webAppUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.text();
+                console.log('Response dari Google Sheets:', result);
+            } catch (error) {
+                console.error('Error saat mengirim data ke Google Sheets:', error);
+            }
+        }
+
+        // Fungsi untuk mendapatkan dan menampilkan semua pengguna dari Firestore dan mengirim data ke Google Sheets
+        async function fetchAndDisplayUsers() {
+            try {
+                // Dapatkan semua dokumen dari koleksi 'users'
+                const querySnapshot = await db.collection('users').get();
+
+                // Referensi ke elemen HTML untuk menampilkan daftar pengguna
+                const userList = document.getElementById('user-list');
+                userList.innerHTML = ''; // Kosongkan daftar sebelum menambahkan data baru
+
+                // Loop melalui semua dokumen dan ambil data nama, nomor telepon, dan email pengguna
+                querySnapshot.forEach((doc) => {
+                    const userData = doc.data();
+                    const userName = userData.name;
+                    const userPhone = userData.phone;
+                    const userEmail = userData.email;
+
+                    // Siapkan data untuk dikirim ke Google Sheets
+                    const dataToSend = {
+                        name: userName,
+                        phone: userPhone,
+                        email: userEmail
+                    };
+
+                    // Kirim data ke Google Sheets melalui Web App
+                    sendDataToGoogleSheets(dataToSend);
+
+                    // Buat elemen list untuk setiap pengguna dan tambahkan ke daftar
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+                    listItem.innerHTML = `<strong>Nama:</strong> ${userName} <br>
+                                          <strong>Nomor HP:</strong> ${userPhone} <br>
+                                          <strong>Email:</strong> ${userEmail}`;
+                    userList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error("Error saat mengambil data pengguna:", error);
+            }
+        }
+
+        // Panggil fungsi ini ketika halaman dimuat untuk menampilkan daftar pengguna
+        document.addEventListener('DOMContentLoaded', fetchAndDisplayUsers);
+    </script>
+</body>
+
+</html>

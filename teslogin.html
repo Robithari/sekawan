@@ -43,7 +43,7 @@
                                 <a href="#" id="forgot-password">Forgot Password?</a>
                             </div>
                             <div class="mt-2">
-                                <p>Don't have an account? <a href="#" id="signup">Sign Up</a></p>
+                                <p>Don't have an account? <a href="#" id="signup-link">Sign Up</a></p>
                             </div>
                         </form>
 
@@ -99,6 +99,26 @@
         var auth = firebase.auth();
         var db = firebase.firestore();
 
+        // URL Web App dari Google Apps Script
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbzlLgkECZku6FATlv-crsGOZC90IHBPQXHnQqNXjwvN3l1GOz0UIOvRdhTZ4ZG-5P8L/exec'; // Ganti dengan URL Web App Anda
+
+        // Fungsi untuk mengirim data ke Google Sheets melalui Web App
+        async function sendDataToGoogleSheets(data) {
+            try {
+                const response = await fetch(webAppUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.text();
+                console.log('Response dari Google Sheets:', result);
+            } catch (error) {
+                console.error('Error saat mengirim data ke Google Sheets:', error);
+            }
+        }
+
         // Fungsi login
         async function handleLogin(event) {
             event.preventDefault(); // Menghindari pengiriman formulir secara default
@@ -141,6 +161,16 @@
                         email: email
                     });
 
+                    // Siapkan data untuk dikirim ke Google Sheets
+                    const dataToSend = {
+                        name: name,
+                        phone: phone,
+                        email: email
+                    };
+
+                    // Kirim data ke Google Sheets melalui Web App
+                    sendDataToGoogleSheets(dataToSend);
+
                     // Tampilkan notifikasi sukses
                     document.getElementById('success-message').innerHTML = "Anda berhasil mendaftar, silakan login";
                     document.getElementById('success-message').style.display = 'block';
@@ -148,7 +178,7 @@
                     // Setelah 3 detik, sembunyikan notifikasi dan arahkan ke halaman login
                     setTimeout(function () {
                         document.getElementById('success-message').style.display = 'none';
-                        window.location.href = 'login.html'; // Redirect ke halaman login
+                        window.location.href = 'teslogin.html'; // Redirect ke halaman login
                     }, 3000);
                 } catch (error) {
                     console.error("Error pada pendaftaran:", error.code, error.message);
@@ -176,19 +206,22 @@
             }
         }
 
-        document.getElementById('login-form').addEventListener('submit', handleLogin);
-        document.getElementById('forgot-password').addEventListener('click', handleForgotPassword);
-        document.getElementById('signup').addEventListener('click', function (event) {
+        // Fungsi untuk beralih antara form login dan signup
+        document.getElementById('signup-link').addEventListener('click', function (event) {
             event.preventDefault();
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('signup-form').style.display = 'block';
         });
+
         document.getElementById('back-to-login').addEventListener('click', function (event) {
             event.preventDefault();
             document.getElementById('signup-form').style.display = 'none';
             document.getElementById('login-form').style.display = 'block';
         });
+
+        document.getElementById('login-form').addEventListener('submit', handleLogin);
         document.getElementById('signup-form').addEventListener('submit', handleSignup);
+        document.getElementById('forgot-password').addEventListener('click', handleForgotPassword);
     </script>
 </body>
 
