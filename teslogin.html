@@ -20,7 +20,7 @@
                     <div class="card-body">
                         <!-- Notifikasi Sukses -->
                         <div id="success-message" class="alert alert-success" style="display: none;">
-                            Pendaftaran Anda Sukses
+                            Anda berhasil mendaftar, silakan login
                         </div>
 
                         <!-- Notifikasi Sukses Login -->
@@ -69,6 +69,8 @@
                             <div class="mt-2">
                                 <a href="#" id="back-to-login">Back to Login</a>
                             </div>
+                            <!-- Button untuk arahkan ke halaman login jika diinginkan -->
+                            <button id="go-to-login" class="btn btn-secondary mt-3" style="display: none;">Go to Login</button>
                         </form>
                     </div>
                 </div>
@@ -175,11 +177,9 @@
                     document.getElementById('success-message').innerHTML = "Anda berhasil mendaftar, silakan login";
                     document.getElementById('success-message').style.display = 'block';
 
-                    // Setelah 3 detik, sembunyikan notifikasi dan arahkan ke halaman login
-                    setTimeout(function () {
-                        document.getElementById('success-message').style.display = 'none';
-                        window.location.href = 'teslogin.html'; // Redirect ke halaman login
-                    }, 3000);
+                    // Tampilkan tombol login
+                    document.getElementById('go-to-login').style.display = 'block';
+
                 } catch (error) {
                     console.error("Error pada pendaftaran:", error.code, error.message);
                     alert('Error: ' + error.message);
@@ -219,9 +219,14 @@
             document.getElementById('login-form').style.display = 'block';
         });
 
+        document.getElementById('forgot-password').addEventListener('click', handleForgotPassword);
         document.getElementById('login-form').addEventListener('submit', handleLogin);
         document.getElementById('signup-form').addEventListener('submit', handleSignup);
-        document.getElementById('forgot-password').addEventListener('click', handleForgotPassword);
+
+        // Menangani klik pada tombol "Go to Login"
+        document.getElementById('go-to-login').addEventListener('click', function () {
+            window.location.href = 'teslogin.html'; // Arahkan ke halaman login
+        });
     </script>
 </body>
 
