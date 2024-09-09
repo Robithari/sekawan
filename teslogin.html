@@ -69,7 +69,6 @@
                             <div class="mt-2">
                                 <a href="#" id="back-to-login">Back to Login</a>
                             </div>
-                            <!-- Button untuk arahkan ke halaman login jika diinginkan -->
                             <button id="go-to-login" class="btn btn-secondary mt-3" style="display: none;">Go to Login</button>
                         </form>
                     </div>
@@ -102,7 +101,7 @@
         var db = firebase.firestore();
 
         // URL Web App dari Google Apps Script
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbxLeeTBRZHXHJ2sknyBd4qlchxmAp72pCHtoIYME9sitB7_tCACG-P_9vX9PO4B4Qw/exec'; 
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbwT2mMR-xCmga9FuOYdRxPGaOn1gb7IZ-V1KwcP58XTpnDTe8nSP37uQO1nkoPEkUdB/exec';
 
         // Fungsi untuk mengirim data ke Google Sheets melalui Web App
         async function sendDataToGoogleSheets(data) {
@@ -114,7 +113,7 @@
                     },
                     body: JSON.stringify(data),
                 });
-                const result = await response.text();
+                const result = await response.json();
                 console.log('Response dari Google Sheets:', result);
             } catch (error) {
                 console.error('Error saat mengirim data ke Google Sheets:', error);
@@ -171,7 +170,7 @@
                     };
 
                     // Kirim data ke Google Sheets melalui Web App
-                    sendDataToGoogleSheets(dataToSend);
+                    await sendDataToGoogleSheets(dataToSend);
 
                     // Tampilkan notifikasi sukses
                     document.getElementById('success-message').innerHTML = "Anda berhasil mendaftar, silakan login";
@@ -228,6 +227,20 @@
             window.location.href = 'teslogin.html'; // Arahkan ke halaman login
         });
     </script>
+    
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+                    // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
+                }, function (error) {
+                    console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
+                });
+            });
+        }
+    </script>
+    <!-- END Service Worker -->
 </body>
 
 </html>
