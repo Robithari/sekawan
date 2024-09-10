@@ -101,7 +101,7 @@
         var db = firebase.firestore();
 
         // URL Web App dari Google Apps Script
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbwT2mMR-xCmga9FuOYdRxPGaOn1gb7IZ-V1KwcP58XTpnDTe8nSP37uQO1nkoPEkUdB/exec';
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbwRHhfCDJeVYvKO4WycsWaPXNPu0sLfFdJuBBAeRWYhPcxuvM_X7KIt8RD_9xybW07O/exec';
 
         // Fungsi untuk mengirim data ke Google Sheets melalui Web App
         async function sendDataToGoogleSheets(data) {
@@ -112,6 +112,7 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(data),
+                    mode: 'cors'  // Tambahkan mode 'cors' di sini
                 });
                 const result = await response.json();
                 console.log('Response dari Google Sheets:', result);
