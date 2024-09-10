@@ -83,6 +83,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
+        // Konfigurasi Firebase
         var firebaseConfig = {
             apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
             authDomain: "sekawan-fc-427414.firebaseapp.com",
@@ -96,12 +97,8 @@
         // Inisialisasi Firebase
         firebase.initializeApp(firebaseConfig);
 
-        // Referensi ke layanan autentikasi dan Firestore
-        var auth = firebase.auth();
-        var db = firebase.firestore();
-
         // URL Web App dari Google Apps Script
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbwRHhfCDJeVYvKO4WycsWaPXNPu0sLfFdJuBBAeRWYhPcxuvM_X7KIt8RD_9xybW07O/exec';
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbx0R6Btn4NbQUN56b9O9c9XdeqRo-GTcFQI290nnZV39myxr75IjH_N9hTuQnjoJexi/exec';
 
         // Fungsi untuk mengirim data ke Google Sheets melalui Web App
         async function sendDataToGoogleSheets(data) {
@@ -112,33 +109,12 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(data),
-                    mode: 'cors'  // Tambahkan mode 'cors' di sini
+                    mode: 'cors'  // Pastikan 'cors' ditambahkan di sini
                 });
                 const result = await response.json();
                 console.log('Response dari Google Sheets:', result);
             } catch (error) {
                 console.error('Error saat mengirim data ke Google Sheets:', error);
-            }
-        }
-
-        // Fungsi login
-        async function handleLogin(event) {
-            event.preventDefault(); // Menghindari pengiriman formulir secara default
-
-            var email = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
-
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                localStorage.setItem('loggedIn', 'true');
-                document.getElementById('login-success-message').style.display = 'block';
-
-                setTimeout(function () {
-                    document.getElementById('login-success-message').style.display = 'none';
-                    window.location.href = 'index.html'; // Redirect ke halaman beranda
-                }, 3000);
-            } catch (error) {
-                alert('Login gagal! Kesalahan: ' + error.message);
             }
         }
 
@@ -153,22 +129,8 @@
 
             if (name && phone && email && password) {
                 try {
-                    var userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    var user = userCredential.user;
-
                     // Simpan informasi pengguna ke Firestore
-                    await db.collection('users').doc(user.uid).set({
-                        name: name,
-                        phone: phone,
-                        email: email
-                    });
-
-                    // Siapkan data untuk dikirim ke Google Sheets
-                    const dataToSend = {
-                        name: name,
-                        phone: phone,
-                        email: email
-                    };
+                    const dataToSend = { name: name, phone: phone, email: email };
 
                     // Kirim data ke Google Sheets melalui Web App
                     await sendDataToGoogleSheets(dataToSend);
@@ -189,24 +151,8 @@
             }
         }
 
-        // Fungsi untuk lupa password
-        async function handleForgotPassword(event) {
-            event.preventDefault(); // Menghindari pengiriman formulir secara default
-
-            var email = document.getElementById('username').value;
-            if (email) {
-                try {
-                    await auth.sendPasswordResetEmail(email);
-                    alert('Password reset email sent! Please check your inbox.');
-                } catch (error) {
-                    alert('Error: ' + error.message);
-                }
-            } else {
-                alert('Please enter your email address.');
-            }
-        }
-
-        // Fungsi untuk beralih antara form login dan signup
+        // Event listeners
+        document.getElementById('signup-form').addEventListener('submit', handleSignup);
         document.getElementById('signup-link').addEventListener('click', function (event) {
             event.preventDefault();
             document.getElementById('login-form').style.display = 'none';
@@ -218,25 +164,16 @@
             document.getElementById('signup-form').style.display = 'none';
             document.getElementById('login-form').style.display = 'block';
         });
-
-        document.getElementById('forgot-password').addEventListener('click', handleForgotPassword);
-        document.getElementById('login-form').addEventListener('submit', handleLogin);
-        document.getElementById('signup-form').addEventListener('submit', handleSignup);
-
-        // Menangani klik pada tombol "Go to Login"
-        document.getElementById('go-to-login').addEventListener('click', function () {
-            window.location.href = 'teslogin.html'; // Arahkan ke halaman login
-        });
     </script>
-    
+
     <!-- Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
                 navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
-                    // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
+                    // console.log('Service Worker registered with scope:', registration.scope);
                 }, function (error) {
-                    console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
+                    console.error('Service Worker registration failed:', error);
                 });
             });
         }
