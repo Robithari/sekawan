@@ -15,6 +15,44 @@ firebase.initializeApp(firebaseConfig);
 var auth = firebase.auth();
 var db = firebase.firestore();
 
+// Fungsi untuk mendapatkan lokasi user menggunakan Geolocation API
+async function getUserLocation() {
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                try {
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+
+                    // Menggunakan API Geolocation pihak ketiga (misal, OpenCage)
+                    let response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=02766051551448e196808914cc70a154`);
+                    let data = await response.json();
+                    let result = data.results[0];
+                    
+                    // Mengambil nama kota, alamat lengkap, dan koordinat
+                    let city = result.components.city || result.components.town;
+                    let formattedAddress = result.formatted;
+                    let latitude = result.geometry.lat;
+                    let longitude = result.geometry.lng;
+
+                    resolve({
+                        city: city,
+                        formattedAddress: formattedAddress,
+                        latitude: latitude,
+                        longitude: longitude
+                    });
+                } catch (error) {
+                    reject("Tidak dapat mengambil lokasi.");
+                }
+            }, (error) => {
+                reject("Geolocation tidak diizinkan.");
+            });
+        } else {
+            reject("Geolocation tidak didukung oleh browser.");
+        }
+    });
+}
+
 // Fungsi login
 async function handleLogin(event) {
     event.preventDefault(); // Menghindari pengiriman formulir secara default
@@ -46,22 +84,38 @@ async function handleSignup(event) {
     var password = document.getElementById('signup-password').value;
     var membershipCode = document.getElementById('signup-membership-code').value;
 
-    // Cek Kode Keanggotaan
-    if (membershipCode !== 'sekawanfcguyub') {
-        alert('Kode Keanggotaan yang Anda masukkan salah. Silakan masukkan kode yang benar.');
-        return; // Batalkan pendaftaran
+    // Validasi Kode Keanggotaan dari Firestore
+    try {
+        var membershipDoc = await db.collection('membershipCodes').doc(membershipCode).get();
+        if (!membershipDoc.exists) {
+            alert('Kode Keanggotaan yang Anda masukkan salah. Silakan masukkan kode yang benar.');
+            return; // Batalkan pendaftaran
+        }
+    } catch (error) {
+        alert('Terjadi kesalahan saat memverifikasi kode keanggotaan: ' + error.message);
+        return;
     }
 
+    // Proses pendaftaran pengguna
     if (name && phone && email && password) {
         try {
             var userCredential = await auth.createUserWithEmailAndPassword(email, password);
             var user = userCredential.user;
 
+            // Ambil waktu server dan lokasi user
+            var signupTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+            var userLocation = await getUserLocation();
+
             // Simpan informasi pengguna ke Firestore
             await db.collection('users').doc(user.uid).set({
                 name: name,
                 phone: phone,
-                email: email
+                email: email,
+                signupTimestamp: signupTimestamp, // Waktu pendaftaran otomatis dari server Firebase
+                city: userLocation.city, // Kota otomatis berdasarkan lokasi user
+                formattedAddress: userLocation.formattedAddress, // Alamat lengkap
+                latitude: userLocation.latitude, // Latitude
+                longitude: userLocation.longitude // Longitude
             });
 
             // Tampilkan notifikasi sukses
