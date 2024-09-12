@@ -13,6 +13,35 @@
         gtag('config', 'G-CD0MHD1RBP');
     </script>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+
+    <script>
+        // Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+            authDomain: "sekawan-fc-427414.firebaseapp.com",
+            projectId: "sekawan-fc-427414",
+            storageBucket: "sekawan-fc-427414.appspot.com",
+            messagingSenderId: "399174955835",
+            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+            measurementId: "G-CD0MHD1RBP"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Check user authentication status
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (!user) {
+                // User is not logged in, redirect to login page
+                alert('Anda harus login terlebih dahulu untuk mengakses halaman ini.');
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+
     <!-- link preview -->
     <meta property="og:title" content="Kas Sekawan FC" />
     <meta property="og:description" content="Laporan Kas Sekawan FC Realtime" />

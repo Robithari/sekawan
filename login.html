@@ -2,11 +2,57 @@
 <html lang="en" translate="no">
 
 <head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-CD0MHD1RBP');
+    </script>
+
+    <!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-5">
+
+    <!-- Viewport and Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="google" content="notranslate">
+
+    <!-- Bootstrap and Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/loading.css">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="icon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="icon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="icon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="icon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="icon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>Sekawan FC</title>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
 </head>
 
 <body>
@@ -15,7 +61,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="text-center">Login</h3>
+                        <h3 id="form-title" class="text-center">Login</h3> <!-- Berikan ID untuk judul -->
                     </div>
                     <div class="card-body">
                         <!-- Notifikasi Sukses -->
@@ -65,145 +111,64 @@
                                 <label for="signup-password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="signup-password" required>
                             </div>
+                            <!-- Input Kode Keanggotaan -->
+                            <div class="mb-3">
+                                <label for="signup-membership-code" class="form-label">Kode Keanggotaan</label>
+                                <input type="text" class="form-control" id="signup-membership-code"
+                                    placeholder="Masukkan Kode Keanggotaan Anda" required>
+                            </div>
                             <button type="submit" class="btn btn-primary">Sign Up</button>
                             <div class="mt-2">
                                 <a href="#" id="back-to-login">Back to Login</a>
                             </div>
-                            <button id="go-to-login" class="btn btn-secondary mt-3" style="display: none;">Go to Login</button>
+                            <button id="go-to-login" class="btn btn-secondary mt-3" style="display: none;">Go to
+                                Login</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <hr>
+    <!-- FOOTER -->
+    <footer class="custom-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h6>Ikuti Kami</h6>
+                <div class="social-icons">
+                    <a href="proses.html" class="social-icon" target="_blank">
+                        <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
+                            alt="Ikon Facebook" class="icon-image">
+                    </a>
+                    <a href="proses.html" class="social-icon" target="_blank">
+                        <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
+                            alt="Ikon Instagram" class="icon-image">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h6>Hubungi Kami</h6>
+                <p class="footer-email">Email: <a class="footer-email-link"
+                        href="mailto:admin@sekawanfc.com">admin@sekawanfc.com</a></p>
+                <p class="footer-telephone">Telepon: +62 813 363 06253</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
+            <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
+        </div>
+    </footer>
+    <!-- END FOOTER -->
+    <!-- SCRIPTS -->
+    <script src="js/kunci-layar.js"></script>
+    <script src="js/login.js"></script>
 
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-    <script>
-        var firebaseConfig = {
-            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
-            authDomain: "sekawan-fc-427414.firebaseapp.com",
-            projectId: "sekawan-fc-427414",
-            storageBucket: "sekawan-fc-427414.appspot.com",
-            messagingSenderId: "399174955835",
-            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
-            measurementId: "G-CD0MHD1RBP"
-        };
-
-        // Inisialisasi Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // Referensi ke layanan autentikasi dan Firestore
-        var auth = firebase.auth();
-        var db = firebase.firestore();
-
-        // Fungsi login
-        async function handleLogin(event) {
-            event.preventDefault(); // Menghindari pengiriman formulir secara default
-
-            var email = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
-
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                localStorage.setItem('loggedIn', 'true');
-                document.getElementById('login-success-message').style.display = 'block';
-
-                setTimeout(function () {
-                    document.getElementById('login-success-message').style.display = 'none';
-                    window.location.href = 'index.html'; // Redirect ke halaman beranda
-                }, 3000);
-            } catch (error) {
-                alert('Login gagal! Kesalahan: ' + error.message);
-            }
-        }
-
-        // Fungsi signup dengan async/await
-        async function handleSignup(event) {
-            event.preventDefault(); // Menghindari pengiriman formulir secara default
-
-            var name = document.getElementById('signup-name').value;
-            var phone = document.getElementById('signup-phone').value;
-            var email = document.getElementById('signup-email').value;
-            var password = document.getElementById('signup-password').value;
-
-            if (name && phone && email && password) {
-                try {
-                    var userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    var user = userCredential.user;
-
-                    // Simpan informasi pengguna ke Firestore
-                    await db.collection('users').doc(user.uid).set({
-                        name: name,
-                        phone: phone,
-                        email: email
-                    });
-
-                    // Tampilkan notifikasi sukses
-                    document.getElementById('success-message').innerHTML = "Anda berhasil mendaftar, silakan login";
-                    document.getElementById('success-message').style.display = 'block';
-
-                    // Tampilkan tombol login
-                    document.getElementById('go-to-login').style.display = 'block';
-
-                } catch (error) {
-                    console.error("Error pada pendaftaran:", error.code, error.message);
-                    alert('Error: ' + error.message);
-                }
-            } else {
-                alert('Please fill in all fields.');
-            }
-        }
-
-        // Fungsi untuk lupa password
-        async function handleForgotPassword(event) {
-            event.preventDefault(); // Menghindari pengiriman formulir secara default
-
-            var email = document.getElementById('username').value;
-            if (email) {
-                try {
-                    await auth.sendPasswordResetEmail(email);
-                    alert('Password reset email sent! Please check your inbox.');
-                } catch (error) {
-                    alert('Error: ' + error.message);
-                }
-            } else {
-                alert('Please enter your email address.');
-            }
-        }
-
-        // Fungsi untuk beralih antara form login dan signup
-        document.getElementById('signup-link').addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('signup-form').style.display = 'block';
-        });
-
-        document.getElementById('back-to-login').addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('signup-form').style.display = 'none';
-            document.getElementById('login-form').style.display = 'block';
-        });
-
-        document.getElementById('forgot-password').addEventListener('click', handleForgotPassword);
-        document.getElementById('login-form').addEventListener('submit', handleLogin);
-        document.getElementById('signup-form').addEventListener('submit', handleSignup);
-
-        // Menangani klik pada tombol "Go to Login"
-        document.getElementById('go-to-login').addEventListener('click', function () {
-            window.location.href = 'teslogin.html'; // Arahkan ke halaman login
-        });
-    </script>
-    
     <!-- Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
                 navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
-                    // console.log('Service Worker registered with scope:', registration.scope);
+                    console.log('Service Worker registered with scope:', registration.scope);
                 }, function (error) {
                     console.error('Service Worker registration failed:', error);
                 });
