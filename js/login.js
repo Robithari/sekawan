@@ -1,3 +1,4 @@
+// Konfigurasi Firebase
 var firebaseConfig = {
     apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
     authDomain: "sekawan-fc-427414.firebaseapp.com",
@@ -28,7 +29,7 @@ async function getUserLocation() {
                     let response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=02766051551448e196808914cc70a154`);
                     let data = await response.json();
                     let result = data.results[0];
-                    
+
                     // Mengambil nama kota, alamat lengkap, dan koordinat
                     let city = result.components.city || result.components.town;
                     let formattedAddress = result.formatted;
@@ -65,7 +66,7 @@ async function handleLogin(event) {
         localStorage.setItem('loggedIn', 'true');
         document.getElementById('login-success-message').style.display = 'block';
 
-        setTimeout(function () {
+        setTimeout(() => {
             document.getElementById('login-success-message').style.display = 'none';
             window.location.href = 'index.html'; // Redirect ke halaman beranda
         }, 3000);
@@ -123,7 +124,7 @@ async function handleSignup(event) {
             document.getElementById('success-message').style.display = 'block';
 
             // Tunggu 3 detik, lalu arahkan ke halaman login secara otomatis
-            setTimeout(function() {
+            setTimeout(() => {
                 window.location.href = 'login.html'; // Arahkan ke halaman login
             }, 3000);
 
@@ -154,14 +155,14 @@ async function handleForgotPassword(event) {
 }
 
 // Fungsi untuk beralih antara form login dan signup
-document.getElementById('signup-link').addEventListener('click', function (event) {
+document.getElementById('signup-link').addEventListener('click', (event) => {
     event.preventDefault();
     document.getElementById('form-title').innerText = 'Sign Up'; // Ubah judul jadi Sign Up
     document.getElementById('login-form').style.display = 'none';
     document.getElementById('signup-form').style.display = 'block';
 });
 
-document.getElementById('back-to-login').addEventListener('click', function (event) {
+document.getElementById('back-to-login').addEventListener('click', (event) => {
     event.preventDefault();
     document.getElementById('form-title').innerText = 'Login'; // Kembalikan judul jadi Login
     document.getElementById('signup-form').style.display = 'none';
@@ -173,6 +174,6 @@ document.getElementById('login-form').addEventListener('submit', handleLogin);
 document.getElementById('signup-form').addEventListener('submit', handleSignup);
 
 // Menangani klik pada tombol "Go to Login"
-document.getElementById('go-to-login').addEventListener('click', function () {
+document.getElementById('go-to-login').addEventListener('click', () => {
     window.location.href = 'login.html'; // Arahkan ke halaman login
 });
