@@ -1,28 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" translate="no">
 <head>
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-CD0MHD1RBP');
-    </script>
-
-    <!-- Cache Control -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-5">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta charset="UTF-8">
-    <meta name="google" content="notranslate">
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
     <title>Sekawan FC</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -36,7 +24,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3 id="form-title" class="text-center">Login</h3> <!-- ID untuk judul -->
+                        <h3 id="form-title" class="text-center">Login</h3>
                     </div>
                     <div class="card-body">
                         <!-- Pesan Selamat Datang -->
@@ -134,50 +122,6 @@
     </footer>
 
     <!-- SCRIPTS -->
-    <script>
-        // Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
-            authDomain: "sekawan-fc-427414.firebaseapp.com",
-            projectId: "sekawan-fc-427414",
-            storageBucket: "sekawan-fc-427414.appspot.com",
-            messagingSenderId: "399174955835",
-            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
-            measurementId: "G-CD0MHD1RBP"
-        };
-
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        var auth = firebase.auth();
-
-        // Cek status login pengguna
-        auth.onAuthStateChanged(function (user) {
-            if (user) {
-                // Jika sudah login, sembunyikan form login dan tampilkan pesan selamat datang serta tombol logout
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('signup-form').style.display = 'none';
-                document.getElementById('welcome-message').style.display = 'block';
-                document.getElementById('logout-button').style.display = 'block';
-                document.getElementById('user-email').textContent = user.email;
-            } else {
-                // Jika belum login, tampilkan form login
-                document.getElementById('login-form').style.display = 'block';
-                document.getElementById('signup-form').style.display = 'none';
-                document.getElementById('welcome-message').style.display = 'none';
-                document.getElementById('logout-button').style.display = 'none';
-            }
-        });
-
-        // Fungsi untuk logout
-        document.getElementById('logout-button').addEventListener('click', function () {
-            auth.signOut().then(function () {
-                window.location.reload(); // Refresh halaman setelah logout
-            }).catch(function (error) {
-                console.error('Error logging out:', error);
-            });
-        });
-    </script>
+    <script src="js/login.js"></script>
 </body>
 </html>

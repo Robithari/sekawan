@@ -58,17 +58,16 @@ async function handleSignup(event) {
 
     // Validasi Kode Keanggotaan dari Firestore
     try {
-        var membershipDoc = await db.collection('membershipCodes').doc(membershipCode).get();
+        var membershipDoc = await firebase.firestore().collection('membershipCodes').doc(membershipCode).get();
         if (!membershipDoc.exists) {
-            alert('Kode Keanggotaan salah. Masukkan kode yang benar.');
+            alert('Kode Keanggotaan yang Anda masukkan salah.');
             return;
         }
     } catch (error) {
-        alert('Gagal memverifikasi kode keanggotaan: ' + error.message);
+        alert('Terjadi kesalahan saat memverifikasi kode keanggotaan: ' + error.message);
         return;
     }
 
-    // Proses Pendaftaran
     try {
         await auth.createUserWithEmailAndPassword(email, password);
         document.getElementById('success-message').style.display = 'block';
@@ -76,36 +75,26 @@ async function handleSignup(event) {
             window.location.href = 'login.html'; // Arahkan ke halaman login
         }, 3000);
     } catch (error) {
-        alert('Pendaftaran gagal: ' + error.message);
+        alert('Sign up gagal: ' + error.message);
     }
 }
 
-// Fungsi untuk lupa password
-async function handleForgotPassword(event) {
+// Fungsi Lupa Password
+document.getElementById('forgot-password').addEventListener('click', async function (event) {
     event.preventDefault();
     var email = document.getElementById('username').value;
     if (email) {
         try {
             await auth.sendPasswordResetEmail(email);
-            alert('Email reset password telah dikirim!');
+            alert('Email reset password berhasil dikirim!');
         } catch (error) {
-            alert('Gagal mengirim email: ' + error.message);
+            alert('Error: ' + error.message);
         }
     } else {
-        alert('Harap masukkan alamat email.');
+        alert('Silakan masukkan email terlebih dahulu.');
     }
-}
+});
 
-// Pasang event listener untuk form login dan signup
+// Attach event listeners
 document.getElementById('login-form').addEventListener('submit', handleLogin);
 document.getElementById('signup-form').addEventListener('submit', handleSignup);
-document.getElementById('forgot-password').addEventListener('click', handleForgotPassword);
-
-// Logout
-document.getElementById('logout-button').addEventListener('click', function () {
-    auth.signOut().then(function () {
-        window.location.reload();
-    }).catch(function (error) {
-        console.error('Error logging out:', error);
-    });
-});
