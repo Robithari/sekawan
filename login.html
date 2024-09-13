@@ -134,6 +134,50 @@
     </footer>
 
     <!-- SCRIPTS -->
-    <script src="js/login.js"></script>
+    <script>
+        // Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+            authDomain: "sekawan-fc-427414.firebaseapp.com",
+            projectId: "sekawan-fc-427414",
+            storageBucket: "sekawan-fc-427414.appspot.com",
+            messagingSenderId: "399174955835",
+            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+            measurementId: "G-CD0MHD1RBP"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        var auth = firebase.auth();
+
+        // Cek status login pengguna
+        auth.onAuthStateChanged(function (user) {
+            if (user) {
+                // Jika sudah login, sembunyikan form login dan tampilkan pesan selamat datang serta tombol logout
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('signup-form').style.display = 'none';
+                document.getElementById('welcome-message').style.display = 'block';
+                document.getElementById('logout-button').style.display = 'block';
+                document.getElementById('user-email').textContent = user.email;
+            } else {
+                // Jika belum login, tampilkan form login
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('signup-form').style.display = 'none';
+                document.getElementById('welcome-message').style.display = 'none';
+                document.getElementById('logout-button').style.display = 'none';
+            }
+        });
+
+        // Fungsi untuk logout
+        document.getElementById('logout-button').addEventListener('click', function () {
+            auth.signOut().then(function () {
+                window.location.reload(); // Refresh halaman setelah logout
+            }).catch(function (error) {
+                console.error('Error logging out:', error);
+            });
+        });
+    </script>
 </body>
 </html>

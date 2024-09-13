@@ -27,6 +27,11 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="css/loading.css">
 
+      <!-- Firebase -->
+      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
   <!-- Icons -->
   <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="icon/apple-icon-60x60.png">
@@ -98,8 +103,9 @@
                     <a class="nav-link" style="color: yellow;">Contact</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" style="color: white;" href="login.html">Masuk / Daftar</a>
+                    <a class="nav-link" id="login-logout-link" style="color: white;" href="login.html">Masuk / Daftar</a>
                   </li>
+                  
                 </ul>
               </div>
             </div>
@@ -334,6 +340,10 @@
           <script src="js/data-pertandingan.js"></script>
           <script type="module" src="firebase-config.js"></script>
           <script src="firebase-messaging.js"></script>
+          <script src="js/cek-login.js"></script>
+
+
+
 
           <script>
             window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
