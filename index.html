@@ -105,9 +105,10 @@
                     <a class="nav-link" style="color: yellow;">Contact</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="login-logout-link" style="color: white;" href="login.html">Masuk / Daftar</a>
+                    <a class="nav-link" id="login-logout-link" style="color: white;" href="login.html">Masuk /
+                      Daftar</a>
                   </li>
-                  
+
                 </ul>
               </div>
             </div>
@@ -352,8 +353,8 @@
           </script>
         </div>
         <!-- END SCRIPTS -->
-         <!-- Firebase Configuration and Cloud Messaging -->
-         <script>
+        <!-- Firebase Configuration and Cloud Messaging -->
+        <script>
           // Firebase configuration
           var firebaseConfig = {
             apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
@@ -371,10 +372,10 @@
 
           // Request notification permission and get FCM token
           messaging.requestPermission()
-            .then(function() {
+            .then(function () {
               return messaging.getToken();
             })
-            .then(function(token) {
+            .then(function (token) {
               console.log('FCM Token:', token);
               // Save FCM token to Firestore
               firebase.firestore().collection('fcmTokens').add({
@@ -382,12 +383,12 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
               });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.error('Error obtaining FCM token:', error);
             });
 
           // Handle incoming messages
-          messaging.onMessage(function(payload) {
+          messaging.onMessage(function (payload) {
             console.log('Message received: ', payload);
             // Customize notification UI here
           });
@@ -395,43 +396,32 @@
 
         <!-- Service Worker Registration -->
         <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/firebase-messaging-sw.js')
-    .then(function (registration) {
-      console.log('Service Worker registered with scope:', registration.scope);
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+              .then(function (registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
 
-      // Tunggu hingga Service Worker siap sebelum mendapatkan token FCM
-      return navigator.serviceWorker.ready;
-    })
-    .then(function (registration) {
-      // Sekarang Service Worker siap, lanjutkan dengan mendapatkan token
-      messaging.requestPermission()
-        .then(function () {
-          console.log('Notification permission granted.');
-          return messaging.getToken();
-        })
-        .then(function (token) {
-          console.log('FCM Token:', token);
-          // Simpan token FCM ke Firestore atau gunakan di aplikasi Anda
-          firebase.firestore().collection('fcmTokens').add({
-            token: token,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        })
-        .catch(function (error) {
-          console.error('Error obtaining FCM token:', error);
-        });
-    })
-    .catch(function (error) {
-      console.error('Service Worker registration failed:', error);
-    });
-}
-
+                // Wait for the service worker to be ready before requesting FCM token
+                return navigator.serviceWorker.ready;
+              })
+              .then(function () {
+                // Now that the service worker is ready, request permission
+                return messaging.getToken();
+              })
+              .then(function (token) {
+                console.log('FCM Token:', token);
+                // Save FCM token to Firestore
+                firebase.firestore().collection('fcmTokens').add({
+                  token: token,
+                  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+              })
+              .catch(function (error) {
+                console.error('Error registering service worker:', error);
+              });
+          }
         </script>
-      </div>
-    </div>
-  </div>
-</div>
+
 </body>
 
 </html>
