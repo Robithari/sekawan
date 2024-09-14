@@ -395,17 +395,38 @@
 
         <!-- Service Worker Registration -->
         <script>
-          if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-              navigator.serviceWorker.register('/firebase-messaging-sw.js')
-                .then(function (registration) {
-                  console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch(function (error) {
-                  console.error('Service Worker registration failed:', error);
-                });
-            });
-          }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then(function (registration) {
+      console.log('Service Worker registered with scope:', registration.scope);
+
+      // Tunggu hingga Service Worker siap sebelum mendapatkan token FCM
+      return navigator.serviceWorker.ready;
+    })
+    .then(function (registration) {
+      // Sekarang Service Worker siap, lanjutkan dengan mendapatkan token
+      messaging.requestPermission()
+        .then(function () {
+          console.log('Notification permission granted.');
+          return messaging.getToken();
+        })
+        .then(function (token) {
+          console.log('FCM Token:', token);
+          // Simpan token FCM ke Firestore atau gunakan di aplikasi Anda
+          firebase.firestore().collection('fcmTokens').add({
+            token: token,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        })
+        .catch(function (error) {
+          console.error('Error obtaining FCM token:', error);
+        });
+    })
+    .catch(function (error) {
+      console.error('Service Worker registration failed:', error);
+    });
+}
+
         </script>
       </div>
     </div>
