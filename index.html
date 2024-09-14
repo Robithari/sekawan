@@ -27,11 +27,10 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="css/loading.css">
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+      <!-- Firebase -->
+      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
   <!-- Icons -->
   <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
@@ -55,7 +54,6 @@
   <title>Sekawan FC</title>
 
 </head>
-
 
 <body>
   <!-- LOADING SCREEN -->
@@ -105,10 +103,9 @@
                     <a class="nav-link" style="color: yellow;">Contact</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="login-logout-link" style="color: white;" href="login.html">Masuk /
-                      Daftar</a>
+                    <a class="nav-link" id="login-logout-link" style="color: white;" href="login.html">Masuk / Daftar</a>
                   </li>
-
+                  
                 </ul>
               </div>
             </div>
@@ -342,7 +339,7 @@
           <script src="js/kunci-layar.js"></script>
           <script src="js/data-pertandingan.js"></script>
           <script type="module" src="firebase-config.js"></script>
-          <script type="module" src="firebase-messaging.js"></script>
+          <script src="firebase-messaging.js"></script>
           <script src="js/cek-login.js"></script>
 
 
@@ -353,75 +350,24 @@
           </script>
         </div>
         <!-- END SCRIPTS -->
-        <!-- Firebase Configuration and Cloud Messaging -->
-        <script>
-          // Firebase configuration
-          var firebaseConfig = {
-            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
-            authDomain: "sekawan-fc-427414.firebaseapp.com",
-            projectId: "sekawan-fc-427414",
-            storageBucket: "sekawan-fc-427414.appspot.com",
-            messagingSenderId: "399174955835",
-            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
-            measurementId: "G-CD0MHD1RBP"
-          };
 
-          // Initialize Firebase
-          firebase.initializeApp(firebaseConfig);
-          var messaging = firebase.messaging();
 
-          // Request notification permission and get FCM token
-          messaging.requestPermission()
-            .then(function () {
-              return messaging.getToken();
-            })
-            .then(function (token) {
-              console.log('FCM Token:', token);
-              // Save FCM token to Firestore
-              firebase.firestore().collection('fcmTokens').add({
-                token: token,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-              });
-            })
-            .catch(function (error) {
-              console.error('Error obtaining FCM token:', error);
-            });
-
-          // Handle incoming messages
-          messaging.onMessage(function (payload) {
-            console.log('Message received: ', payload);
-            // Customize notification UI here
-          });
-        </script>
-
-        <!-- Service Worker Registration -->
+        <!-- Service Worker -->
         <script>
           if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/firebase-messaging-sw.js')
-              .then(function (registration) {
-                console.log('Service Worker registered with scope:', registration.scope);
-
-                // Wait for the service worker to be ready before requesting FCM token
-                return navigator.serviceWorker.ready;
-              })
-              .then(function () {
-                // Now that the service worker is ready, request permission
-                return messaging.getToken();
-              })
-              .then(function (token) {
-                console.log('FCM Token:', token);
-                // Save FCM token to Firestore
-                firebase.firestore().collection('fcmTokens').add({
-                  token: token,
-                  timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-              })
-              .catch(function (error) {
-                console.error('Error registering service worker:', error);
+            window.addEventListener('load', function () {
+              navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+                // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
+              }, function (error) {
+                console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
               });
+            });
           }
         </script>
-
+        <!-- END Service Worker -->
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
