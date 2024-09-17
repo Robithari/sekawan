@@ -3,6 +3,7 @@
 html {
   margin: 0;
   padding: 0;
+  box-sizing: border-box; /* Tambahkan ini */
 }
 
 body {
@@ -53,14 +54,11 @@ a {
 
 /*======================================================= NAVBAR =======================================================*/
 
-.navbar navbar-expand-lg custom-navbar {
-  background: rgb(38, 0, 255);
-  background: linear-gradient(90deg, rgba(38, 0, 255, 1) 0%, rgba(196, 60, 207, 0.9612219887955182) 74%, rgba(38, 0, 255, 1) 100%);
-}
-
 .custom-navbar {
-  background: rgb(38,0,255);
-  background: linear-gradient(90deg, rgba(38,0,255,1) 0%, rgba(196,60,207,0.9612219887955182) 74%, rgba(38,0,255,1) 100%);  padding: 0 3.5px;
+  background-color: #571ec9;
+  background: linear-gradient(90deg, rgba(38, 0, 255, 1) 0%, rgba(196, 60, 207, 0.9612219887955182) 74%, rgba(38, 0, 255, 1) 100%);
+  padding: 0 5px 5px 5px; /* Menggunakan padding dari kode kedua */
+  display: flex; /* Menggunakan properti display flex dari kode kedua */
   position: fixed;
   top: 0;
   width: 100%;
@@ -91,6 +89,12 @@ a {
 .dropdown-item.text-dark {
   color: black !important;
 }
+
+.navbar-brand {
+  color: whitesmoke; /* Menggunakan warna dari kode kedua */
+  padding: 0 5px 0 0; /* Menggunakan padding dari kode kedua */
+}
+
 
 
 /* ======================================================= SLIDE =======================================================*/
@@ -401,8 +405,7 @@ a {
 
   /*======================================================= Navbar Desktop =======================================================*/
   .custom-navbar {
-    padding-left: 10%;
-    padding-right: 10%;
+    padding: 0 5px 5px 5px;
     width: 80%;
     height: 70px;
     left: 10%;
