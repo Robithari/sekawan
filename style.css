@@ -3,7 +3,7 @@
 html {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Tambahkan ini */
+  box-sizing: border-box;
 }
 
 body {
@@ -11,12 +11,23 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-
 }
 
 a {
   text-decoration: none;
   color: black;
+}
+
+/* Wrapper untuk seluruh halaman agar footer berada di bawah */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Konten utama yang fleksibel */
+.content {
+  flex: 1;
 }
 
 /*======================================================= LOADING SCREEN =======================================================*/
@@ -53,12 +64,11 @@ a {
 }
 
 /*======================================================= NAVBAR =======================================================*/
-
 .custom-navbar {
   background-color: #571ec9;
   background: linear-gradient(90deg, rgba(38, 0, 255, 1) 0%, rgba(196, 60, 207, 0.9612219887955182) 74%, rgba(38, 0, 255, 1) 100%);
-  padding: 0 5px 5px 5px; /* Menggunakan padding dari kode kedua */
-  display: flex; /* Menggunakan properti display flex dari kode kedua */
+  padding: 0 5px 5px 5px;
+  display: flex;
   position: fixed;
   top: 0;
   width: 100%;
@@ -91,11 +101,9 @@ a {
 }
 
 .navbar-brand {
-  color: whitesmoke; /* Menggunakan warna dari kode kedua */
-  padding: 0 5px 0 0; /* Menggunakan padding dari kode kedua */
+  color: whitesmoke;
+  padding: 0 5px 0 0;
 }
-
-
 
 /* ======================================================= SLIDE =======================================================*/
 #carouselExampleDark {
@@ -262,26 +270,20 @@ a {
   margin-bottom: 10px;
 }
 
-/* CSS untuk container readmore */
 .container-readmore {
-  background-color: #9bbbd0;
-  /* Warna biru untuk latar belakang */
-  color: black;
-  /* Warna teks putih */
-  font-size: 14px;
-  font-family: Arial, sans-serif;
+  display: inline-block;
+  background-color: #007bff; /* Warna background biru */
+  color: white; /* Warna teks putih */
+  font-size: 14px; /* Ukuran teks default */
+  padding: 1px 3px; /* Padding di sekitar teks */
+  border-radius: 5px; /* Membuat sudut kolom melengkung */
   text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  /* Membuat sudut melengkung */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* Efek bayangan */
-  cursor: pointer;
-  width: 110px;
-  /* Mengatur lebar tombol */
-  height: auto;
-  padding: 1px 1px;
+  text-decoration: none; /* Menghapus garis bawah */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Efek transisi saat hover */
 }
+
+
 
 /*======================================================= FOOTER =======================================================*/
 .custom-footer {
@@ -290,7 +292,8 @@ a {
   color: black;
   font-size: 14px;
   text-align: center;
-  margin-bottom: -100%;
+  padding: 10px;
+  margin-top: auto;
 }
 
 .footer-content {
@@ -373,17 +376,13 @@ a {
   padding-bottom: 5px;
 }
 
-
-
 /*======================================================= Media Queries untuk Desktop =======================================================*/
 @media (min-width: 1024px) {
 
-  /*======================================================= General Styling =======================================================*/
   body {
     background-color: white;
   }
 
-  /*======================================================= Wrapper & Content Desktop =======================================================*/
   .wrapper {
     padding-left: 10%;
     padding-right: 10%;
@@ -403,7 +402,6 @@ a {
     box-sizing: border-box;
   }
 
-  /*======================================================= Navbar Desktop =======================================================*/
   .custom-navbar {
     padding: 0 5px 5px 5px;
     width: 80%;
@@ -436,12 +434,13 @@ a {
     font-weight: bold;
   }
 
-  /*======================================================= Carousel Desktop =======================================================*/
   #carouselExampleDark {
     margin-top: 70px;
     overflow: hidden;
     border-radius: 20px;
   }
+
+
 
   #carouselExampleDark .carousel-item {
     height: 300px;
@@ -480,7 +479,6 @@ a {
     transform: scale(1);
   }
 
-  /*======================================================= Countdown Box Desktop =======================================================*/
   .container-box {
     margin: 20px 0;
   }
@@ -498,7 +496,6 @@ a {
     font-weight: bold;
   }
 
-  /*======================================================= Footer Desktop =======================================================*/
   .custom-footer {
     color: aliceblue;
     margin-left: -13%;
@@ -514,7 +511,6 @@ a {
     color: white;
   }
 
-  /*======================================================= Loading Screen Desktop =======================================================*/
   #loading-screen {
     width: 80vw;
     padding-left: 10%;
@@ -535,7 +531,6 @@ a {
     margin: 20px auto 0;
   }
 
-  /*======================================================= Carousel Control Desktop =======================================================*/
   .carousel-control-prev-icon,
   .carousel-control-next-icon {
     background-color: rgba(0, 0, 0, 0.5);
@@ -543,7 +538,6 @@ a {
     padding: 10px;
   }
 
-  /*======================================================= Text Styling Desktop =======================================================*/
   .text-yellow-bold {
     color: #FFD700;
     font-weight: bold;
