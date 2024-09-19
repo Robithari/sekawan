@@ -131,7 +131,7 @@
                                         <a class="nav-link" style="color: maroon;" href="#" role="button"
                                             data-bs-toggle="dropdown" aria-expanded="false">Informasi</a>
                                         <ul class="dropdown-menu">
-                                            <li><a class="nav-link disabled textblack" href="proses.html">Berita</a>
+                                            <li><a class="nav-link" href="berita.html">Berita</a>
                                             </li>
                                             <li><a class="nav-link disabled text-black" href="proses.html">Artikel</a>
                                             </li>
@@ -236,7 +236,21 @@
             </script>
             <!-- END Service Worker -->
 
-
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  // Cek status autentikasi pengguna
+                  firebase.auth().onAuthStateChanged(function (user) {
+                    if (user) {
+                      // Jika pengguna sudah login, tampilkan konten halaman
+                      document.getElementById('main-content').style.display = 'block';
+                      document.getElementById('loading-screen').style.display = 'none';
+                    } else {
+                      // Jika belum login, arahkan ke halaman login
+                      window.location.href = 'login.html';
+                    }
+                  });
+                });
+              </script>
               
         </div>
     </div>
