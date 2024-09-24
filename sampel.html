@@ -6,17 +6,14 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() {
-            dataLayer.push(arguments);
-        }
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-CD0MHD1RBP');
     </script>
-
     <!-- link preview -->
-    <meta property="og:title" content="Kas Sekawan FC" />
-    <meta property="og:description" content="Laporan Kas Sekawan FC Realtime" />
-    <meta property="og:image" content="https://sekawanfc.fun/img/kas-sekawan-fc.jpg" />
+    <meta property="og:title" id="og-title" content="Dokumentasi Sekawan FC" />
+    <meta property="og:description" id="og-description" content="Kumpulan Dokumentasi Foto Sekawan FC" />
+    <meta property="og:image" content="https://sekawanfc.fun/img/sekawanfc-united.jpg" />
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <!-- link preview -->
@@ -26,14 +23,14 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-5">
 
-      <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <!-- Viewport and Meta -->
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
     <meta name="google" content="notranslate">
 
     <!-- Bootstrap and Styles -->
@@ -41,7 +38,8 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/loading.css">
-    <link rel="stylesheet" href="css/inventaris.css">
+    <link rel="stylesheet" href="css/berita.css" />
+
 
     <!-- Icons -->
     <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
@@ -62,20 +60,8 @@
     <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
-    <script>
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                // Jika user login
-                document.getElementById('main-content').style.display = 'block';
-                document.getElementById('loading-screen').style.display = 'none';
-            } else {
-                // Jika user belum login
-                window.location.href = "login.html"; // Redirect ke halaman login
-            }
-        });
-      </script>
+    <title>Sekawan FC vs Ukhwa FC - Sekawan FC</title>
 
-    <title>Inventaris-Sekawan FC</title>
 </head>
 
 <body>
@@ -84,7 +70,6 @@
             <div class="wrapper">
                 <!-- LOADING SCREEN -->
                 <div id="loading-screen" class="background">
-                    <span></span>
                     <span></span>
                     <span></span>
                     <span></span>
@@ -125,20 +110,17 @@
                                             href="index.html">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="profil.html" style="color: rgb(2, 49, 2);">Profil</a>
+                                        <a class="nav-link" href="profil.html">Profil</a>
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link" style="color: maroon;" href="#" role="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">Informasi</a>
+                                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">Informasi</a>
                                         <ul class="dropdown-menu">
-                                            <li><a class="nav-link" href="berita.html">Berita</a>
+                                            <li><a class="nav-link disabled textblack" href="proses.html">Berita</a>
                                             </li>
                                             <li><a class="nav-link disabled text-black" href="proses.html">Artikel</a>
                                             </li>
                                         </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" style="color: yellow;">Contact</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="login-logout-link" style="color: white;"
@@ -153,33 +135,75 @@
                     <!-- End Navbar -->
                 </div>
 
-                <!-- Data Kas -->
-                <div class="container-kas">
-                    <h5>DAFTAR BARANG INVENTARIS</h5>
-                    <div class="table-container">
-                        <table id="data-table">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2">NO.</th>
-                                    <th rowspan="2">NAMA BARANG</th>
-                                    <th rowspan="2">MERK BARANG</th>
-                                    <th rowspan="2">JUMLAH</th>
-                                    <th rowspan="2">KODE</th>
-                                    <th colspan="2">JUMLAH KONDISI BARANG</th>
-                                    <th rowspan="2">KETERANGAN</th>
-                                </tr>
-                                <tr>
-                                    <th>BAIK</th>
-                                    <th>BURUK</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data akan ditampilkan di sini -->
-                            </tbody>
-                        </table>
+                <!-- Article -->
+                <div class="container-artikel">
+                    <h6>Sekawan FC Raih Kemenangan Dramatis Atas Ukhwa FC dengan Skor
+                        5-3
+                        di Stadion BTB</h6>
+                    <p style="padding-left: 10px; padding-right: 10px; font-size: 12px; margin-bottom: 0rem;">
+                        Oleh Ayahe Syafiq, pada 26
+                        Mei 2024
+                    </p>
+                    <div class="container-foto">
+                        <img src="img/sekawanfc-vs-ukhwafc.jpg" class="custom-foto" alt="Sekawan FC Logo">
                     </div>
+                    <p style="opacity: 0.5; padding-left: 10px; padding-right: 10px; font-size: 12px;">
+                        Antok nomor punggung 6 dari
+                        Sekawan
+                        FC beraksi heroik memblok bola lawan. (25/05/2024)
+                    </p>
+                    <p> <strong>Dalam</strong> pertandingan yang penuh gairah dan semangat kompetitif, Sekawan FC
+                        berhasil mengamankan
+                        kemenangan dengan
+                        skor 5-3 atas rival mereka, Ukhwa FC, dalam sebuah pertandingan yang diadakan di Stadion BTB.
+                        Pertandingan ini,
+                        yang telah lama ditunggu-tunggu oleh para penggemar kedua tim, tidak mengecewakan dengan aksi
+                        yang menegangkan
+                        dan
+                        momen yang tak terlupakan.</p>
+                    <p>Sekawan FC, yang dikenal dengan serangan balik cepat dan strategi ofensif, membuka skor di
+                        menit-menit awal
+                        pertandingan, menunjukkan niat mereka untuk mendominasi permainan. Ukhwa FC, tidak mau kalah,
+                        membalas dengan
+                        serangan-serangan tajam yang menguji pertahanan Sekawan FC. Gol demi gol tercipta, dengan kedua
+                        tim berlomba
+                        untuk
+                        menguasai bola dan mencetak poin.</p>
+                    <p>Puncak pertandingan terjadi di babak kedua, ketika Sekawan FC menunjukkan ketangguhan mereka
+                        dengan mencetak
+                        dua
+                        gol tambahan, yang memastikan keunggulan mereka atas Ukhwa FC. Meskipun Ukhwa FC berusaha keras
+                        untuk mengejar
+                        ketertinggalan, pertahanan solid dan kerja sama tim Sekawan FC memastikan bahwa mereka
+                        mempertahankan keunggulan
+                        mereka hingga peluit akhir.</p>
+                    <p>Kemenangan ini merupakan bukti dari kerja keras dan dedikasi yang ditunjukkan oleh para pemain
+                        Sekawan FC, yang
+                        telah berlatih tanpa lelah untuk mencapai tingkat permainan yang mereka tunjukkan hari ini. Bagi
+                        Ukhwa FC,
+                        meskipun hasil ini mengecewakan, ada banyak pelajaran yang bisa dipetik dan kesempatan untuk
+                        bangkit kembali di
+                        pertandingan mendatang.</p>
+                    <p>Pertandingan ini tidak hanya tentang skor akhir, tetapi juga tentang semangat olahraga dan
+                        persahabatan yang
+                        ditunjukkan oleh kedua tim. Para penggemar yang hadir di Stadion BTB pasti merasakan kegembiraan
+                        dan kebanggaan
+                        yang sama, menyaksikan olahraga yang mereka cintai dimainkan dengan begitu banyak hati dan
+                        semangat.</p>
+                    <p>Dengan kemenangan ini, Sekawan FC telah menetapkan diri mereka sebagai salah satu tim yang harus
+                        diperhitungkan,
+                        sementara Ukhwa FC pasti akan kembali dengan lebih kuat dan lebih termotivasi untuk pertandingan
+                        berikutnya.
+                        Kami
+                        menantikan lebih banyak pertandingan seru seperti ini di masa depan, yang tidak hanya menghibur
+                        tetapi juga
+                        menginspirasi banyak orang melalui kekuatan olahraga.</p>
+                    <p>Demikianlah laporan kami mengenai pertandingan antara Sekawan FC dan Ukhwa FC. Terus ikuti kami
+                        untuk berita
+                        olahraga terbaru dan terlengkap.</p>
                 </div>
-                <!-- End Data Kas -->
+                <!-- end Article -->
+
 
                 <!-- FOOTER -->
                 <footer class="custom-footer">
@@ -211,90 +235,38 @@
                 </footer>
                 <!-- END FOOTER -->
             </div>
-            <!-- SCRIPTS -->
-            <div class="container-js">
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-                    crossorigin="anonymous"></script>
-                <script src="js/pencarian.js"></script>
-                <script src="js/hapus-cookie.js"></script>
-                <script src="js/splas-screen-start.js"></script>
-                <script src="js/kunci-layar.js"></script>
-                <script src="js/nootifikasi.js"></script>
-                <script src="js/inventaris.js"></script>
-                <script type="module" src="firebase-config.js"></script>
-                <script src="js/cek-login.js"></script>
-                <script>
-                    window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=CZfT4ukELTEw74U8y4_OVSdJA0MoRPTnbfrM_pEJnBf_yj0iY0f6c9xlI4u9RgHKuk3zOPedAt89EJiJW5Ng1pQVVtY5QfDsm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFp8IpH6vIoxlz6z1vHvBGveIMkwE5hxhRZgrX7pPlQO98dtL__CtYPa3KdNnIXbUm9WnqK1sm1dRh5mrQJuQ_bE78tZtLS8jw&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
-                  </script>
-            </div>
-            <!-- END SCRIPTS -->
-
-            <!-- Service Worker -->
-            <script>
-                if ('serviceWorker' in navigator) {
-                    window.addEventListener('load', function () {
-                        navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
-                            console.log('Service Worker registered with scope:', registration.scope);
-                        }, function (error) {
-                            console.error('Service Worker registration failed:', error);
-                        });
-                    });
-                }
-            </script>
-            <!-- END Service Worker -->
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    // Cek status API
-                    function checkApiStatus() {
-                        return fetch('https://api.example.com/status') // Ganti dengan URL API kamu
-                            .then(response => response.ok) // Jika response ok (status 200), berarti API siap
-                            .catch(() => false); // Jika terjadi error, anggap API belum siap
-                    }
-            
-                    function showMainContent() {
-                        document.getElementById('main-content').style.display = 'block';
-                        document.getElementById('loading-screen').style.display = 'none';
-                    }
-            
-                    function keepSplashScreen() {
-                        document.getElementById('main-content').style.display = 'none';
-                        document.getElementById('loading-screen').style.display = 'block';
-                    }
-            
-                    function checkAuthAndApi() {
-                        firebase.auth().onAuthStateChanged(async function (user) {
-                            if (user) {
-                                // Jika pengguna sudah login, cek status API
-                                keepSplashScreen(); // Tampilkan splash screen saat pengecekan API
-                                let apiReady = false;
-            
-                                // Loop untuk terus mengecek status API setiap beberapa detik
-                                while (!apiReady) {
-                                    apiReady = await checkApiStatus(); // Tunggu hingga API siap
-                                    if (apiReady) {
-                                        showMainContent(); // API siap, tampilkan konten halaman
-                                    } else {
-                                        console.log('API belum siap, menunggu...');
-                                        await new Promise(resolve => setTimeout(resolve, 3000)); // Tunggu 3 detik sebelum cek lagi
-                                    }
-                                }
-                            } else {
-                                // Jika belum login, arahkan ke halaman login
-                                window.location.href = 'login.html';
-                            }
-                        });
-                    }
-            
-                    checkAuthAndApi();
-                });
-            </script>
-            
-              
         </div>
     </div>
-    
+
+    <!-- SCRIPTS -->
+    <div class="container-js">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+        <script src="js/pencarian.js"></script>
+        <script src="js/hapus-cookie.js"></script>
+        <script src="js/splas-screen-start.js"></script>
+        <script src="js/kunci-layar.js"></script>
+        <script type="module" src="firebase-config.js"></script>
+        <script src="js/cek-login.js"></script>
+
+
+    </div>
+    <!-- END SCRIPTS -->
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+                    // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
+                }, function (error) {
+                    console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
+                });
+            });
+        }
+    </script>
+    <!-- END Service Worker -->
 </body>
 
 </html>

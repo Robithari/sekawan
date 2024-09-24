@@ -1,115 +1,69 @@
-/* Universal Styles */
-*,
-html {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; /* Tambahkan ini */
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background-size: cover;
-  height: 100vh;
-}
-
-/* Navbar */
-.custom-navbar {
-  background-color: #571ec9;
-  padding: 0 5px 5px 5px;
-  display: flex; /* Tambahkan ini */
-}
-
-
-
-
-
-/* Berita Terkini */
-.berita {
-  font-size: 20px;
-  color: #06713f;
-  font-weight: bold;
-  padding: 0 20px;
-  margin: 15px 0; /* Ubah margin menjadi positif */
-}
-
-.informasi {
-  padding: 0 20px;
-  border: none;
-  background: none;
-}
-
-.custom-image {
-  width: 70px;
-  height: 70px;
-}
-
-.custom-title {
-  border: none;
-  width: 110%;
-  text-align: center;
-}
-
-.card-body {
-  padding: 10px;
-  width: 100%; /* Ubah menjadi 100% */
-  border: none;
-}
-
-.card {
-  display: flex;
-  justify-content: center;
-  border: none;
-}
-
-.cek {
-  background-color: #06713f;
-}
-
-.card-img-top {
-  height: 100px; /* Ubah nilai menjadi 100px */
-  width: 150px;
-  margin: auto;
-  display: block;
-}
-
+/* Container Artikel */
 .container-artikel {
-  padding-left: 10px;
   padding-right: 10px;
+  padding-left: 10px;
+  margin-top: 50px;
 }
 
-.container {
+/* Judul Artikel */
+.artikel-judul {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+/* Kontainer Gambar */
+.container-artikel .container-foto {
+  width: 100%;
+  overflow-x: auto;
+  margin: 10px 0;
   text-align: center;
 }
 
-.container-waktu {
-  opacity: 0.5;
-text-align: center;
-  font-size: 12px;
-}
-
-
-/* foto */
-.container-foto {
-  margin-left: 10px;
-  margin-right: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.judul-halaman {
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-/* Styling for the image */
-.custom-foto {
-  width: 100%; /* Ubah menjadi 100% */
+.container-artikel img.custom-foto {
+  max-width: 100%;
   height: auto;
-  border-radius: 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.isi-halaman p {
-  text-align: left;
+/* Deskripsi Gambar Khusus */
+.container-artikel .container-foto + p {
+  opacity: 0.5;
+  text-align: center;
+}
+
+/* Media Queries untuk Responsif */
+@media (max-width: 600px) {
+  .container-artikel h6 {
+    font-size: 16px;
+  }
+
+  .container-artikel img.custom-foto {
+    border-radius: 5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .container-artikel h6 {
+    font-size: 14px;
+  }
+
+  .container-artikel img.custom-foto {
+    border-radius: 5px;
+  }
+}
+
+@media (orientation: portrait) {
+  .container-artikel h6 {
+    font-size: 12px;
+  }
+}
+
+@media (orientation: landscape) {
+  .container-artikel h6 {
+    font-size: 14px;
+  }
 }

@@ -26,10 +26,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-5">
 
-      <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <!-- Viewport and Meta -->
     <meta charset="UTF-8">
@@ -62,18 +62,6 @@
     <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
-    <script>
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                // Jika user login
-                document.getElementById('main-content').style.display = 'block';
-                document.getElementById('loading-screen').style.display = 'none';
-            } else {
-                // Jika user belum login
-                window.location.href = "login.html"; // Redirect ke halaman login
-            }
-        });
-      </script>
 
     <title>Kas-Sekawan FC</title>
 </head>
@@ -125,20 +113,17 @@
                                             href="index.html">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="profil.html" style="color: rgb(2, 49, 2);">Profil</a>
+                                        <a class="nav-link" href="profil.html">Profil</a>
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link" style="color: maroon;" href="#" role="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">Informasi</a>
+                                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">Informasi</a>
                                         <ul class="dropdown-menu">
-                                            <li><a class="nav-link" href="berita.html">Berita</a>
+                                            <li><a class="nav-link disabled textblack" href="proses.html">Berita</a>
                                             </li>
                                             <li><a class="nav-link disabled text-black" href="proses.html">Artikel</a>
                                             </li>
                                         </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" style="color: yellow;">Contact</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="login-logout-link" style="color: white;"
@@ -214,7 +199,6 @@
                 <script src="js/hapus-cookie.js"></script>
                 <script src="js/splas-screen-start.js"></script>
                 <script src="js/kunci-layar.js"></script>
-                <script src="js/nootifikasi.js"></script>
                 <script src="js/kas.js"></script>
                 <script type="module" src="firebase-config.js"></script>
                 <script src="js/cek-login.js"></script>
@@ -222,7 +206,7 @@
 
                 <script>
                     window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=CZfT4ukELTEw74U8y4_OVSdJA0MoRPTnbfrM_pEJnBf_yj0iY0f6c9xlI4u9RgHKuk3zOPedAt89EJiJW5Ng1pQVVtY5QfDsm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFp8IpH6vIoxlz6z1vHvBGveIMkwE5hxhRZgrX7pPlQO98dtL__CtYPa3KdNnIXbUm9WnqK1sm1dRh5mrQJuQ_bE78tZtLS8jw&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
-                  </script>
+                </script>
             </div>
             <!-- END SCRIPTS -->
 
@@ -241,10 +225,10 @@
             <!-- END Service Worker -->
 
 
-              
+
         </div>
     </div>
-    
+
 </body>
 
 </html>
