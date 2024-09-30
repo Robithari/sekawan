@@ -6,11 +6,22 @@
 }
 
 /* Judul Artikel */
+.judul-halaman {
+  margin-top: 1rem;
+  padding-top: 2.5rem;
+  padding-right: 10px;
+  padding-left: 10px;
+}
 .detail-title {
   font-size: 20px;
-  text-align: center;
+  text-align: left;
   color: #50C878;
 }
+
+.container-waktu {
+  font-size: 12px;
+}
+
 
 .title-sub {
   font-size: 19px;
@@ -24,6 +35,11 @@
   margin-top: 20px;
   font-size: 16px;
   font-weight: bold;
+}
+
+.isi-halaman {
+  padding-right: 10px;
+  padding-left: 10px;
 }
 
 /* Kontainer Gambar */
@@ -43,8 +59,15 @@
   /* Memastikan tinggi gambar otomatis sesuai dengan proporsi */
   margin: 0 auto;
   /* Menjadikan gambar rata tengah jika lebih kecil dari kontainer */
-  border-radius: 10px;
-  /* Border radius opsional */
+
+}
+
+.keterangan-foto {
+  opacity: 0.5;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 12px;
+  text-align: center; /* Memastikan teks di dalamnya juga rata tengah */
 }
 
 /* Deskripsi Gambar Khusus */
