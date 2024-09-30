@@ -18,8 +18,13 @@
   color: #50C878;
 }
 
-.container-waktu {
+.title-keterangan {
+  opacity: 0.5;
+  margin-top: -5px;
   font-size: 12px;
+  margin-bottom: 0;
+  padding: 0;
+  margin-bottom: -15px;
 }
 
 
