@@ -141,7 +141,7 @@
               <thead>
                 <tr>
                   <th>TANGGAL</th>
-                  <th>PERTANDINGAN</th>
+                  <th>PERTANDINGAN / ACARA</th>
                   <th>LINK FOTO</th>
                   <th>KETERANGAN</th>
                 </tr>
@@ -154,6 +154,12 @@
         </div>
         <!-- End Dokumentasi -->
 
+        <!-- Tombol Share ke WhatsApp di bawah keterangan foto -->
+        <div class="whatsapp-share-container">
+          <button id="shareBtn" class="whatsapp-share-btn">
+            Share to WhatsApp
+          </button>
+        </div>
 
         <!-- FOOTER -->
         <footer class="custom-footer">
@@ -204,6 +210,15 @@
     <script>
       window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=CZfT4ukELTEw74U8y4_OVSdJA0MoRPTnbfrM_pEJnBf_yj0iY0f6c9xlI4u9RgHKuk3zOPedAt89EJiJW5Ng1pQVVtY5QfDsm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFp8IpH6vIoxlz6z1vHvBGveIMkwE5hxhRZgrX7pPlQO98dtL__CtYPa3KdNnIXbUm9WnqK1sm1dRh5mrQJuQ_bE78tZtLS8jw&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
     </script>
+
+        <!-- WhatsApp Share Script -->
+        <script>
+          document.getElementById("shareBtn").addEventListener("click", function () {
+            const articleUrl = window.location.href;
+            const whatsappUrl = `https://api.whatsapp.com/send?text=Check%20this%20out:%20${encodeURIComponent(articleUrl)}`;
+            window.open(whatsappUrl, '_blank');
+          });
+        </script>
 
   </div>
   <!-- END SCRIPTS -->
