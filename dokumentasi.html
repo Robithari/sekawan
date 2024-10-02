@@ -141,7 +141,7 @@
               <thead>
                 <tr>
                   <th>TANGGAL</th>
-                  <th>PERTANDINGAN / ACARA</th>
+                  <th>PERTANDINGAN</th>
                   <th>LINK FOTO</th>
                   <th>KETERANGAN</th>
                 </tr>
@@ -150,22 +150,22 @@
                 <!-- Data akan ditampilkan di sini -->
               </tbody>
             </table>
-            <!-- Tombol tautan -->
-            <div class="container-tautan">
-              <span id="copyLink" class="link-icon">
-                🔗 Share Link
-              </span>
-
-              <!-- Pesan Notifikasi -->
-              <div id="tautan-notification" class="tautan-notification">
-                Tautan sudah disalin ke clipboard!
-              </div>
-            </div>
           </div>
         </div>
         <!-- End Dokumentasi -->
+          <!-- Tombol tautan -->
+          <div class="container-tautan">
+            <!-- Ikon untuk Salin Tautan menggunakan gambar -->
+            <span id="copyLink" class="link-icon">
+              <img src="img/icon-link.png" alt="Ikon Share Link" class="icon-link">
+              Share Link
+            </span>
 
-
+            <!-- Pesan Notifikasi -->
+            <div id="tautan-notification" class="tautan-notification">
+              Tautan sudah disalin ke clipboard!
+            </div>
+          </div>
 
         <!-- FOOTER -->
         <footer class="custom-footer">
@@ -213,34 +213,9 @@
     <script type="module" src="firebase-config.js"></script>
     <script src="js/cek-login.js"></script>
     <script src="js/dokumentasi.js"></script>
+    <script src="js/share-link.js"></script>
     <script>
       window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=CZfT4ukELTEw74U8y4_OVSdJA0MoRPTnbfrM_pEJnBf_yj0iY0f6c9xlI4u9RgHKuk3zOPedAt89EJiJW5Ng1pQVVtY5QfDsm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFp8IpH6vIoxlz6z1vHvBGveIMkwE5hxhRZgrX7pPlQO98dtL__CtYPa3KdNnIXbUm9WnqK1sm1dRh5mrQJuQ_bE78tZtLS8jw&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
-    </script>
-
-
-    <!-- tautan notifikasi -->
-    <script>
-      document.getElementById("copyLink").addEventListener("click", function () {
-        // Mendapatkan URL halaman saat ini
-        const link = window.location.href;
-
-        // Membuat elemen input untuk sementara menyimpan URL
-        const tempInput = document.createElement("input");
-        document.body.appendChild(tempInput);
-        tempInput.value = link;
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-
-        // Menampilkan notifikasi bahwa tautan telah disalin
-        const notification = document.getElementById("tautan-notification");
-        notification.style.display = "block";
-
-        // Menghilangkan notifikasi setelah 3 detik
-        setTimeout(function () {
-          notification.style.display = "none";
-        }, 3000);
-      });
     </script>
 
   </div>

@@ -384,8 +384,11 @@ h6 {
 .link-icon {
   font-size: 12px;
   cursor: pointer;
-  color: white;
+  color: #f5f5dc;
   text-decoration: none;
+  font-weight: bold;
+
+
 }
 
 .tautan-notification {
@@ -401,25 +404,38 @@ h6 {
 }
 
 .container-tautan {
-display: inline-block;
-padding: 1px 5px;
-border: 1px solid #ddd;
-border-radius: 5px;
-background-color: rgba(80, 200, 120, 1);
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-text-align: center;
-margin-top: 20px;
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 5px; /* Rounded corners */
+  background: linear-gradient(135deg, #2d9802, #4cf279); /* Gradien gelap dari abu-abu tua ke biru tua */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 6px 6px rgba(0, 0, 0, 0.2); /* Deep shadow for elegance */
+  text-align: center;
+  width: auto; /* Lebar tetap */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-family: 'Arial', sans-serif; /* Font yang modern dan umum */
 }
+
 
 .container-tautan h5 {
   margin-bottom: 10px;
   font-size: 18px;
+  font-weight: bold;
 }
 
 .container-tautan p {
   margin-bottom: 10px;
   font-size: 14px;
 }
+
+    /* Pengaturan ukuran ikon */
+    .link-icon img {
+      width: 14px;  /* Ubah ukuran sesuai kebutuhan */
+      height: 14px; /* Ubah ukuran sesuai kebutuhan */
+      margin-top: -6px;
+  }
 
 /*======================================================= Media Queries untuk Desktop =======================================================*/
 @media (min-width: 1024px) {
