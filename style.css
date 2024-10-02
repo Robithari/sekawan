@@ -380,6 +380,47 @@ h6 {
   padding-bottom: 5px;
 }
 
+/* share link */
+.link-icon {
+  font-size: 12px;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+}
+
+.tautan-notification {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.container-tautan {
+display: inline-block;
+padding: 1px 5px;
+border: 1px solid #ddd;
+border-radius: 5px;
+background-color: rgba(80, 200, 120, 1);
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+text-align: center;
+margin-top: 20px;
+}
+
+.container-tautan h5 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.container-tautan p {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
 /*======================================================= Media Queries untuk Desktop =======================================================*/
 @media (min-width: 1024px) {
 
