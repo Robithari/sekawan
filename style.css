@@ -602,6 +602,11 @@ h6 {
   }
 }
 
+.custom-foto {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
 /*======================================================= Media Queries untuk Desktop dengan Tampilan iPad Pro =======================================================*/
 @media (min-width: 1024px) {
