@@ -68,33 +68,54 @@
 
 
   <style>
-    .audio-player {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #f0f0f0;
-      padding: 20px;
-      border-radius: 10px;
-      margin: 20px auto;
-      width: 300px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+.audio-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
 
-    .audio-player button {
-      background-color: #007bff;
-      border: none;
-      color: white;
-      padding: 15px;
-      border-radius: 50%;
-      cursor: pointer;
-      margin: 0 10px;
-      font-size: 18px;
-      transition: background-color 0.3s ease;
-    }
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
 
-    .audio-player button:hover {
-      background-color: #0056b3;
-    }
+button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.progress-container {
+  width: 100%;
+  margin: 10px 0;
+}
+
+#progress-bar {
+  width: 100%;
+}
+
+.time {
+  font-family: monospace;
+  font-size: 14px;
+}
+
+
   </style>
 </head>
 
@@ -190,10 +211,19 @@
         </p>
 
         <div class="audio-player">
-          <button id="play-btn"><i class="fas fa-play"></i></button>
-          <button id="pause-btn"><i class="fas fa-pause"></i></button>
-          <button id="stop-btn"><i class="fas fa-stop"></i></button>
+          <div class="controls">
+            <button id="play-btn" class="btn-play">&#9658;</button> <!-- Simbol Play -->
+            <button id="pause-btn" class="btn-pause">&#10074;&#10074;</button> <!-- Simbol Pause -->
+            <button id="stop-btn" class="btn-stop">&#9632;</button> <!-- Simbol Stop -->
+          </div>
+          <div class="progress-container">
+            <input type="range" id="progress-bar" value="0" min="0" max="100">
+          </div>
+          <div class="time">
+            <span id="current-time">00:00</span> / <span id="duration">00:00</span>
+          </div>
         </div>
+        
         
 
         <div class="isi-halaman">
@@ -332,55 +362,149 @@
       <!-- END Service Worker -->
 
       <script>
-  // Inisialisasi SpeechSynthesis API
-  const synth = window.speechSynthesis;
-  let utterance;
-  let isPaused = false;
-  
-  // Ambil elemen artikel dengan class "isi-halaman"
-  const articleText = document.querySelector('.isi-halaman').innerText;
-
-  // Tombol kontrol
-  const playBtn = document.getElementById('play-btn');
-  const pauseBtn = document.getElementById('pause-btn');
-  const stopBtn = document.getElementById('stop-btn');
-
-  // Fungsi untuk mulai membacakan artikel
-  function playText() {
-    if (isPaused && utterance) {
-      // Jika sedang di-pause, lanjutkan dari posisi terakhir
-      synth.resume();
-    } else {
-      // Jika belum ada utterance, buat baru
-      utterance = new SpeechSynthesisUtterance(articleText);
-      synth.speak(utterance);
-    }
-    isPaused = false;
-  }
-
-  // Fungsi untuk pause audio
-  function pauseText() {
-    if (synth.speaking && !isPaused) {
-      synth.pause();
-      isPaused = true;
-    }
-  }
-
-  // Fungsi untuk stop audio
-  function stopText() {
-    if (synth.speaking) {
-      synth.cancel();  // Menghentikan audio dan mengosongkan antrian
-    }
-    isPaused = false;
-  }
-
-  // Event listeners untuk tombol
-  playBtn.addEventListener('click', playText);
-  pauseBtn.addEventListener('click', pauseText);
-  stopBtn.addEventListener('click', stopText);
-
+        const textContent = document.querySelector('.isi-halaman').innerText;
+        const synth = window.speechSynthesis;
+        let utterance;
+        let isPaused = false;
+        let isStopped = false;
+      
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeDisplay = document.getElementById('current-time');
+        const durationDisplay = document.getElementById('duration');
+        let estimatedDuration = 0;
+        let elapsedTime = 0;
+        let updateInterval;
+      
+        let wordsArray = textContent.split(' '); // Array dari teks yang akan dibaca
+        let currentWordIndex = 0; // Index kata saat ini
+      
+        // Fungsi untuk mengatur durasi dalam format mm:ss
+        function formatTime(seconds) {
+          const minutes = Math.floor(seconds / 60);
+          const sec = Math.floor(seconds % 60);
+          return `${minutes < 10 ? '0' : ''}${minutes}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+      
+        // Fungsi untuk menghitung durasi berdasarkan panjang teks
+        function estimateDuration(text) {
+          const words = text.split(' ').length;
+          const averageWordsPerSecond = 3; // Estimasi rata-rata 3 kata per detik
+          return words / averageWordsPerSecond;
+        }
+      
+        // Fungsi untuk memperbarui waktu yang berjalan dan progress bar
+        function updateProgress() {
+          elapsedTime += 1; // Setiap detik
+          progressBar.value = (elapsedTime / estimatedDuration) * 100;
+          currentTimeDisplay.innerText = formatTime(elapsedTime);
+      
+          // Stop updating if time exceeds duration
+          if (elapsedTime >= estimatedDuration) {
+            clearInterval(updateInterval);
+            isStopped = true;
+            elapsedTime = 0;
+            progressBar.value = 0;
+          }
+        }
+      
+        // Fungsi untuk memulai atau melanjutkan pembacaan
+        function startSpeech(fromIndex = 0) {
+          if (isPaused) {
+            synth.resume();
+            isPaused = false;
+            updateInterval = setInterval(updateProgress, 1000); // Update progress setiap detik
+          } else if (!synth.speaking || isStopped) {
+            utterance = new SpeechSynthesisUtterance(wordsArray.slice(fromIndex).join(' ')); // Mulai dari index kata
+            utterance.lang = 'id-ID';
+            currentWordIndex = fromIndex; // Set posisi kata saat ini
+      
+            utterance.onend = function() {
+              clearInterval(updateInterval);
+              isStopped = true;
+              elapsedTime = 0;
+              progressBar.value = 0;
+            };
+      
+            utterance.onboundary = function(event) {
+              if (event.name === 'word') {
+                currentWordIndex++;
+                elapsedTime = (currentWordIndex / wordsArray.length) * estimatedDuration;
+                updateProgress();
+              }
+            };
+      
+            synth.speak(utterance);
+            isStopped = false;
+            elapsedTime = (currentWordIndex / wordsArray.length) * estimatedDuration;
+            durationDisplay.innerText = formatTime(estimatedDuration);
+            updateInterval = setInterval(updateProgress, 1000);
+          }
+        }
+      
+        // Fungsi untuk pause
+        function pauseSpeech() {
+          if (synth.speaking && !synth.paused) {
+            synth.pause();
+            isPaused = true;
+            clearInterval(updateInterval);
+          }
+        }
+      
+        // Fungsi untuk stop
+        function stopSpeech() {
+          if (synth.speaking || synth.paused) {
+            synth.cancel();
+            isStopped = true;
+            isPaused = false;
+            clearInterval(updateInterval);
+            elapsedTime = 0;
+            progressBar.value = 0;
+            currentTimeDisplay.innerText = '00:00';
+          }
+        }
+      
+        // Fungsi untuk menggeser progress bar
+        function skipTo(newValue) {
+          clearInterval(updateInterval);
+          stopSpeech();
+          const newElapsedTime = (newValue / 100) * estimatedDuration;
+          const newWordIndex = Math.floor((newValue / 100) * wordsArray.length); // Hitung index kata yang baru
+          elapsedTime = newElapsedTime;
+          currentTimeDisplay.innerText = formatTime(elapsedTime);
+          progressBar.value = newValue;
+          startSpeech(newWordIndex); // Mulai dari kata baru
+        }
+      
+        // Stop audio ketika pengguna keluar dari halaman
+        window.addEventListener('beforeunload', function() {
+          stopSpeech();
+        });
+      
+        // Stop audio jika halaman tidak aktif (tab lain atau minimize)
+        document.addEventListener('visibilitychange', function() {
+          if (document.hidden) {
+            stopSpeech();
+          }
+        });
+      
+        // Event listener untuk tombol
+        document.getElementById('play-btn').addEventListener('click', startSpeech);
+        document.getElementById('pause-btn').addEventListener('click', pauseSpeech);
+        document.getElementById('stop-btn').addEventListener('click', stopSpeech);
+      
+        // Event listener untuk progress bar (skip)
+        progressBar.addEventListener('input', function() {
+          const newValue = progressBar.value;
+          skipTo(newValue);
+        });
+      
+        estimatedDuration = estimateDuration(textContent); // Estimasi durasi berdasarkan teks
+        durationDisplay.innerText = formatTime(estimatedDuration);
       </script>
-
+      
+      
+      
+      
 
     </div>
   </div>
