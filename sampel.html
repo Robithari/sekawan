@@ -129,6 +129,14 @@
     .btn-stop {
       background-color: #d9534f;
     }
+
+    /* CSS */
+/* @media (max-width: 767px) {
+  .desktop-only {
+    display: none;
+  }
+} */
+
   </style>
 </head>
 
@@ -223,7 +231,7 @@
           FC beraksi heroik memblok bola lawan. (25/05/2024)
         </p>
 
-        <div class="audio-player-container">
+        <div class="audio-player-container desktop-only">
           <div class="audio-player-title">Mau dibacakan? Klik</div>
           <div class="audio-player">
             <div class="controls">
@@ -233,6 +241,7 @@
             </div>
           </div>
         </div>
+        
         
         
 
@@ -378,12 +387,40 @@
         let isPaused = false;
         let isStopped = true;
         let resumeIndex = 0;
+        let wakeLock = null;
       
         const playBtn = document.getElementById('play-btn');
         const pauseBtn = document.getElementById('pause-btn');
         const stopBtn = document.getElementById('stop-btn');
       
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+        async function requestWakeLock() {
+          try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            wakeLock.addEventListener('release', () => {
+              console.log('Wake Lock released');
+            });
+            console.log('Wake Lock is active');
+          } catch (err) {
+            console.error(`${err.name}, ${err.message}`);
+          }
+        }
+      
+        async function releaseWakeLock() {
+          if (wakeLock) {
+            await wakeLock.release();
+            wakeLock = null;
+          }
+        }
+      
         function startSpeech() {
+          requestWakeLock(); // Mencegah layar terkunci
+      
+          if (audioContext.state === 'suspended') {
+            audioContext.resume();
+          }
+      
           if (isPaused && !isStopped) {
             synth.resume();
             isPaused = false;
@@ -400,13 +437,12 @@
             utterance.onend = function() {
               isStopped = true;
               resumeIndex = 0;
-              updateMediaSessionState();
+              releaseWakeLock(); // Melepaskan wake lock setelah selesai
             };
       
             synth.speak(utterance);
             isStopped = false;
             isPaused = false;
-            updateMediaSessionState();
           }
         }
       
@@ -414,7 +450,6 @@
           if (synth.speaking && !synth.paused) {
             synth.pause();
             isPaused = true;
-            updateMediaSessionState();
           }
         }
       
@@ -424,45 +459,29 @@
             isStopped = true;
             isPaused = false;
             resumeIndex = 0;
-            updateMediaSessionState();
+            releaseWakeLock(); // Melepaskan wake lock saat audio dihentikan
           }
         }
       
-        function updateMediaSessionState() {
-          if ('mediaSession' in navigator) {
-            navigator.mediaSession.playbackState = isStopped
-              ? 'none'
-              : isPaused
-              ? 'paused'
-              : 'playing';
+        playBtn.addEventListener('click', () => {
+          if (audioContext.state === 'suspended') {
+            audioContext.resume();
           }
-        }
+          startSpeech();
+        });
       
-        // Event listeners
-        playBtn.addEventListener('click', startSpeech);
         pauseBtn.addEventListener('click', pauseSpeech);
         stopBtn.addEventListener('click', stopSpeech);
       
-        // Media Session API untuk kontrol audio di background
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.setActionHandler('play', startSpeech);
-          navigator.mediaSession.setActionHandler('pause', pauseSpeech);
-          navigator.mediaSession.setActionHandler('stop', stopSpeech);
+        window.addEventListener('beforeunload', stopSpeech);
       
-          navigator.mediaSession.metadata = new MediaMetadata({
-            title: 'Speech Synthesis Audio',
-            artist: 'Your App',
-            album: 'Speech Synthesis',
-            artwork: [
-              { src: 'path/to/your/image.jpg', sizes: '96x96', type: 'image/png' },
-              { src: 'path/to/your/image.jpg', sizes: '128x128', type: 'image/png' },
-              { src: 'path/to/your/image.jpg', sizes: '192x192', type: 'image/png' },
-              { src: 'path/to/your/image.jpg', sizes: '256x256', type: 'image/png' },
-              { src: 'path/to/your/image.jpg', sizes: '384x384', type: 'image/png' },
-              { src: 'path/to/your/image.jpg', sizes: '512x512', type: 'image/png' }
-            ]
-          });
-        }
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') {
+            audioContext.suspend();
+          } else {
+            audioContext.resume();
+          }
+        });
       </script>
       
       

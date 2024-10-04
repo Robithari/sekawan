@@ -56,16 +56,7 @@
   /* Menghapus padding di dalam kontainer */
 }
 
-.custom-foto {
-  display: block;
-  max-width: 100%;
-  /* Gambar hanya akan selebar kontainer induk */
-  height: auto;
-  /* Memastikan tinggi gambar otomatis sesuai dengan proporsi */
-  margin: 0 auto;
-  /* Menjadikan gambar rata tengah jika lebih kecil dari kontainer */
 
-}
 
 .keterangan-foto {
   opacity: 0.5;

@@ -606,6 +606,8 @@ h6 {
   width: 100%;
   height: auto;
   display: block;
+  padding: 0 10px 0 10px;
+  border-radius: 20px;
 }
 
 /*======================================================= Media Queries untuk Desktop dengan Tampilan iPad Pro =======================================================*/
