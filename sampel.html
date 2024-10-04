@@ -377,13 +377,12 @@
         let utterance;
         let isPaused = false;
         let isStopped = true;
-        let resumeIndex = 0; // Untuk menyimpan posisi kata terakhir yang dibacakan
+        let resumeIndex = 0;
       
         const playBtn = document.getElementById('play-btn');
         const pauseBtn = document.getElementById('pause-btn');
         const stopBtn = document.getElementById('stop-btn');
       
-        // Membuat dan menjalankan atau melanjutkan speech synthesis
         function startSpeech() {
           if (isPaused && !isStopped) {
             synth.resume();
@@ -394,47 +393,78 @@
       
             utterance.onboundary = function(event) {
               if (event.name === 'word') {
-                resumeIndex += 1; // Menyimpan indeks kata terakhir yang dibaca
+                resumeIndex += 1;
               }
             };
       
             utterance.onend = function() {
               isStopped = true;
-              resumeIndex = 0; // Reset posisi ketika selesai
+              resumeIndex = 0;
+              updateMediaSessionState();
             };
       
             synth.speak(utterance);
             isStopped = false;
             isPaused = false;
+            updateMediaSessionState();
           }
         }
       
-        // Pause speech synthesis
         function pauseSpeech() {
           if (synth.speaking && !synth.paused) {
             synth.pause();
             isPaused = true;
+            updateMediaSessionState();
           }
         }
       
-        // Stop speech synthesis
         function stopSpeech() {
           if (synth.speaking || synth.paused) {
             synth.cancel();
             isStopped = true;
             isPaused = false;
-            resumeIndex = 0; // Reset posisi ketika berhenti
+            resumeIndex = 0;
+            updateMediaSessionState();
           }
         }
       
-        // Event listeners untuk tombol kontrol
+        function updateMediaSessionState() {
+          if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = isStopped
+              ? 'none'
+              : isPaused
+              ? 'paused'
+              : 'playing';
+          }
+        }
+      
+        // Event listeners
         playBtn.addEventListener('click', startSpeech);
         pauseBtn.addEventListener('click', pauseSpeech);
         stopBtn.addEventListener('click', stopSpeech);
       
-        // Menghentikan audio saat pengguna meninggalkan halaman sepenuhnya
-        window.addEventListener('beforeunload', stopSpeech);
+        // Media Session API untuk kontrol audio di background
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.setActionHandler('play', startSpeech);
+          navigator.mediaSession.setActionHandler('pause', pauseSpeech);
+          navigator.mediaSession.setActionHandler('stop', stopSpeech);
+      
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: 'Speech Synthesis Audio',
+            artist: 'Your App',
+            album: 'Speech Synthesis',
+            artwork: [
+              { src: 'path/to/your/image.jpg', sizes: '96x96', type: 'image/png' },
+              { src: 'path/to/your/image.jpg', sizes: '128x128', type: 'image/png' },
+              { src: 'path/to/your/image.jpg', sizes: '192x192', type: 'image/png' },
+              { src: 'path/to/your/image.jpg', sizes: '256x256', type: 'image/png' },
+              { src: 'path/to/your/image.jpg', sizes: '384x384', type: 'image/png' },
+              { src: 'path/to/your/image.jpg', sizes: '512x512', type: 'image/png' }
+            ]
+          });
+        }
       </script>
+      
       
       
 
