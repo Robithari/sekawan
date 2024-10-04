@@ -68,54 +68,67 @@
 
 
   <style>
-.audio-player {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 300px;
-  background-color: #f3f3f3;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
+    /* Container utama */
+    .audio-player-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 300px;
+      margin: auto;
+      text-align: center;
+    }
 
-.controls {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-}
+    /* Teks header */
+    .audio-player-title {
+      font-size: 1.5em;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
 
-button {
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 10px;
-  font-size: 16px;
-  margin: 0 5px;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-}
+    /* Kontainer tombol */
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
 
-button:hover {
-  background-color: #45a049;
-}
+    /* Tombol */
+    .controls button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      font-size: 1.2em;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-.progress-container {
-  width: 100%;
-  margin: 10px 0;
-}
+    /* Hover efek tombol */
+    .controls button:hover {
+      background-color: #45a049;
+    }
 
-#progress-bar {
-  width: 100%;
-}
+    /* Tombol play khusus */
+    .btn-play {
+      background-color: #2196F3;
+    }
 
-.time {
-  font-family: monospace;
-  font-size: 14px;
-}
+    /* Tombol pause khusus */
+    .btn-pause {
+      background-color: #f0ad4e;
+    }
 
-
+    /* Tombol stop khusus */
+    .btn-stop {
+      background-color: #d9534f;
+    }
   </style>
 </head>
 
@@ -210,11 +223,14 @@ button:hover {
           FC beraksi heroik memblok bola lawan. (25/05/2024)
         </p>
 
-        <div class="audio-player">
-          <div class="controls">
-            <button id="play-btn" class="btn-play">&#9658;</button> <!-- Simbol Play -->
-            <button id="pause-btn" class="btn-pause">&#10074;&#10074;</button> <!-- Simbol Pause -->
-            <button id="stop-btn" class="btn-stop">&#9632;</button> <!-- Simbol Stop -->
+        <div class="audio-player-container">
+          <div class="audio-player-title">Mau dibacakan? Klik</div>
+          <div class="audio-player">
+            <div class="controls">
+              <button id="play-btn" class="btn-play">&#9658;</button> <!-- Simbol Play -->
+              <button id="pause-btn" class="btn-pause">&#10074;&#10074;</button> <!-- Simbol Pause -->
+              <button id="stop-btn" class="btn-stop">&#9632;</button> <!-- Simbol Stop -->
+            </div>
           </div>
         </div>
         
