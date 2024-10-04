@@ -216,12 +216,6 @@ button:hover {
             <button id="pause-btn" class="btn-pause">&#10074;&#10074;</button> <!-- Simbol Pause -->
             <button id="stop-btn" class="btn-stop">&#9632;</button> <!-- Simbol Stop -->
           </div>
-          <div class="progress-container">
-            <input type="range" id="progress-bar" value="0" min="0" max="100">
-          </div>
-          <div class="time">
-            <span id="current-time">00:00</span> / <span id="duration">00:00</span>
-          </div>
         </div>
         
         
@@ -366,140 +360,54 @@ button:hover {
         const synth = window.speechSynthesis;
         let utterance;
         let isPaused = false;
-        let isStopped = false;
+        let isStopped = true;
       
-        const progressBar = document.getElementById('progress-bar');
-        const currentTimeDisplay = document.getElementById('current-time');
-        const durationDisplay = document.getElementById('duration');
-        let estimatedDuration = 0;
-        let elapsedTime = 0;
-        let updateInterval;
+        const playBtn = document.getElementById('play-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const stopBtn = document.getElementById('stop-btn');
       
-        let wordsArray = textContent.split(' '); // Array dari teks yang akan dibaca
-        let currentWordIndex = 0; // Index kata saat ini
-      
-        // Fungsi untuk mengatur durasi dalam format mm:ss
-        function formatTime(seconds) {
-          const minutes = Math.floor(seconds / 60);
-          const sec = Math.floor(seconds % 60);
-          return `${minutes < 10 ? '0' : ''}${minutes}:${sec < 10 ? '0' : ''}${sec}`;
-        }
-      
-        // Fungsi untuk menghitung durasi berdasarkan panjang teks
-        function estimateDuration(text) {
-          const words = text.split(' ').length;
-          const averageWordsPerSecond = 3; // Estimasi rata-rata 3 kata per detik
-          return words / averageWordsPerSecond;
-        }
-      
-        // Fungsi untuk memperbarui waktu yang berjalan dan progress bar
-        function updateProgress() {
-          elapsedTime += 1; // Setiap detik
-          progressBar.value = (elapsedTime / estimatedDuration) * 100;
-          currentTimeDisplay.innerText = formatTime(elapsedTime);
-      
-          // Stop updating if time exceeds duration
-          if (elapsedTime >= estimatedDuration) {
-            clearInterval(updateInterval);
-            isStopped = true;
-            elapsedTime = 0;
-            progressBar.value = 0;
-          }
-        }
-      
-        // Fungsi untuk memulai atau melanjutkan pembacaan
-        function startSpeech(fromIndex = 0) {
+        // Memulai atau melanjutkan speech synthesis
+        function startSpeech() {
           if (isPaused) {
             synth.resume();
             isPaused = false;
-            updateInterval = setInterval(updateProgress, 1000); // Update progress setiap detik
           } else if (!synth.speaking || isStopped) {
-            utterance = new SpeechSynthesisUtterance(wordsArray.slice(fromIndex).join(' ')); // Mulai dari index kata
+            utterance = new SpeechSynthesisUtterance(textContent);
             utterance.lang = 'id-ID';
-            currentWordIndex = fromIndex; // Set posisi kata saat ini
       
             utterance.onend = function() {
-              clearInterval(updateInterval);
               isStopped = true;
-              elapsedTime = 0;
-              progressBar.value = 0;
-            };
-      
-            utterance.onboundary = function(event) {
-              if (event.name === 'word') {
-                currentWordIndex++;
-                elapsedTime = (currentWordIndex / wordsArray.length) * estimatedDuration;
-                updateProgress();
-              }
             };
       
             synth.speak(utterance);
             isStopped = false;
-            elapsedTime = (currentWordIndex / wordsArray.length) * estimatedDuration;
-            durationDisplay.innerText = formatTime(estimatedDuration);
-            updateInterval = setInterval(updateProgress, 1000);
           }
         }
       
-        // Fungsi untuk pause
+        // Pause speech synthesis
         function pauseSpeech() {
           if (synth.speaking && !synth.paused) {
             synth.pause();
             isPaused = true;
-            clearInterval(updateInterval);
           }
         }
       
-        // Fungsi untuk stop
+        // Stop speech synthesis
         function stopSpeech() {
           if (synth.speaking || synth.paused) {
             synth.cancel();
             isStopped = true;
             isPaused = false;
-            clearInterval(updateInterval);
-            elapsedTime = 0;
-            progressBar.value = 0;
-            currentTimeDisplay.innerText = '00:00';
           }
         }
       
-        // Fungsi untuk menggeser progress bar
-        function skipTo(newValue) {
-          clearInterval(updateInterval);
-          stopSpeech();
-          const newElapsedTime = (newValue / 100) * estimatedDuration;
-          const newWordIndex = Math.floor((newValue / 100) * wordsArray.length); // Hitung index kata yang baru
-          elapsedTime = newElapsedTime;
-          currentTimeDisplay.innerText = formatTime(elapsedTime);
-          progressBar.value = newValue;
-          startSpeech(newWordIndex); // Mulai dari kata baru
-        }
+        // Event listeners
+        playBtn.addEventListener('click', startSpeech);
+        pauseBtn.addEventListener('click', pauseSpeech);
+        stopBtn.addEventListener('click', stopSpeech);
       
-        // Stop audio ketika pengguna keluar dari halaman
-        window.addEventListener('beforeunload', function() {
-          stopSpeech();
-        });
-      
-        // Stop audio jika halaman tidak aktif (tab lain atau minimize)
-        document.addEventListener('visibilitychange', function() {
-          if (document.hidden) {
-            stopSpeech();
-          }
-        });
-      
-        // Event listener untuk tombol
-        document.getElementById('play-btn').addEventListener('click', startSpeech);
-        document.getElementById('pause-btn').addEventListener('click', pauseSpeech);
-        document.getElementById('stop-btn').addEventListener('click', stopSpeech);
-      
-        // Event listener untuk progress bar (skip)
-        progressBar.addEventListener('input', function() {
-          const newValue = progressBar.value;
-          skipTo(newValue);
-        });
-      
-        estimatedDuration = estimateDuration(textContent); // Estimasi durasi berdasarkan teks
-        durationDisplay.innerText = formatTime(estimatedDuration);
+        // Menghentikan audio hanya ketika pengguna meninggalkan halaman (bukan saat tab atau layar terkunci)
+        window.addEventListener('beforeunload', stopSpeech);
       </script>
       
       
