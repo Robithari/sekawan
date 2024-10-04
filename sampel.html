@@ -382,12 +382,12 @@
         const pauseBtn = document.getElementById('pause-btn');
         const stopBtn = document.getElementById('stop-btn');
       
-        // Memulai atau melanjutkan speech synthesis
+        // Fungsi untuk memulai atau melanjutkan pemutaran audio
         function startSpeech() {
-          if (isPaused) {
+          if (isPaused && synth.paused) {
             synth.resume();
             isPaused = false;
-          } else if (!synth.speaking || isStopped) {
+          } else if (isStopped || !synth.speaking) {
             utterance = new SpeechSynthesisUtterance(textContent);
             utterance.lang = 'id-ID';
       
@@ -395,12 +395,17 @@
               isStopped = true;
             };
       
+            utterance.onerror = function(event) {
+              console.error("SpeechSynthesis error: " + event.error);
+            };
+      
             synth.speak(utterance);
+            isPaused = false;
             isStopped = false;
           }
         }
       
-        // Pause speech synthesis
+        // Fungsi untuk menjeda pemutaran audio
         function pauseSpeech() {
           if (synth.speaking && !synth.paused) {
             synth.pause();
@@ -408,25 +413,25 @@
           }
         }
       
-        // Stop speech synthesis
+        // Fungsi untuk menghentikan pemutaran audio
         function stopSpeech() {
           if (synth.speaking || synth.paused) {
             synth.cancel();
-            isStopped = true;
             isPaused = false;
+            isStopped = true;
           }
         }
       
-        // Event listeners
+        // Event listeners untuk tombol kontrol
         playBtn.addEventListener('click', startSpeech);
         pauseBtn.addEventListener('click', pauseSpeech);
         stopBtn.addEventListener('click', stopSpeech);
       
-        // Menghentikan audio hanya ketika pengguna meninggalkan halaman (bukan saat tab atau layar terkunci)
-        window.addEventListener('beforeunload', stopSpeech);
+        // Menghapus event yang menghentikan audio saat tab atau layar tidak aktif
+        window.addEventListener('beforeunload', stopSpeech); // Tetap digunakan untuk menghentikan audio saat halaman ditutup
+      
+        // Penghapusan 'visibilitychange' agar audio tetap berjalan di background
       </script>
-      
-      
       
       
 
