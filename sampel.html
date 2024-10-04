@@ -395,6 +395,10 @@
       
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       
+        function isMobileDevice() {
+          return /Mobi|Android/i.test(navigator.userAgent);
+        }
+      
         async function requestWakeLock() {
           try {
             wakeLock = await navigator.wakeLock.request('screen');
@@ -415,7 +419,9 @@
         }
       
         function startSpeech() {
-          requestWakeLock(); // Mencegah layar terkunci
+          if (isMobileDevice()) {
+            requestWakeLock();
+          }
       
           if (audioContext.state === 'suspended') {
             audioContext.resume();
@@ -437,7 +443,9 @@
             utterance.onend = function() {
               isStopped = true;
               resumeIndex = 0;
-              releaseWakeLock(); // Melepaskan wake lock setelah selesai
+              if (isMobileDevice()) {
+                releaseWakeLock();
+              }
             };
       
             synth.speak(utterance);
@@ -459,7 +467,7 @@
             isStopped = true;
             isPaused = false;
             resumeIndex = 0;
-            releaseWakeLock(); // Melepaskan wake lock saat audio dihentikan
+            releaseWakeLock();
           }
         }
       
@@ -483,9 +491,6 @@
           }
         });
       </script>
-      
-      
-      
 
     </div>
   </div>
