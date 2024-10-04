@@ -377,35 +377,39 @@
         let utterance;
         let isPaused = false;
         let isStopped = true;
+        let resumeIndex = 0; // Untuk menyimpan posisi kata terakhir yang dibacakan
       
         const playBtn = document.getElementById('play-btn');
         const pauseBtn = document.getElementById('pause-btn');
         const stopBtn = document.getElementById('stop-btn');
       
-        // Fungsi untuk memulai atau melanjutkan pemutaran audio
+        // Membuat dan menjalankan atau melanjutkan speech synthesis
         function startSpeech() {
-          if (isPaused && synth.paused) {
+          if (isPaused && !isStopped) {
             synth.resume();
             isPaused = false;
-          } else if (isStopped || !synth.speaking) {
-            utterance = new SpeechSynthesisUtterance(textContent);
+          } else if (!synth.speaking || isStopped) {
+            utterance = new SpeechSynthesisUtterance(textContent.split(' ').slice(resumeIndex).join(' '));
             utterance.lang = 'id-ID';
+      
+            utterance.onboundary = function(event) {
+              if (event.name === 'word') {
+                resumeIndex += 1; // Menyimpan indeks kata terakhir yang dibaca
+              }
+            };
       
             utterance.onend = function() {
               isStopped = true;
-            };
-      
-            utterance.onerror = function(event) {
-              console.error("SpeechSynthesis error: " + event.error);
+              resumeIndex = 0; // Reset posisi ketika selesai
             };
       
             synth.speak(utterance);
-            isPaused = false;
             isStopped = false;
+            isPaused = false;
           }
         }
       
-        // Fungsi untuk menjeda pemutaran audio
+        // Pause speech synthesis
         function pauseSpeech() {
           if (synth.speaking && !synth.paused) {
             synth.pause();
@@ -413,12 +417,13 @@
           }
         }
       
-        // Fungsi untuk menghentikan pemutaran audio
+        // Stop speech synthesis
         function stopSpeech() {
           if (synth.speaking || synth.paused) {
             synth.cancel();
-            isPaused = false;
             isStopped = true;
+            isPaused = false;
+            resumeIndex = 0; // Reset posisi ketika berhenti
           }
         }
       
@@ -427,10 +432,8 @@
         pauseBtn.addEventListener('click', pauseSpeech);
         stopBtn.addEventListener('click', stopSpeech);
       
-        // Menghapus event yang menghentikan audio saat tab atau layar tidak aktif
-        window.addEventListener('beforeunload', stopSpeech); // Tetap digunakan untuk menghentikan audio saat halaman ditutup
-      
-        // Penghapusan 'visibilitychange' agar audio tetap berjalan di background
+        // Menghentikan audio saat pengguna meninggalkan halaman sepenuhnya
+        window.addEventListener('beforeunload', stopSpeech);
       </script>
       
       
