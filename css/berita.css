@@ -56,7 +56,16 @@
   /* Menghapus padding di dalam kontainer */
 }
 
+.container-foto {
+  padding: 0 10px 0 10px;
+}
 
+.custom-foto {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 5px;
+}
 
 .keterangan-foto {
   opacity: 0.5;

@@ -38,6 +38,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="css/loading.css">
   <link rel="stylesheet" href="css/berita.css">
+  <link rel="stylesheet" href="css/play-audio.css">
 
 
 
@@ -154,6 +155,19 @@
           Sumber foto: maglearning.id/2020/11/03/pemanasan-sebelum-bermain-sepak-bola
         </p>
 
+        <!-- PLAY AUDIO -->
+        <div class="audio-player-container desktop-only">
+          <div class="audio-player-title">MENDENGARKAN ISI HALAMAN</div>
+          <div class="audio-player">
+            <div class="controls">
+              <button id="play-btn" class="btn-play">&#9658;</button> <!-- Simbol Play -->
+              <button id="pause-btn" class="btn-pause">&#10074;&#10074;</button> <!-- Simbol Pause -->
+              <button id="stop-btn" class="btn-stop">&#9632;</button> <!-- Simbol Stop -->
+            </div>
+          </div>
+        </div>
+        <!-- END PLAY AUDIO -->
+
         <div class="isi-halaman">
           <p><strong>SEKAWANFC.fun</strong> - Pernahkah kamu merasakan nyeri otot yang mengganggu setelah bermain sepak
             bola?</p>
@@ -186,7 +200,8 @@
           <h2 class="title-sub">Tips Tambahan</h2>
           <ul>
             <li>Pemanasan harus dilakukan di tempat yang aman dan luas.<sup><a href="#ref6">[6]</a></sup></li>
-            <li>Gunakan pakaian dan sepatu yang nyaman agar memungkinkan gerakan bebas.<sup><a href="#ref5">[5]</a></sup></li>
+            <li>Gunakan pakaian dan sepatu yang nyaman agar memungkinkan gerakan bebas.<sup><a
+                  href="#ref5">[5]</a></sup></li>
             <li>Minumlah air putih sebelum dan selama pemanasan untuk menjaga hidrasi.<sup><a href="#ref3">[4]</a></sup>
             </li>
           </ul>
@@ -219,7 +234,7 @@
             </li>
             <li id="ref5">[5] National Institute on Aging. *Finding the Right Fitness Shoes and Clothes*. Diakses dari
               <a href="https://www.nia.nih.gov/health/finding-right-fitness-shoes-and-clothes">NIA</a>.
-          </li>
+            </li>
           </ul>
         </div>
         <!-- End Referensi -->
@@ -268,7 +283,7 @@
         <script src="js/splas-screen-start.js"></script>
         <script src="js/kunci-layar.js"></script>
         <script type="module" src="firebase-config.js"></script>
-
+        <script src="js/play-audio.js"></script>
         <script src="js/cek-login.js"></script>
 
         <script type="module" src="firebase-config.js"></script>
