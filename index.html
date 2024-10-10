@@ -354,36 +354,34 @@
           <!-- End Tombol tautan -->
 
 
-          <!-- FOOTER -->
-          <footer class="custom-footer">
-            <div class="footer-content">
-              <div class="footer-section">
-                <h6>Ikuti Kami</h6>
-                <div class="social-icons">
-                  <a href="proses.html" class="social-icon" target="_blank">
-                    <img
-                      src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
+<!-- FOOTER -->
+<footer class="custom-footer">
+  <div class="footer-content">
+      <div class="footer-section">
+          <h6>Ikuti Kami</h6>
+          <div class="social-icons">
+              <a href="#" class="social-icon" target="_blank" id="facebook-link">
+                  <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
                       alt="Ikon Facebook" class="icon-image">
-                  </a>
-                  <a href="proses.html" class="social-icon" target="_blank">
-                    <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
+              </a>
+              <a href="#" class="social-icon" target="_blank" id="instagram-link">
+                  <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
                       alt="Ikon Instagram" class="icon-image">
-                  </a>
-                </div>
-              </div>
-              <div class="footer-section">
-                <h6>Hubungi Kami</h6>
-                <p class="footer-email">Email: <a class="footer-email-link"
-                    href="mailto:admin@sekawanfc.com">admin@sekawanfc.com</a></p>
-                <p class="footer-telephone">Telepon: +62 813 363 06253</p>
-              </div>
-            </div>
-            <div class="footer-bottom">
-              <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
-              <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
-            </div>
-          </footer>
-          <!-- END FOOTER -->
+              </a>
+          </div>
+      </div>
+      <div class="footer-section">
+          <h6>Hubungi Kami</h6>
+          <p class="footer-email">Email: <a class="footer-email-link" href="mailto:" id="email-link"></a></p>
+          <p class="footer-telephone">Telepon: <span id="telephone"></span></p>
+      </div>
+  </div>
+  <div class="footer-bottom">
+      <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
+      <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
+  </div>
+</footer>
+
         </div>
         <!-- SCRIPTS -->
         <div class="container-js">
@@ -425,6 +423,37 @@
       </div>
     </div>
   </div>
+
+
+  <!-- cms footer -->
+  <script type="module">
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { db } from './firebase-config.js'; // Sesuaikan dengan konfigurasi Firebase
+
+    // Fungsi untuk memuat data footer
+    async function loadFooterData() {
+        try {
+            const querySnapshot = await getDocs(collection(db, "footer"));
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+
+                // Memasukkan data ke dalam elemen footer
+                document.getElementById('facebook-link').href = data.facebook;
+                document.getElementById('instagram-link').href = data.instagram;
+                document.getElementById('email-link').textContent = data.email;
+                document.getElementById('email-link').href = `mailto:${data.email}`;
+                document.getElementById('telephone').textContent = data.telephone;
+            });
+        } catch (error) {
+            console.error("Error memuat data footer:", error);
+        }
+    }
+
+    // Panggil fungsi untuk memuat footer setelah halaman selesai dimuat
+    window.onload = function () {
+        loadFooterData();
+    };
+</script>
 </body>
 
 </html>

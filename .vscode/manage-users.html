@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Users - Sekawan FC CMS</title>
+  <link rel="stylesheet" href="cms.css">
+</head>
+<body>
+  <nav>
+    <h1>Manage Users</h1>
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="manage-articles.html">Manage Articles</a></li>
+      <li><a href="manage-users.html">Manage Users</a></li>
+      <li><a href="media-library.html">Media Library</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="#" id="logout-btn">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>User Management</h2>
+    <p>Here you can manage all users who have access to the CMS. You can add, edit, or remove users.</p>
+    <!-- Add a table to display user information and buttons to manage users -->
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- User data will be dynamically populated here using JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="firebase-config.js"></script>
+</body>
+</html>
