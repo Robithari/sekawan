@@ -33,61 +33,34 @@ let utterance;  // Objek untuk menyimpan ucapan
 let isPaused = false;  // Status untuk mengecek apakah ucapan dalam kondisi jeda
 let isStopped = true;  // Status untuk mengecek apakah ucapan dalam kondisi berhenti
 let resumeIndex = 0;  // Index untuk melanjutkan ucapan yang dijeda
-let wakeLock = null;  // Objek untuk menangani Wake Lock
 
 const playBtn = document.getElementById('play-btn');  // Tombol Play
 const pauseBtn = document.getElementById('pause-btn');  // Tombol Pause
 const stopBtn = document.getElementById('stop-btn');  // Tombol Stop
 
-let audioContext;  // Deklarasi audioContext di luar scope agar dapat digunakan setelah interaksi
+let voices = [];
 
 // Fungsi untuk memeriksa apakah perangkat adalah perangkat mobile
 function isMobileDevice() {
   return /Mobi|Android/i.test(navigator.userAgent);
 }
 
-// Fungsi untuk meminta Wake Lock (agar layar tidak mati selama ucapan)
-async function requestWakeLock() {
-  try {
-    wakeLock = await navigator.wakeLock.request('screen');
-    wakeLock.addEventListener('release', () => {
-      console.log('Wake Lock released');
-    });
-    console.log('Wake Lock is active');
-  } catch (err) {
-    console.error(`${err.name}, ${err.message}`);
-  }
-}
-
-// Fungsi untuk melepas Wake Lock ketika tidak lagi dibutuhkan
-async function releaseWakeLock() {
-  if (wakeLock) {
-    await wakeLock.release();
-    wakeLock = null;
-  }
-}
-
 // Fungsi untuk memulai ucapan
 function startSpeech() {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();  // Inisialisasi AudioContext setelah interaksi
-  }
-
-  if (isMobileDevice()) {
-    requestWakeLock();  // Meminta Wake Lock untuk perangkat mobile
-  }
-
-  if (audioContext.state === 'suspended') {
-    audioContext.resume();  // Memulihkan AudioContext jika ter-suspend
-  }
-
   if (isPaused && !isStopped) {
     synth.resume();  // Melanjutkan ucapan yang dijeda
     isPaused = false;
   } else if (!synth.speaking || isStopped) {
-    // Inisialisasi ucapan baru dari posisi yang dijeda (resumeIndex)
     utterance = new SpeechSynthesisUtterance(textContent.split(' ').slice(resumeIndex).join(' '));
     utterance.lang = 'id-ID';  // Bahasa ucapan diatur ke bahasa Indonesia
+
+    // Menentukan voice secara eksplisit
+    const idIDVoice = voices.find(voice => voice.lang === 'id-ID');
+    if (idIDVoice) {
+      utterance.voice = idIDVoice;
+    } else {
+      console.warn("Voice 'id-ID' tidak tersedia. Menggunakan voice default.");
+    }
 
     // Menyimpan posisi terakhir kata yang diucapkan
     utterance.onboundary = function (event) {
@@ -100,9 +73,7 @@ function startSpeech() {
     utterance.onend = function () {
       isStopped = true;
       resumeIndex = 0;
-      if (isMobileDevice()) {
-        releaseWakeLock();  // Melepas Wake Lock saat ucapan selesai
-      }
+      console.log("Ucapan selesai.");
     };
 
     // Mulai mengucapkan teks
@@ -127,24 +98,12 @@ function stopSpeech() {
     isStopped = true;
     isPaused = false;
     resumeIndex = 0;  // Reset posisi ucapan
-    releaseWakeLock();  // Melepas Wake Lock saat ucapan dihentikan
   }
 }
 
 // Event listener untuk tombol Play
 playBtn.addEventListener('click', () => {
-  // Inisialisasi dan resume AudioContext hanya setelah tombol play diklik
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();  // Inisialisasi AudioContext
-  }
-
-  if (audioContext.state === 'suspended') {
-    audioContext.resume().then(() => {
-      startSpeech();  // Memulai atau melanjutkan ucapan setelah AudioContext resume
-    });
-  } else {
-    startSpeech();  // Memulai ucapan langsung jika AudioContext tidak suspended
-  }
+  startSpeech();  // Mulai atau melanjutkan ucapan setelah interaksi pengguna
 });
 
 // Event listener untuk tombol Pause
@@ -157,10 +116,10 @@ stopBtn.addEventListener('click', stopSpeech);
 window.addEventListener('beforeunload', stopSpeech);
 
 // Suspend AudioContext jika halaman tidak aktif (misalnya pengguna berpindah tab)
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden' && audioContext) {
-    audioContext.suspend();  // Suspend AudioContext saat halaman tidak terlihat
-  } else if (audioContext) {
-    audioContext.resume();  // Memulihkan AudioContext saat halaman aktif kembali
-  }
-});
+// Tidak diperlukan jika Anda menghapus AudioContext
+
+// Event untuk memuat voices setelah tersedia
+synth.onvoiceschanged = () => {
+  voices = synth.getVoices();
+  console.log("Daftar suara:", voices);
+};
