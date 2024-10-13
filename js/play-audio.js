@@ -45,6 +45,13 @@ function isMobileDevice() {
   return /Mobi|Android/i.test(navigator.userAgent);
 }
 
+// Fungsi untuk memastikan Speech Synthesis bekerja di perangkat mobile
+document.addEventListener('click', () => {
+  if (isMobileDevice() && synth && synth.paused && !synth.speaking) {
+    synth.resume();
+  }
+}, { once: true });
+
 // Fungsi untuk memulai ucapan
 function startSpeech() {
   if (isPaused && !isStopped) {
@@ -114,9 +121,6 @@ stopBtn.addEventListener('click', stopSpeech);
 
 // Menghentikan ucapan jika pengguna keluar dari halaman
 window.addEventListener('beforeunload', stopSpeech);
-
-// Suspend AudioContext jika halaman tidak aktif (misalnya pengguna berpindah tab)
-// Tidak diperlukan jika Anda menghapus AudioContext
 
 // Event untuk memuat voices setelah tersedia
 synth.onvoiceschanged = () => {
