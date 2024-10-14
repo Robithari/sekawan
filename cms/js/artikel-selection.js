@@ -1,5 +1,5 @@
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db } from './firebase-config.js'; 
+import { db } from '../../firebase-config.js'; 
 
 let currentEditId = null;
 

@@ -1,6 +1,6 @@
 import { collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js"; // Import Storage
-import { db } from './firebase-config.js'; // pastikan file ini sudah benar
+import { db } from '../../firebase-config.js'; // pastikan file ini sudah benar
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Import Firebase Auth
 
 const storage = getStorage(); // Inisialisasi Storage
