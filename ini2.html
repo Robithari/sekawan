@@ -14,7 +14,7 @@
         /* Sidebar styling */
         #sidebar {
             min-width: 250px;
-            max-width: 250px;
+            max-width: 400px;
             min-height: 100vh;
             background: #343a40;
             color: #fff;
@@ -72,9 +72,6 @@
                 font-size: 18px;
             }
 
-            #sidebar {
-                min-width: 100px;
-            }
 
             #page-content-wrapper {
                 padding: 5px;
@@ -196,7 +193,7 @@
                             <form id="profilForm">
                                 <h2>Edit Profil</h2>
                                 <div class="mb-3">
-                                    <textarea id="profilContent" class="form-control" rows="100%" placeholder="Masukkan konten profil" required></textarea>
+                                    <textarea id="profilContent" class="form-control" placeholder="Masukkan konten profil" rows="100%" required></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Simpan Profil</button>
                                 <button type="button" class="btn btn-secondary" id="cancel-profil-btn">Batal</button>
@@ -340,32 +337,7 @@
             wrapper.classList.toggle("toggled");
         });
     </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    const wrapper = document.getElementById("wrapper");
     
-    // Check if the page is loaded on a mobile device or small screen
-    const windowWidth = window.innerWidth;
-    
-    // If screen width is less than 768px, we toggle sidebar
-    if (windowWidth <= 768) {
-        wrapper.classList.remove("toggled");  // Sidebar hidden on small screen by default
-    } else {
-        wrapper.classList.add("toggled");  // Sidebar visible on larger screens
-    }
-
-    // Show initial section
-    showSection('berita-section');
-});
-
-// Toggle sidebar on button click
-document.getElementById("menu-toggle").addEventListener("click", function () {
-    const wrapper = document.getElementById("wrapper");
-    wrapper.classList.toggle("toggled");
-});
-
-    </script>
 
     <!-- Custom JavaScript Modules -->
     <script type="module" src="cms/js/footer-selection.js"></script>
