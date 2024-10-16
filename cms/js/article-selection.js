@@ -32,14 +32,7 @@ function createSlug(title) {
 
 // Fungsi untuk mengecek apakah slug unik, kecuali untuk artikel yang sedang diedit
 async function isSlugUnique(slug, excludeId = null) {
-    let q;
-    if (excludeId) {
-        // Firestore tidak mendukung penyaringan berdasarkan __name__ dengan operator '!=' secara langsung
-        // Jadi, kita perlu mengambil semua artikel dengan slug tersebut dan mengecualikan ID yang diberikan
-        q = query(articleCollectionRef, where("slug", "==", slug));
-    } else {
-        q = query(articleCollectionRef, where("slug", "==", slug));
-    }
+    let q = query(articleCollectionRef, where("slug", "==", slug));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) return true;
 
@@ -274,17 +267,33 @@ async function editArticleById(articleId) {
         if (docSnap.exists()) {
             const article = docSnap.data();
             console.log("Artikel yang diedit:", article);
-            document.getElementById("title").value = article.title;
-            document.getElementById("content").value = article.content;
-            document.getElementById("photoUrl").value = article.photoUrl;
-            document.getElementById("caption").value = article.caption;
-            document.getElementById("titleKeterangan").value = article.titleKeterangan;
-            document.getElementById("tanggalPembuatan").value = article.tanggalPembuatan;
+
+            const titleInput = document.getElementById("title");
+            const contentInput = document.getElementById("content");
+            const photoUrlInput = document.getElementById("photoUrl");
+            const captionInput = document.getElementById("caption");
+            const titleKeteranganInput = document.getElementById("titleKeterangan");
+            const tanggalPembuatanInput = document.getElementById("tanggalPembuatan");
+
+            if (titleInput) titleInput.value = article.title;
+            if (contentInput) contentInput.value = article.content;
+            if (photoUrlInput) photoUrlInput.value = article.photoUrl;
+            if (captionInput) captionInput.value = article.caption;
+            if (titleKeteranganInput) titleKeteranganInput.value = article.titleKeterangan;
+            if (tanggalPembuatanInput) tanggalPembuatanInput.value = article.tanggalPembuatan;
+
             currentArticleId = articleId;
-            updateBtn.classList.remove("d-none");
+
+            if (updateBtn) {
+                updateBtn.classList.remove("d-none");
+            } else {
+                console.warn("Elemen dengan ID 'update-btn' tidak ditemukan.");
+            }
 
             // Scroll ke form untuk edit
-            window.scrollTo({ top: addContentForm.offsetTop, behavior: 'smooth' });
+            if (addContentForm) {
+                window.scrollTo({ top: addContentForm.offsetTop, behavior: 'smooth' });
+            }
         } else {
             message.textContent = "Artikel tidak ditemukan.";
             message.classList.remove("d-none");
@@ -300,12 +309,12 @@ async function editArticleById(articleId) {
 addContentForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const title = document.getElementById("title").value.trim();
-    const content = document.getElementById("content").value.trim();
-    const photoUrl = document.getElementById("photoUrl").value.trim();
-    const caption = document.getElementById("caption").value.trim();
-    const titleKeterangan = document.getElementById("titleKeterangan").value.trim();
-    const tanggalPembuatan = document.getElementById("tanggalPembuatan").value;
+    const title = document.getElementById("title")?.value.trim();
+    const content = document.getElementById("content")?.value.trim();
+    const photoUrl = document.getElementById("photoUrl")?.value.trim();
+    const caption = document.getElementById("caption")?.value.trim();
+    const titleKeterangan = document.getElementById("titleKeterangan")?.value.trim();
+    const tanggalPembuatan = document.getElementById("tanggalPembuatan")?.value;
 
     if (!title || !content || !photoUrl || !caption || !titleKeterangan || !tanggalPembuatan) {
         message.textContent = "Semua field harus diisi.";
@@ -321,7 +330,10 @@ addContentForm.addEventListener("submit", async (e) => {
 
     addContentForm.reset();
     currentArticleId = null;
-    updateBtn.classList.add("d-none");
+
+    if (updateBtn) {
+        updateBtn.classList.add("d-none");
+    }
 });
 
 // Initialize articles on load
