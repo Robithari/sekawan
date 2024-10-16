@@ -397,11 +397,6 @@
                     <script type="module" src="firebase-config.js"></script>
                     <script src="js/cek-login.js"></script>
                     <script src="js/share-link.js"></script>
-                    <script type="module" src="js/api-slide.js"></script>
-                    <script type="module" src="js/api-footer.js"></script>
-
-
-
 
 
 
@@ -431,9 +426,90 @@
     </div>
 
 
+    <!-- cms footer -->
+    <script type="module">
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { db } from './firebase-config.js'; // Sesuaikan dengan konfigurasi Firebase
 
+        // Fungsi untuk memuat data footer
+        async function loadFooterData() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "footer"));
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
 
+                    // Memasukkan data ke dalam elemen footer
+                    document.getElementById('facebook-link').href = data.facebook;
+                    document.getElementById('instagram-link').href = data.instagram;
+                    document.getElementById('email-link').textContent = data.email;
+                    document.getElementById('email-link').href = `mailto:${data.email}`;
+                    document.getElementById('telephone').textContent = data.telephone;
+                });
+            } catch (error) {
+                console.error("Error memuat data footer:", error);
+            }
+        }
 
+        // Panggil fungsi untuk memuat footer setelah halaman selesai dimuat
+        window.onload = function () {
+            loadFooterData();
+        };
+    </script>
+
+    <script type="module">
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { db } from './firebase-config.js'; // Pastikan path benar sesuai proyek Anda
+
+        // Fungsi untuk memuat gambar carousel dari Firestore
+        async function loadCarouselImages() {
+            const carouselInner = document.querySelector('.carousel-inner');
+            const carouselIndicators = document.querySelector('.carousel-indicators');
+            carouselInner.innerHTML = ''; // Kosongkan konten carousel sebelumnya
+            carouselIndicators.innerHTML = ''; // Kosongkan indikator sebelumnya
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "carousel"));
+                let isFirst = true;
+                let slideIndex = 0;
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const imageUrl = data.imageUrl;
+
+                    // Buat item carousel
+                    const carouselItem = document.createElement('div');
+                    carouselItem.classList.add('carousel-item');
+                    if (isFirst) {
+                        carouselItem.classList.add('active'); // Set item pertama sebagai aktif
+                        isFirst = false;
+                    }
+                    carouselItem.innerHTML = `<img src="${imageUrl}" class="d-block w-100 custom-carousel-image" alt="Slide ${slideIndex + 1}">`;
+
+                    // Buat indikator untuk slide
+                    const indicatorButton = document.createElement('button');
+                    indicatorButton.type = 'button';
+                    indicatorButton.setAttribute('data-bs-target', '#carouselExampleDark');
+                    indicatorButton.setAttribute('data-bs-slide-to', slideIndex);
+                    indicatorButton.setAttribute('aria-label', `Slide ${slideIndex + 1}`);
+                    if (slideIndex === 0) {
+                        indicatorButton.classList.add('active');
+                        indicatorButton.setAttribute('aria-current', 'true');
+                    }
+
+                    // Tambahkan item ke carousel
+                    carouselInner.appendChild(carouselItem);
+                    carouselIndicators.appendChild(indicatorButton);
+
+                    slideIndex++;
+                });
+            } catch (error) {
+                console.error("Error loading carousel images:", error);
+            }
+        }
+
+        // Panggil fungsi untuk memuat gambar carousel saat halaman dimuat
+        window.addEventListener('DOMContentLoaded', loadCarouselImages);
+    </script>
 
 
 

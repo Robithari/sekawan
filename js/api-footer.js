@@ -1,6 +1,8 @@
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db } from './firebase-config.js'; // Sesuaikan dengan konfigurasi Firebase
+import { db } from '../firebase-config.js';  // Naik satu level ke root
 
+
+// Fungsi untuk memuat data footer
 async function loadFooterData() {
     try {
         const querySnapshot = await getDocs(collection(db, "footer"));
@@ -20,5 +22,6 @@ async function loadFooterData() {
 }
 
 // Panggil fungsi untuk memuat footer setelah halaman selesai dimuat
-window.addEventListener('load', loadFooterData);
-
+window.onload = function () {
+    loadFooterData();
+};
