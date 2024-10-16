@@ -1,3 +1,5 @@
+// script.js
+
 // Import Firebase dependencies
 import { 
     getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, where, getDoc 
@@ -5,7 +7,7 @@ import {
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
 // Firebase Configuration
-import firebaseConfig from "../../firebase-config.js"; // Pastikan firebase-config.js mengekspor config sebagai default
+import firebaseConfig from "./firebase-config.js"; // Pastikan path ini sesuai dengan lokasi file firebase-config.js
 
 // Initialize Firebase jika belum diinisialisasi
 let app;
@@ -49,8 +51,7 @@ async function addArticle(title, content, photoUrl, caption, titleKeterangan, ta
     const slug = createSlug(title);
 
     if (!(await isSlugUnique(slug))) {
-        message.textContent = "Artikel dengan judul tersebut sudah ada.";
-        message.classList.remove("d-none");
+        tampilkanPesan("Artikel dengan judul tersebut sudah ada.", "danger");
         return;
     }
 
@@ -67,15 +68,13 @@ async function addArticle(title, content, photoUrl, caption, titleKeterangan, ta
 
         console.log(`Artikel ditambahkan dengan ID: ${docRef.id} dan slug: ${slug}`);
 
-        message.textContent = "Artikel berhasil ditambahkan!";
-        message.classList.remove("d-none");
+        tampilkanPesan("Artikel berhasil ditambahkan!", "success");
 
         // Redirect ke halaman artikel dengan slug sebagai hash
         window.location.href = `/artikel-home.html#${slug}`;
     } catch (error) {
         console.error("Error saat menambahkan artikel:", error);
-        message.textContent = `Gagal menambahkan artikel: ${error.message}`;
-        message.classList.remove("d-none");
+        tampilkanPesan(`Gagal menambahkan artikel: ${error.message}`, "danger");
     }
 }
 
@@ -92,14 +91,12 @@ async function updateArticle(articleId, title, content, photoUrl, caption, title
             if (slug !== currentSlug) {
                 // Cek apakah slug baru unik, kecuali untuk artikel ini sendiri
                 if (!(await isSlugUnique(slug, articleId))) {
-                    message.textContent = "Slug baru sudah digunakan oleh artikel lain.";
-                    message.classList.remove("d-none");
+                    tampilkanPesan("Slug baru sudah digunakan oleh artikel lain.", "danger");
                     return;
                 }
             }
         } else {
-            message.textContent = "Artikel tidak ditemukan untuk diperbarui.";
-            message.classList.remove("d-none");
+            tampilkanPesan("Artikel tidak ditemukan untuk diperbarui.", "danger");
             return;
         }
 
@@ -116,15 +113,13 @@ async function updateArticle(articleId, title, content, photoUrl, caption, title
 
         console.log(`Artikel dengan ID: ${articleId} diperbarui dengan slug: ${slug}`);
 
-        message.textContent = "Artikel berhasil diperbarui!";
-        message.classList.remove("d-none");
+        tampilkanPesan("Artikel berhasil diperbarui!", "success");
 
         // Redirect ke halaman artikel yang diperbarui dengan slug sebagai hash
         window.location.href = `/artikel-home.html#${slug}`;
     } catch (error) {
         console.error("Error saat memperbarui artikel:", error);
-        message.textContent = `Gagal memperbarui artikel: ${error.message}`;
-        message.classList.remove("d-none");
+        tampilkanPesan(`Gagal memperbarui artikel: ${error.message}`, "danger");
     }
 }
 
@@ -135,8 +130,7 @@ async function loadArticleFromSlug() {
     console.log("Slug yang diambil dari URL:", slug);
 
     if (!slug) {
-        message.textContent = "Slug tidak ditemukan di URL.";
-        message.classList.remove("d-none");
+        tampilkanPesan("Slug tidak ditemukan di URL.", "warning");
         return;
     }
 
@@ -153,13 +147,17 @@ async function loadArticleFromSlug() {
 
             console.log("Artikel yang ditemukan:", article);
 
+            // Sembunyikan daftar artikel dan tampilkan tampilan artikel
+            document.getElementById("artikel-selection").style.display = "none";
+            document.getElementById("articles").style.display = "block";
+
             // Tampilkan data artikel di elemen HTML
             const titleElement = document.getElementById("title");
             const titleKeteranganElement = document.getElementById("titleKeterangan");
             const tanggalPembuatanElement = document.getElementById("tanggalPembuatan");
             const photoUrlElement = document.getElementById("photoUrl");
             const captionElement = document.getElementById("caption");
-            const articlesElement = document.getElementById("articles");
+            const articlesElement = document.getElementById("content"); // Pastikan ID sesuai
             const slugElement = document.getElementById("slug"); // Untuk debugging
 
             if (titleElement) titleElement.innerText = article.title;
@@ -173,19 +171,12 @@ async function loadArticleFromSlug() {
             if (articlesElement) articlesElement.innerHTML = article.content;
             if (slugElement) slugElement.innerText = article.slug; // Menampilkan slug di UI untuk debugging
         } else {
-            message.textContent = "Artikel tidak ditemukan.";
-            message.classList.remove("d-none");
+            tampilkanPesan("Artikel tidak ditemukan.", "warning");
         }
     } catch (error) {
         console.error("Error saat memuat artikel:", error);
-        message.textContent = `Gagal memuat artikel: ${error.message}`;
-        message.classList.remove("d-none");
+        tampilkanPesan(`Gagal memuat artikel: ${error.message}`, "danger");
     }
-}
-
-// Fungsi untuk mendapatkan slug dari hash
-function getSlugFromHash() {
-    return window.location.hash.substring(1); // Menghapus karakter '#'
 }
 
 // Fungsi untuk memuat daftar artikel
@@ -222,8 +213,7 @@ async function fetchArticles() {
         attachEventListeners(); // Pasang event listener pada tombol
     } catch (error) {
         console.error("Error saat memuat daftar artikel:", error);
-        message.textContent = `Gagal memuat artikel: ${error.message}`;
-        message.classList.remove("d-none");
+        tampilkanPesan(`Gagal memuat artikel: ${error.message}`, "danger");
     }
 }
 
@@ -252,13 +242,11 @@ async function deleteArticle(articleId) {
 
     try {
         await deleteDoc(doc(db, "articles", articleId));
-        message.textContent = "Artikel berhasil dihapus.";
-        message.classList.remove("d-none");
+        tampilkanPesan("Artikel berhasil dihapus.", "success");
         fetchArticles();
     } catch (error) {
         console.error("Error saat menghapus artikel:", error);
-        message.textContent = `Gagal menghapus artikel: ${error.message}`;
-        message.classList.remove("d-none");
+        tampilkanPesan(`Gagal menghapus artikel: ${error.message}`, "danger");
     }
 }
 
@@ -283,14 +271,26 @@ async function editArticleById(articleId) {
             // Scroll ke form untuk edit
             window.scrollTo({ top: addContentForm.offsetTop, behavior: 'smooth' });
         } else {
-            message.textContent = "Artikel tidak ditemukan.";
-            message.classList.remove("d-none");
+            tampilkanPesan("Artikel tidak ditemukan.", "warning");
         }
     } catch (error) {
         console.error("Error saat mengambil data artikel untuk edit:", error);
-        message.textContent = `Gagal mengambil artikel: ${error.message}`;
-        message.classList.remove("d-none");
+        tampilkanPesan(`Gagal mengambil artikel: ${error.message}`, "danger");
     }
+}
+
+// Fungsi untuk menampilkan pesan
+function tampilkanPesan(teks, tipe) {
+    // Tipe bisa 'success', 'danger', 'warning', dll sesuai dengan kelas Bootstrap
+    message.textContent = teks;
+    message.className = ""; // Reset kelas
+    message.classList.add("alert", `alert-${tipe}`);
+    message.classList.remove("d-none");
+
+    // Otomatis sembunyikan setelah 5 detik
+    setTimeout(() => {
+        message.classList.add("d-none");
+    }, 5000);
 }
 
 // Handle form submission
@@ -305,8 +305,7 @@ addContentForm.addEventListener("submit", async (e) => {
     const tanggalPembuatan = document.getElementById("tanggalPembuatan").value;
 
     if (!title || !content || !photoUrl || !caption || !titleKeterangan || !tanggalPembuatan) {
-        message.textContent = "Semua field harus diisi.";
-        message.classList.remove("d-none");
+        tampilkanPesan("Semua field harus diisi.", "warning");
         return;
     }
 
@@ -320,6 +319,11 @@ addContentForm.addEventListener("submit", async (e) => {
     currentArticleId = null;
     updateBtn.classList.add("d-none");
 });
+
+// Fungsi untuk mendapatkan slug dari hash
+function getSlugFromHash() {
+    return window.location.hash.substring(1); // Menghapus karakter '#'
+}
 
 // Initialize articles on load
 document.addEventListener("DOMContentLoaded", () => {
