@@ -17,331 +17,189 @@ if (!getApps().length) {
 
 const db = getFirestore(app);
 
-// References
+// References to HTML elements
 const articleCollectionRef = collection(db, "articles");
 const addContentForm = document.getElementById("addContentForm");
 const artikelSelection = document.getElementById("artikel-selection");
+const addBtn = document.getElementById("add-btn");
 const updateBtn = document.getElementById("update-btn");
+const cancelBtn = document.getElementById("cancel-profil-btn");
 const message = document.getElementById("message");
-let currentArticleId = null; // Untuk tracking mode edit
+let currentArticleId = null; // To track edit mode
 
-// Fungsi untuk membuat slug unik dari judul
+// Function to create a unique slug from title
 function createSlug(title) {
     return title.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 }
 
-// Fungsi untuk mengecek apakah slug unik, kecuali untuk artikel yang sedang diedit
+// Function to check if slug is unique
 async function isSlugUnique(slug, excludeId = null) {
-    let q = query(articleCollectionRef, where("slug", "==", slug));
+    const q = query(articleCollectionRef, where("slug", "==", slug));
     const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) return true;
 
+    if (querySnapshot.empty) return true;
     if (excludeId) {
-        // Periksa apakah ada dokumen selain yang ingin diedit
         return querySnapshot.docs.length === 1 && querySnapshot.docs[0].id === excludeId;
     }
-
     return false;
 }
 
-// Fungsi untuk menambah artikel
-async function addArticle(title, content, photoUrl, caption, titleKeterangan, tanggalPembuatan) {
-    const slug = createSlug(title);
-
-    if (!(await isSlugUnique(slug))) {
-        message.textContent = "Artikel dengan judul tersebut sudah ada.";
-        message.classList.remove("d-none");
-        return;
-    }
-
-    try {
-        const docRef = await addDoc(articleCollectionRef, {
-            title,
-            content,
-            photoUrl,
-            caption,
-            titleKeterangan,
-            tanggalPembuatan,
-            slug
-        });
-
-        console.log(`Artikel ditambahkan dengan ID: ${docRef.id} dan slug: ${slug}`);
-
-        message.textContent = "Artikel berhasil ditambahkan!";
-        message.classList.remove("d-none");
-
-        // Redirect ke halaman artikel
-        window.location.href = `/artikel-home.html?slug=${slug}`;
-    } catch (error) {
-        console.error("Error saat menambahkan artikel:", error);
-        message.textContent = `Gagal menambahkan artikel: ${error.message}`;
-        message.classList.remove("d-none");
-    }
+// Function to display messages in the UI
+function displayMessage(text, type = "info") {
+    message.textContent = text;
+    message.className = `alert alert-${type}`;
+    message.classList.remove("d-none");
+    setTimeout(() => message.classList.add("d-none"), 5000);
 }
 
-// Fungsi untuk memperbarui artikel
-async function updateArticle(articleId, title, content, photoUrl, caption, titleKeterangan, tanggalPembuatan) {
-    const docRef = doc(db, "articles", articleId);
-    let slug = createSlug(title);
-
-    try {
-        // Ambil data artikel saat ini untuk memeriksa apakah slug berubah
-        const currentDoc = await getDoc(docRef);
-        if (currentDoc.exists()) {
-            const currentSlug = currentDoc.data().slug;
-            if (slug !== currentSlug) {
-                // Cek apakah slug baru unik, kecuali untuk artikel ini sendiri
-                if (!(await isSlugUnique(slug, articleId))) {
-                    message.textContent = "Slug baru sudah digunakan oleh artikel lain.";
-                    message.classList.remove("d-none");
-                    return;
-                }
-            }
-        } else {
-            message.textContent = "Artikel tidak ditemukan untuk diperbarui.";
-            message.classList.remove("d-none");
-            return;
-        }
-
-        // Update data artikel
-        await updateDoc(docRef, {
-            title,
-            content,
-            photoUrl,
-            caption,
-            titleKeterangan,
-            tanggalPembuatan,
-            slug
-        });
-
-        console.log(`Artikel dengan ID: ${articleId} diperbarui dengan slug: ${slug}`);
-
-        message.textContent = "Artikel berhasil diperbarui!";
-        message.classList.remove("d-none");
-
-        // Redirect ke halaman artikel yang diperbarui
-        window.location.href = `/artikel-home.html?slug=${slug}`;
-    } catch (error) {
-        console.error("Error saat memperbarui artikel:", error);
-        message.textContent = `Gagal memperbarui artikel: ${error.message}`;
-        message.classList.remove("d-none");
-    }
-}
-
-// Fungsi untuk memuat artikel berdasarkan slug dari URL
-async function loadArticleFromSlug() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const slug = urlParams.get('slug'); // Ambil slug dari URL
-
-    console.log("Slug yang diambil dari URL:", slug);
-
-    if (!slug) {
-        message.textContent = "Slug tidak ditemukan di URL.";
-        message.classList.remove("d-none");
-        return;
-    }
-
-    try {
-        const q = query(articleCollectionRef, where("slug", "==", slug));
-        const querySnapshot = await getDocs(q);
-
-        console.log("Jumlah artikel yang ditemukan:", querySnapshot.size);
-
-        if (!querySnapshot.empty) {
-            // Pastikan dokumen yang memiliki slug yang sesuai ditemukan
-            const articleDoc = querySnapshot.docs[0];
-            const article = articleDoc.data();
-
-            console.log("Artikel yang ditemukan:", article);
-
-            // Tampilkan data artikel di elemen HTML
-            const titleElement = document.getElementById("title");
-            const titleKeteranganElement = document.getElementById("titleKeterangan");
-            const tanggalPembuatanElement = document.getElementById("tanggalPembuatan");
-            const photoUrlElement = document.getElementById("photoUrl");
-            const captionElement = document.getElementById("caption");
-            const articlesElement = document.getElementById("articles");
-            const slugElement = document.getElementById("slug"); // Untuk debugging
-
-            if (titleElement) titleElement.innerText = article.title;
-            if (titleKeteranganElement) titleKeteranganElement.innerText = article.titleKeterangan;
-            if (tanggalPembuatanElement) tanggalPembuatanElement.innerText = new Date(article.tanggalPembuatan).toLocaleDateString('id-ID');
-            if (photoUrlElement) {
-                photoUrlElement.src = article.photoUrl;
-                photoUrlElement.alt = article.caption;
-            }
-            if (captionElement) captionElement.innerText = article.caption;
-            if (articlesElement) articlesElement.innerHTML = article.content;
-            if (slugElement) slugElement.innerText = article.slug; // Menampilkan slug di UI untuk debugging
-        } else {
-            message.textContent = "Artikel tidak ditemukan.";
-            message.classList.remove("d-none");
-        }
-    } catch (error) {
-        console.error("Error saat memuat artikel:", error);
-        message.textContent = `Gagal memuat artikel: ${error.message}`;
-        message.classList.remove("d-none");
-    }
-}
-
-// Fungsi untuk memuat daftar artikel
-async function fetchArticles() {
-    try {
-        artikelSelection.innerHTML = "";
-        const querySnapshot = await getDocs(articleCollectionRef);
-        console.log("Jumlah artikel yang diambil:", querySnapshot.size);
-        querySnapshot.forEach((docSnapshot) => {
-            const article = docSnapshot.data();
-            console.log("Artikel yang diambil:", article);
-            const articleCard = `
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="detail-title">${article.title}</h2>
-                            <div class="title-keterangan">
-                                <p><strong>${article.titleKeterangan}</strong></p>
-                                <p>${new Date(article.tanggalPembuatan).toLocaleDateString('id-ID')}</p>
-                            </div>
-                            <div class="container-foto">
-                                <img src="${article.photoUrl}" class="custom-foto" alt="${article.title}">
-                            </div>
-                            <p class="keterangan-foto">${article.caption}</p>
-                            <a href="/artikel-home.html?slug=${article.slug}" class="btn btn-primary">Baca Artikel</a>
-                            <button class="btn btn-warning edit-btn" data-id="${docSnapshot.id}">Edit</button>
-                            <button class="btn btn-danger delete-btn" data-id="${docSnapshot.id}">Hapus</button>
-                        </div>
-                    </div>
-                </div>`;
-            artikelSelection.innerHTML += articleCard;
-        });
-
-        attachEventListeners(); // Pasang event listener pada tombol
-    } catch (error) {
-        console.error("Error saat memuat daftar artikel:", error);
-        message.textContent = `Gagal memuat artikel: ${error.message}`;
-        message.classList.remove("d-none");
-    }
-}
-
-// Pasang event listener pada tombol edit dan hapus
-function attachEventListeners() {
-    document.querySelectorAll(".edit-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-            const articleId = button.getAttribute("data-id");
-            editArticleById(articleId);
-        });
-    });
-
-    document.querySelectorAll(".delete-btn").forEach((button) => {
-        button.addEventListener("click", async () => {
-            const articleId = button.getAttribute("data-id");
-            await deleteArticle(articleId);
-        });
-    });
-}
-
-// Fungsi untuk menghapus artikel
-async function deleteArticle(articleId) {
-    if (!confirm("Apakah Anda yakin ingin menghapus artikel ini?")) {
-        return;
-    }
-
-    try {
-        await deleteDoc(doc(db, "articles", articleId));
-        message.textContent = "Artikel berhasil dihapus.";
-        message.classList.remove("d-none");
-        fetchArticles();
-    } catch (error) {
-        console.error("Error saat menghapus artikel:", error);
-        message.textContent = `Gagal menghapus artikel: ${error.message}`;
-        message.classList.remove("d-none");
-    }
-}
-
-// Fungsi untuk mengambil data artikel berdasarkan ID
-async function editArticleById(articleId) {
-    const docRef = doc(db, "articles", articleId);
-    try {
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            const article = docSnap.data();
-            console.log("Artikel yang diedit:", article);
-
-            const titleInput = document.getElementById("title");
-            const contentInput = document.getElementById("content");
-            const photoUrlInput = document.getElementById("photoUrl");
-            const captionInput = document.getElementById("caption");
-            const titleKeteranganInput = document.getElementById("titleKeterangan");
-            const tanggalPembuatanInput = document.getElementById("tanggalPembuatan");
-
-            if (titleInput) titleInput.value = article.title;
-            if (contentInput) contentInput.value = article.content;
-            if (photoUrlInput) photoUrlInput.value = article.photoUrl;
-            if (captionInput) captionInput.value = article.caption;
-            if (titleKeteranganInput) titleKeteranganInput.value = article.titleKeterangan;
-            if (tanggalPembuatanInput) tanggalPembuatanInput.value = article.tanggalPembuatan;
-
-            currentArticleId = articleId;
-
-            if (updateBtn) {
-                updateBtn.classList.remove("d-none");
-            } else {
-                console.warn("Elemen dengan ID 'update-btn' tidak ditemukan.");
-            }
-
-            // Scroll ke form untuk edit
-            if (addContentForm) {
-                window.scrollTo({ top: addContentForm.offsetTop, behavior: 'smooth' });
-            }
-        } else {
-            message.textContent = "Artikel tidak ditemukan.";
-            message.classList.remove("d-none");
-        }
-    } catch (error) {
-        console.error("Error saat mengambil data artikel untuk edit:", error);
-        message.textContent = `Gagal mengambil artikel: ${error.message}`;
-        message.classList.remove("d-none");
-    }
-}
-
-// Handle form submission
-addContentForm.addEventListener("submit", async (e) => {
+// Function to handle form submission (Add or Update Article)
+async function handleFormSubmit(e) {
     e.preventDefault();
-
-    const title = document.getElementById("title")?.value.trim();
-    const content = document.getElementById("content")?.value.trim();
-    const photoUrl = document.getElementById("photoUrl")?.value.trim();
-    const caption = document.getElementById("caption")?.value.trim();
-    const titleKeterangan = document.getElementById("titleKeterangan")?.value.trim();
-    const tanggalPembuatan = document.getElementById("tanggalPembuatan")?.value;
-
-    if (!title || !content || !photoUrl || !caption || !titleKeterangan || !tanggalPembuatan) {
-        message.textContent = "Semua field harus diisi.";
-        message.classList.remove("d-none");
-        return;
-    }
+    const title = document.getElementById("title").value;
+    const content = document.getElementById("content").value;
+    const photoUrl = document.getElementById("photoUrl").value;
+    const caption = document.getElementById("caption").value;
+    const titleKeterangan = document.getElementById("titleKeterangan").value;
+    const tanggalPembuatan = document.getElementById("tanggalPembuatan").value;
 
     if (currentArticleId) {
         await updateArticle(currentArticleId, title, content, photoUrl, caption, titleKeterangan, tanggalPembuatan);
     } else {
         await addArticle(title, content, photoUrl, caption, titleKeterangan, tanggalPembuatan);
     }
+    resetForm(); // Reset form fields after submission
+}
 
+// Function to reset the form
+function resetForm() {
     addContentForm.reset();
     currentArticleId = null;
+    addBtn.classList.remove("d-none");
+    updateBtn.classList.add("d-none");
+    cancelBtn.classList.add("d-none");
+    document.getElementById("form-title").innerText = "Tambah Artikel Baru";
+}
 
-    if (updateBtn) {
-        updateBtn.classList.add("d-none");
+// Function to fetch and display the list of articles
+async function fetchArticles() {
+    artikelSelection.innerHTML = "";
+    try {
+        const querySnapshot = await getDocs(articleCollectionRef);
+        if (querySnapshot.empty) {
+            artikelSelection.innerHTML = "<p>Tidak ada artikel yang tersedia.</p>";
+            return;
+        }
+        querySnapshot.forEach((docSnapshot) => {
+            const article = docSnapshot.data();
+            artikelSelection.innerHTML += generateArticleCard(docSnapshot.id, article);
+        });
+        attachEventListeners();
+    } catch (error) {
+        console.error("Error saat memuat daftar artikel:", error);
+        displayMessage(`Gagal memuat artikel: ${error.message}`, "danger");
     }
-});
+}
 
-// Initialize articles on load
-document.addEventListener("DOMContentLoaded", () => {
-    fetchArticles();
+// Helper function to generate article card HTML
+function generateArticleCard(id, article) {
+    const truncatedContent = article.content.substring(0, 200) + "...";
+    return `
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="${article.photoUrl}" class="card-img-top" alt="${article.title}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">${article.title}</h5>
+                    <p class="card-text"><strong>${article.titleKeterangan}</strong></p>
+                    <p class="card-text text-muted">${new Date(article.tanggalPembuatan).toLocaleDateString('id-ID')}</p>
+                    <p class="card-text">${truncatedContent}</p>
+                    <div class="mt-auto">
+                        <a href="/artikel-home.html?slug=${article.slug}" class="btn btn-primary">Baca Artikel</a>
+                        <button class="btn btn-warning edit-btn mt-2" data-id="${id}">Edit</button>
+                        <button class="btn btn-danger delete-btn mt-2" data-id="${id}">Hapus</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+}
 
-    // Hanya muat artikel berdasarkan slug jika halaman artikel
-    if (window.location.pathname.includes("artikel-home.html")) {
-        loadArticleFromSlug();
+// Function to attach event listeners to Edit and Delete buttons
+function attachEventListeners() {
+    document.querySelectorAll(".edit-btn").forEach((button) => {
+        button.addEventListener("click", () => editArticleById(button.dataset.id));
+    });
+
+    document.querySelectorAll(".delete-btn").forEach((button) => {
+        button.addEventListener("click", () => deleteArticle(button.dataset.id));
+    });
+}
+
+// Function to add a new article
+async function addArticle(title, content, photoUrl, caption, titleKeterangan, tanggalPembuatan) {
+    try {
+        const slug = createSlug(title);
+        if (!(await isSlugUnique(slug))) throw new Error("Slug sudah digunakan.");
+        await addDoc(articleCollectionRef, { title, content, photoUrl, caption, titleKeterangan, tanggalPembuatan, slug });
+        displayMessage("Artikel berhasil ditambahkan!", "success");
+        fetchArticles();
+    } catch (error) {
+        displayMessage(`Gagal menambahkan artikel: ${error.message}`, "danger");
     }
-});
+}
+
+// Function to update an existing article
+async function updateArticle(id, title, content, photoUrl, caption, titleKeterangan, tanggalPembuatan) {
+    try {
+        const docRef = doc(db, "articles", id);
+        await updateDoc(docRef, { title, content, photoUrl, caption, titleKeterangan, tanggalPembuatan });
+        displayMessage("Artikel berhasil diperbarui!", "success");
+        fetchArticles();
+    } catch (error) {
+        displayMessage(`Gagal memperbarui artikel: ${error.message}`, "danger");
+    }
+}
+
+// Function to delete an article
+async function deleteArticle(id) {
+    if (!confirm("Apakah Anda yakin ingin menghapus artikel ini?")) return;
+    try {
+        await deleteDoc(doc(db, "articles", id));
+        displayMessage("Artikel berhasil dihapus.", "success");
+        fetchArticles();
+    } catch (error) {
+        displayMessage(`Gagal menghapus artikel: ${error.message}`, "danger");
+    }
+}
+
+// Function to edit an article by ID
+async function editArticleById(id) {
+    try {
+        const docSnap = await getDoc(doc(db, "articles", id));
+        if (!docSnap.exists()) throw new Error("Artikel tidak ditemukan.");
+        const article = docSnap.data();
+        populateForm(article);
+        currentArticleId = id;
+        addBtn.classList.add("d-none");
+        updateBtn.classList.remove("d-none");
+        cancelBtn.classList.remove("d-none");
+        document.getElementById("form-title").innerText = "Edit Artikel";
+    } catch (error) {
+        displayMessage(`Gagal memuat artikel: ${error.message}`, "danger");
+    }
+}
+
+// Helper function to populate the form with article data
+function populateForm(article) {
+    document.getElementById("title").value = article.title;
+    document.getElementById("content").value = article.content;
+    document.getElementById("photoUrl").value = article.photoUrl;
+    document.getElementById("caption").value = article.caption;
+    document.getElementById("titleKeterangan").value = article.titleKeterangan;
+    document.getElementById("tanggalPembuatan").value = article.tanggalPembuatan;
+}
+
+// Event listeners for form submission and cancel button
+addContentForm.addEventListener("submit", handleFormSubmit);
+cancelBtn.addEventListener("click", resetForm);
+
+// Load articles when the DOM is ready
+document.addEventListener("DOMContentLoaded", fetchArticles);
