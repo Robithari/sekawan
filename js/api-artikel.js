@@ -8,7 +8,7 @@ const slug = urlParams.get('slug');
 // Fungsi untuk memuat artikel berdasarkan slug
 async function loadArticle() {
     if (!slug) {
-        document.body.innerHTML = "<h1>Slug tidak ditemukan di URL!</h1>";
+        document.body.innerHTML = "<h1>Maaf Halaman Yang Anda Tuju Salah</h1>";
         return;
     }
 
@@ -29,6 +29,16 @@ async function loadArticle() {
             document.getElementById("photoUrl").alt = article.caption;
             document.getElementById("caption").innerText = article.caption;
             document.getElementById("articles").innerHTML = article.content;
+
+            // Sinkronisasi dengan meta tag og:title, og:description, dan og:image
+            document.querySelector('meta[property="og:title"]').content = article.title;
+            
+            // Ambil hanya kalimat pertama dari deskripsi untuk og:description
+            const firstSentence = article.content.split('. ')[0] + '.';
+            document.querySelector('meta[property="og:description"]').content = firstSentence;
+
+            document.querySelector('meta[property="og:image"]').content = article.photoUrl;
+
         } else {
             // Jika artikel tidak ditemukan
             document.body.innerHTML = "<h1>Artikel tidak ditemukan!</h1>";

@@ -48,27 +48,47 @@
 }
 
 .mt-auto {
-    margin-top: auto; /* Membuat tombol berada di bagian bawah kartu */
+    margin-top: auto; /* Menempatkan tombol di bagian bawah */
+    display: flex;
+    justify-content: center; /* Pusatkan secara horizontal */
+    align-items: center; /* Pusatkan secara vertikal jika diperlukan */
+    width: 100%; /* Memastikan grup tombol mengambil lebar penuh */
+    padding: 1rem 0; /* Tambah ruang di atas/bawah tombol */
+    gap: 5px; /* Jarak antar tombol atau elemen */
 }
 
 /* CSS untuk tombol */
 .btn {
     display: inline-block;
-    font-weight: 400;
+    font-weight: 400; /* Sedikit lebih bold untuk keterbacaan */
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
-    border: 1px solid transparent;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: 0.25rem;
+    border: 1px solid #ccc; /* Sedikit border agar terlihat */
+    padding: 0.4rem 0.8rem; /* Padding yang lebih seimbang */
+    font-size: 0.9rem; /* Ukuran font sedikit lebih kecil */
+    line-height: 1.2; /* Spasi antar baris */
+    border-radius: 0.3rem; /* Sudut lebih lembut */
+    background-color: #f8f9fa; /* Warna latar yang lembut */
+    color: #333; /* Warna teks */
+    width: auto; /* Tidak terlalu lebar, menyesuaikan konten */
+    max-width: 200px; /* Membatasi lebar maksimal */
+    height: auto; /* Tidak terlalu tinggi */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sedikit bayangan */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Efek transisi */
 }
+
+.btn:hover {
+    background-color: #e2e6ea; /* Warna latar saat hover */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Bayangan lebih jelas */
+}
+
 
 .btn-primary {
     color: #fff;
     background-color: #007bff;
     border-color: #007bff;
+    margin-top: 8px;
 }
 
 .btn-primary:hover {
@@ -103,9 +123,9 @@
     }
 /* CSS untuk gambar agar berada di tengah secara horizontal */
 .card-img-top {
-    width: 100px;
-    height: auto; /* Mempertahankan rasio aspek */
-    display: block; /* Agar elemen img bertindak seperti blok */
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 1rem; /* Spasi bawah antara gambar dan konten */

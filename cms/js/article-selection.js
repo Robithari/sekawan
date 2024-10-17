@@ -113,7 +113,7 @@ function generateArticleCard(id, article) {
                     <p class="card-text text-muted">${new Date(article.tanggalPembuatan).toLocaleDateString('id-ID')}</p>
                     <p class="card-text">${truncatedContent}</p>
                     <div class="mt-auto">
-                        <a href="/artikel-home.html?slug=${article.slug}" class="btn btn-primary">Baca Artikel</a>
+                        <a href="/artikel-home.html?slug=${article.slug}" class="btn btn-primary">Buka Artikel</a>
                         <button class="btn btn-warning edit-btn mt-2" data-id="${id}">Edit</button>
                         <button class="btn btn-danger delete-btn mt-2" data-id="${id}">Hapus</button>
                     </div>
