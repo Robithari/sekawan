@@ -1,9 +1,17 @@
+// Import Firebase Firestore
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { db } from "../firebase-config.js";
 
 // Ambil slug dari URL
 const urlParams = new URLSearchParams(window.location.search);
 const slug = urlParams.get('slug');
+
+// Fungsi untuk menghapus tag HTML dari string
+function stripHtml(html) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+}
 
 // Fungsi untuk memuat artikel berdasarkan slug
 async function loadArticle() {
@@ -37,8 +45,9 @@ async function loadArticle() {
             // Sinkronisasi dengan meta tag og:title, og:description, dan og:image
             document.querySelector('meta[property="og:title"]').content = article.title;
 
-            // Ambil hanya kalimat pertama dari deskripsi untuk og:description
-            const firstSentence = article.content.split('. ')[0] + '.';
+            // Menghapus tag HTML dan simbol untuk og:description
+            const plainTextContent = stripHtml(article.content);
+            const firstSentence = plainTextContent.split('. ')[0].trim() + '.';
             document.querySelector('meta[property="og:description"]').content = firstSentence;
 
             document.querySelector('meta[property="og:image"]').content = article.photoUrl;
