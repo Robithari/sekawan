@@ -1,35 +1,31 @@
 const express = require('express');
-const fetch = require('node-fetch'); // jika Anda menggunakan fetch
-const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, getDocs, query, where } = require("firebase/firestore");
+const { getFirestore, collection, query, where, getDocs } = require('firebase/firestore');
+const { initializeApp } = require('firebase/app');
 
 const app = express();
 
 // Konfigurasi Firebase
 const firebaseConfig = {
-    // Your Firebase config
+    // Your Firebase config here
 };
-initializeApp(firebaseConfig);
-const db = getFirestore();
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
 app.get('/artikel-home.html', async (req, res) => {
     const slug = req.query.slug;
-
+    const q = query(collection(db, "articles"), where("slug", "==", slug));
+    
     try {
-        const q = query(collection(db, "articles"), where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
         const article = querySnapshot.empty ? null : querySnapshot.docs[0].data();
 
         if (article) {
-            // Menghasilkan meta tags untuk OG
             const metaTags = `
                 <meta property="og:title" content="${article.title}" />
                 <meta property="og:description" content="${article.description}" />
                 <meta property="og:image" content="${article.photoUrl}" />
                 <meta property="og:url" content="https://sekawan.vercel.app/artikel-home.html?slug=${slug}" />
             `;
-
-            // Kirim HTML dengan meta tags
             res.send(`
                 <!DOCTYPE html>
                 <html lang="en">
