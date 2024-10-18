@@ -1,0 +1,36 @@
+name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Jalankan workflow saat ada perubahan di branch 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Menjalankan di environment Ubuntu
+
+    steps:
+      # 1. Checkout kode dari repo
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # 2. Setup Node.js versi yang diperlukan
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Sesuaikan dengan versi Node.js yang kamu pakai
+
+      # 3. Install dependensi proyek
+      - name: Install Dependencies
+        run: npm install
+
+      # 4. Build atau prerender konten
+      - name: Build Project
+        run: npm run build
+
+      # 5. Deploy hasil build ke GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out  # Direktori hasil build (sesuaikan dengan proyekmu)
