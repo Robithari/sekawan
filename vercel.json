@@ -1,0 +1,9 @@
+{
+    "routes": [
+      {
+        "src": "/artikel-home.html",
+        "dest": "/api/server"
+      }
+    ]
+  }
+  
