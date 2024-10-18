@@ -1,16 +1,16 @@
 const express = require('express');
-const fetch = require('node-fetch');
+const fetch = require('node-fetch'); // jika Anda menggunakan fetch
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, getDocs, query, where } = require("firebase/firestore");
 
-// Inisialisasi Firebase
+const app = express();
+
+// Konfigurasi Firebase
 const firebaseConfig = {
     // Your Firebase config
 };
-const appFirebase = initializeApp(firebaseConfig);
-const db = getFirestore(appFirebase);
-
-const app = express();
+initializeApp(firebaseConfig);
+const db = getFirestore();
 
 app.get('/artikel-home.html', async (req, res) => {
     const slug = req.query.slug;
@@ -21,6 +21,7 @@ app.get('/artikel-home.html', async (req, res) => {
         const article = querySnapshot.empty ? null : querySnapshot.docs[0].data();
 
         if (article) {
+            // Menghasilkan meta tags untuk OG
             const metaTags = `
                 <meta property="og:title" content="${article.title}" />
                 <meta property="og:description" content="${article.description}" />
@@ -28,6 +29,7 @@ app.get('/artikel-home.html', async (req, res) => {
                 <meta property="og:url" content="https://sekawan.vercel.app/artikel-home.html?slug=${slug}" />
             `;
 
+            // Kirim HTML dengan meta tags
             res.send(`
                 <!DOCTYPE html>
                 <html lang="en">
@@ -50,6 +52,7 @@ app.get('/artikel-home.html', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Server berjalan di http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server berjalan di http://localhost:${PORT}`);
 });
