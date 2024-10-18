@@ -13,7 +13,7 @@ function stripHtml(html) {
     return tempDiv.textContent || tempDiv.innerText || "";
 }
 
-// Fungsi untuk memperbarui elemen HTML jika ditemukan
+// Fungsi untuk memperbarui elemen jika ditemukan
 function updateElementText(id, text) {
     const element = document.getElementById(id);
     if (element) {
@@ -33,6 +33,16 @@ function updateElementSrc(id, src, alt = "") {
     }
 }
 
+// Fungsi untuk menampilkan konten utama setelah data dimuat
+function showMainContent() {
+    const mainContent = document.getElementById("main-content");
+    if (mainContent) {
+        mainContent.style.display = "block";
+    } else {
+        console.warn('Element with ID "main-content" not found.');
+    }
+}
+
 // Fungsi untuk memuat artikel berdasarkan slug
 async function loadArticle() {
     if (!slug) {
@@ -41,13 +51,13 @@ async function loadArticle() {
     }
 
     try {
-        // Tampilkan pesan loading sementara data diambil
-        document.body.innerHTML = "<h1>Loading...</h1>";
+        console.log("Memulai pemuatan artikel...");
 
-        // Ambil data artikel dari Firestore berdasarkan slug
+        // Buat query untuk mengambil artikel berdasarkan slug
         const q = query(collection(db, "articles"), where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
 
+        // Cek apakah artikel ditemukan
         if (!querySnapshot.empty) {
             const article = querySnapshot.docs[0].data();
 
@@ -68,7 +78,7 @@ async function loadArticle() {
                 console.warn('Element with ID "articles" not found.');
             }
 
-            // Perbarui <title> halaman dan meta tag untuk link preview
+            // Memperbarui <title> halaman dan meta tag untuk link preview
             document.title = article.title;
             document.querySelector('meta[property="og:title"]').setAttribute('content', article.title);
 
@@ -77,11 +87,13 @@ async function loadArticle() {
             document.querySelector('meta[property="og:description"]').setAttribute('content', firstSentence);
             document.querySelector('meta[property="og:image"]').setAttribute('content', article.photoUrl);
 
+            console.log("Artikel berhasil dimuat:", article);
+
+            // Tampilkan konten utama setelah data berhasil dimuat
+            showMainContent();
+
             // Tandai bahwa halaman siap di-render oleh bot
             window.prerenderReady = true;
-
-            // Setelah data API selesai, tampilkan konten lengkap
-            document.getElementById("main-content").style.display = "block";
         } else {
             document.body.innerHTML = "<h1>Artikel tidak ditemukan!</h1>";
         }
@@ -93,6 +105,16 @@ async function loadArticle() {
 
 // Panggil fungsi saat halaman dimuat
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("main-content").style.display = "none"; // Sembunyikan konten saat loading
-    loadArticle(); // Muat artikel dari API
+    console.log("Halaman dimuat. Memulai pemrosesan artikel...");
+    
+    // Sembunyikan konten utama saat loading
+    const mainContent = document.getElementById("main-content");
+    if (mainContent) {
+        mainContent.style.display = "none";
+    } else {
+        console.warn('Element with ID "main-content" not found saat menyembunyikan konten.');
+    }
+
+    // Panggil fungsi untuk memuat artikel
+    loadArticle();
 });
