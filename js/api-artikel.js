@@ -1,4 +1,3 @@
-// Import Firebase Firestore
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { db } from "../firebase-config.js";
 
@@ -6,53 +5,14 @@ import { db } from "../firebase-config.js";
 const urlParams = new URLSearchParams(window.location.search);
 const slug = urlParams.get('slug');
 
-// Fungsi untuk menghapus tag HTML dari string
-function stripHtml(html) {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || "";
-}
-
-// Fungsi untuk memperbarui elemen jika ditemukan
-function updateElementText(id, text) {
-    const element = document.getElementById(id);
-    if (element) {
-        element.innerText = text;
-    } else {
-        console.warn(`Element with ID "${id}" not found.`);
-    }
-}
-
-function updateElementSrc(id, src, alt = "") {
-    const element = document.getElementById(id);
-    if (element) {
-        element.src = src;
-        element.alt = alt;
-    } else {
-        console.warn(`Element with ID "${id}" not found.`);
-    }
-}
-
-// Fungsi untuk menampilkan konten utama setelah data dimuat
-function showMainContent() {
-    const mainContent = document.getElementById("main-content");
-    if (mainContent) {
-        mainContent.style.display = "block";
-    } else {
-        console.warn('Element with ID "main-content" not found.');
-    }
-}
-
 // Fungsi untuk memuat artikel berdasarkan slug
 async function loadArticle() {
     if (!slug) {
-        document.body.innerHTML = "<h1>Maaf Halaman Yang Anda Tuju Salah</h1>";
+        document.body.innerHTML = "<h1>Slug tidak ditemukan di URL!</h1>";
         return;
     }
 
     try {
-        console.log("Memulai pemuatan artikel...");
-
         // Buat query untuk mengambil artikel berdasarkan slug
         const q = query(collection(db, "articles"), where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
@@ -62,39 +22,15 @@ async function loadArticle() {
             const article = querySnapshot.docs[0].data();
 
             // Tampilkan data artikel ke elemen HTML
-            updateElementText("title", article.title);
-            updateElementText("titleKeterangan", article.titleKeterangan);
-            updateElementText(
-                "tanggalPembuatan",
-                new Date(article.tanggalPembuatan).toLocaleDateString('id-ID')
-            );
-            updateElementSrc("photoUrl", article.photoUrl, article.caption);
-            updateElementText("caption", article.caption);
-
-            const articlesContainer = document.getElementById("articles");
-            if (articlesContainer) {
-                articlesContainer.innerHTML = article.content;
-            } else {
-                console.warn('Element with ID "articles" not found.');
-            }
-
-            // Memperbarui <title> halaman dan meta tag untuk link preview
-            document.title = article.title;
-            document.querySelector('meta[property="og:title"]').setAttribute('content', article.title);
-
-            const plainTextContent = stripHtml(article.content);
-            const firstSentence = plainTextContent.split('. ')[0].trim() + '.';
-            document.querySelector('meta[property="og:description"]').setAttribute('content', firstSentence);
-            document.querySelector('meta[property="og:image"]').setAttribute('content', article.photoUrl);
-
-            console.log("Artikel berhasil dimuat:", article);
-
-            // Tampilkan konten utama setelah data berhasil dimuat
-            showMainContent();
-
-            // Tandai bahwa halaman siap di-render oleh bot
-            window.prerenderReady = true;
+            document.getElementById("title").innerText = article.title;
+            document.getElementById("titleKeterangan").innerText = article.titleKeterangan;
+            document.getElementById("tanggalPembuatan").innerText = new Date(article.tanggalPembuatan).toLocaleDateString('id-ID');
+            document.getElementById("photoUrl").src = article.photoUrl;
+            document.getElementById("photoUrl").alt = article.caption;
+            document.getElementById("caption").innerText = article.caption;
+            document.getElementById("articles").innerHTML = article.content;
         } else {
+            // Jika artikel tidak ditemukan
             document.body.innerHTML = "<h1>Artikel tidak ditemukan!</h1>";
         }
     } catch (error) {
@@ -104,17 +40,4 @@ async function loadArticle() {
 }
 
 // Panggil fungsi saat halaman dimuat
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("Halaman dimuat. Memulai pemrosesan artikel...");
-    
-    // Sembunyikan konten utama saat loading
-    const mainContent = document.getElementById("main-content");
-    if (mainContent) {
-        mainContent.style.display = "none";
-    } else {
-        console.warn('Element with ID "main-content" not found saat menyembunyikan konten.');
-    }
-
-    // Panggil fungsi untuk memuat artikel
-    loadArticle();
-});
+document.addEventListener("DOMContentLoaded", loadArticle);
