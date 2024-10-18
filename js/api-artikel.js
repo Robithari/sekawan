@@ -13,7 +13,7 @@ function stripHtml(html) {
     return tempDiv.textContent || tempDiv.innerText || "";
 }
 
-// Fungsi untuk memperbarui elemen jika ditemukan
+// Fungsi untuk memperbarui elemen HTML jika ditemukan
 function updateElementText(id, text) {
     const element = document.getElementById(id);
     if (element) {
@@ -41,11 +41,13 @@ async function loadArticle() {
     }
 
     try {
-        // Buat query untuk mengambil artikel berdasarkan slug
+        // Tampilkan pesan loading sementara data diambil
+        document.body.innerHTML = "<h1>Loading...</h1>";
+
+        // Ambil data artikel dari Firestore berdasarkan slug
         const q = query(collection(db, "articles"), where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
 
-        // Cek apakah artikel ditemukan
         if (!querySnapshot.empty) {
             const article = querySnapshot.docs[0].data();
 
@@ -66,20 +68,20 @@ async function loadArticle() {
                 console.warn('Element with ID "articles" not found.');
             }
 
-            // Memperbarui <title> halaman
+            // Perbarui <title> halaman dan meta tag untuk link preview
             document.title = article.title;
+            document.querySelector('meta[property="og:title"]').setAttribute('content', article.title);
 
-            // Memperbarui meta tag untuk link preview
-            document.querySelector('meta[property="og:title"]').content = article.title;
-            
             const plainTextContent = stripHtml(article.content);
             const firstSentence = plainTextContent.split('. ')[0].trim() + '.';
-            document.querySelector('meta[property="og:description"]').content = firstSentence;
-
-            document.querySelector('meta[property="og:image"]').content = article.photoUrl;
+            document.querySelector('meta[property="og:description"]').setAttribute('content', firstSentence);
+            document.querySelector('meta[property="og:image"]').setAttribute('content', article.photoUrl);
 
             // Tandai bahwa halaman siap di-render oleh bot
             window.prerenderReady = true;
+
+            // Setelah data API selesai, tampilkan konten lengkap
+            document.getElementById("main-content").style.display = "block";
         } else {
             document.body.innerHTML = "<h1>Artikel tidak ditemukan!</h1>";
         }
@@ -90,4 +92,7 @@ async function loadArticle() {
 }
 
 // Panggil fungsi saat halaman dimuat
-document.addEventListener("DOMContentLoaded", loadArticle);
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("main-content").style.display = "none"; // Sembunyikan konten saat loading
+    loadArticle(); // Muat artikel dari API
+});
