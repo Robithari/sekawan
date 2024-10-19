@@ -2,10 +2,10 @@ const express = require('express');
 const { initializeApp } = require('firebase/app');
 const { getFirestore, collection, query, where, getDocs } = require('firebase/firestore');
 
-// Inisialisasi Express dan Firebase
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Konfigurasi Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
   authDomain: "sekawan-fc-427414.firebaseapp.com",
@@ -23,12 +23,12 @@ const db = getFirestore(firebaseApp);
 // Middleware untuk file statis
 app.use(express.static('public'));
 
-// Rute dinamis untuk mengambil artikel berdasarkan slug dan menyajikan metadata OG
+// Rute dinamis untuk mengambil artikel berdasarkan slug
 app.get('/artikel/:slug', async (req, res) => {
   const { slug } = req.params;
 
   try {
-    // Query ke Firestore untuk mendapatkan artikel berdasarkan slug
+    // Query Firestore untuk mendapatkan artikel berdasarkan slug
     const q = query(collection(db, 'articles'), where('slug', '==', slug));
     const querySnapshot = await getDocs(q);
 
@@ -45,8 +45,8 @@ app.get('/artikel/:slug', async (req, res) => {
           <meta property="og:title" content="${article.title}" />
           <meta property="og:description" content="${article.caption}" />
           <meta property="og:image" content="${article.photoUrl}" />
-          <meta property="og:type" content="article" />
           <meta property="og:url" content="https://www.sekawanfc.fun/artikel/${slug}" />
+          <meta property="og:type" content="article" />
           <title>${article.title}</title>
         </head>
         <body>
