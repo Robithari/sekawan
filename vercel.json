@@ -1,9 +1,5 @@
 {
-    "routes": [
-      {
-        "src": "/artikel-home.html",
-        "dest": "/api/server"
-      }
-    ]
-  }
-  
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ]
+}
