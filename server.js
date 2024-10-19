@@ -1,60 +1,68 @@
-// api/server.js
-
 const express = require('express');
-const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, getDocs, query, where } = require("firebase/firestore");
-
-// Inisialisasi aplikasi Express
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, query, where, getDocs } = require('firebase/firestore');
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Konfigurasi Firebase
 const firebaseConfig = {
-    // Isi konfigurasi Firebase Anda di sini
+  apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+  authDomain: "sekawan-fc-427414.firebaseapp.com",
+  projectId: "sekawan-fc-427414",
+  storageBucket: "sekawan-fc-427414.appspot.com",
+  messagingSenderId: "399174955835",
+  appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+  measurementId: "G-CD0MHD1RBP",
+  databaseURL: "https://sekawan-fc-427414-default-rtdb.firebaseio.com/"
 };
-initializeApp(firebaseConfig);
-const db = getFirestore();
 
-// Rute untuk mendapatkan artikel
-app.get('/artikel-home.html', async (req, res) => {
-    const slug = req.query.slug;
+// Inisialisasi Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
-    try {
-        const q = query(collection(db, "articles"), where("slug", "==", slug));
-        const querySnapshot = await getDocs(q);
-        const article = querySnapshot.empty ? null : querySnapshot.docs[0].data();
+// Middleware untuk file statis
+app.use(express.static('public'));
 
-        if (article) {
-            // Meta tags OG yang dihasilkan di server
-            const metaTags = `
-                <meta property="og:title" content="${article.title}" />
-                <meta property="og:description" content="${article.titleKeterangan}" />
-                <meta property="og:image" content="${article.photoUrl}" />
-                <meta property="og:type" content="article" />
-                <meta property="og:url" content="https://sekawan.vercel.app/artikel-home.html?slug=${slug}" />
-            `;
+// Rute dinamis untuk link preview
+app.get('/artikel/:slug', async (req, res) => {
+  const { slug } = req.params;
 
-            // Mengirimkan HTML yang berisi meta tag OG
-            res.send(`
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    ${metaTags}
-                    <title>${article.title}</title>
-                </head>
-                <body>
-                    <h1>${article.title}</h1>
-                    <p>${article.content}</p>
-                </body>
-                </html>
-            `);
-        } else {
-            res.status(404).send("<h1>Artikel tidak ditemukan!</h1>");
-        }
-    } catch (error) {
-        console.error("Error fetching article:", error);
-        res.status(500).send("<h1>Terjadi kesalahan saat memuat artikel.</h1>");
+  try {
+    const q = query(collection(db, 'articles'), where('slug', '==', slug));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const article = querySnapshot.docs[0].data();
+
+      res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta property="og:title" content="${article.title}" />
+          <meta property="og:description" content="${article.caption}" />
+          <meta property="og:image" content="${article.photoUrl}" />
+          <meta property="og:type" content="article" />
+          <title>${article.title}</title>
+        </head>
+        <body>
+          <h1>${article.title}</h1>
+          <p>${article.caption}</p>
+          <img src="${article.photoUrl}" alt="${article.caption}">
+        </body>
+        </html>
+      `);
+    } else {
+      res.status(404).send('Artikel tidak ditemukan!');
     }
+  } catch (error) {
+    console.error('Gagal memuat artikel:', error);
+    res.status(500).send('Terjadi kesalahan saat memuat artikel.');
+  }
 });
 
-// Mengekspor fungsi handler agar bisa digunakan di Vercel
-module.exports = app;
+// Jalankan server
+app.listen(PORT, () => {
+  console.log(`Server berjalan di http://localhost:${PORT}`);
+});

@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "builds": [
+      { "src": "pages/[slug].js", "use": "@vercel/next" },
+      { "src": "api/preview.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+      { "src": "/api/preview", "dest": "/api/preview.js" },
+      { "src": "/(.*)", "dest": "/pages/[slug].js" }
+    ]
+  }
+  
