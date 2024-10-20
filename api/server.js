@@ -55,7 +55,7 @@ app.get('/artikel-home.html', async (req, res) => {
             // Meta tags OG yang dihasilkan di server
             const metaTags = `
                 <meta property="og:title" content="${title}" />
-                <meta property="og:description" content="${titleKeterangan}" />
+                <meta property="og:description" content="${content}" />
                 <meta property="og:image" content="${photoUrl}" />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://sekawanfc.fun/artikel-home.html?slug=${encodeURIComponent(slug)}" />
