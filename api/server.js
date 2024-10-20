@@ -58,7 +58,7 @@ app.get('/artikel-home.html', async (req, res) => {
                 <meta property="og:description" content="${titleKeterangan}" />
                 <meta property="og:image" content="${photoUrl}" />
                 <meta property="og:type" content="article" />
-                <meta property="og:url" content="https://sekawan.vercel.app/artikel-home.html?slug=${encodeURIComponent(slug)}" />
+                <meta property="og:url" content="https://sekawanfc.com/artikel-home.html?slug=${encodeURIComponent(slug)}" />
             `;
 
             // Mengirimkan HTML yang berisi meta tag OG dan konten artikel
