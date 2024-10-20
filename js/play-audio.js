@@ -4,46 +4,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
   /**
    * Fungsi untuk membersihkan teks dari tag HTML, entitas, dan simbol lainnya.
-   * @param {string} html - Teks yang mungkin mengandung tag HTML.
+   * @param {string} text - Teks yang mungkin mengandung tag HTML atau simbol.
    * @returns {string} - Teks yang telah dibersihkan.
    */
-  function cleanText(html) {
-    // Buat elemen sementara untuk memanfaatkan browser dalam menghapus tag HTML
-    const tempElement = document.createElement('div');
-    tempElement.innerHTML = html;
-    let text = tempElement.textContent || tempElement.innerText || '';
-
-    // Dekode entitas HTML jika ada
+  function cleanText(text) {
+    // 1. Dekode entitas HTML
     const textarea = document.createElement('textarea');
     textarea.innerHTML = text;
     text = textarea.value;
 
-    // Hapus karakter yang tidak diinginkan menggunakan regex
-    // Misalnya, menghapus karakter selain huruf, angka, spasi, dan tanda baca dasar
-    text = text.replace(/[^\w\s.,!?]/g, '');
+    // 2. Hapus tag HTML dan kontennya jika ada (misalnya, <p>makan</p> menjadi makan)
+    text = text.replace(/<[^>]*>/g, '');
 
-    // Menghapus spasi berlebih
+    // 3. Hapus simbol atau karakter khusus yang tidak diinginkan
+    //    Misalnya, menghapus karakter selain huruf, angka, spasi, dan tanda baca dasar
+    text = text.replace(/[^\w\s.,!?'"-]/g, '');
+
+    // 4. Menghapus spasi berlebih
     return text.replace(/\s+/g, ' ').trim();
   }
 
   // Gabungkan konten dari kedua elemen jika keduanya ada
   let textContent = '';
-  if (isiHalamanElement && isiHalamanElement.innerHTML.trim() !== '') {
-    textContent += cleanText(isiHalamanElement.innerHTML) + ' ';  // Tambahkan teks bersih dari class "isi-halaman"
+  if (isiHalamanElement && isiHalamanElement.textContent.trim() !== '') {
+    textContent += cleanText(isiHalamanElement.textContent) + ' ';  // Tambahkan teks bersih dari class "isi-halaman"
   }
 
-  if (profilContentElement && profilContentElement.innerHTML.trim() === '') {
+  if (profilContentElement && profilContentElement.textContent.trim() === '') {
     // Jika profil-content belum ada teksnya, kita awasi dengan MutationObserver
     const observer = new MutationObserver(() => {
-      if (profilContentElement.innerHTML.trim() !== '') {
-        textContent += cleanText(profilContentElement.innerHTML);
+      if (profilContentElement.textContent.trim() !== '') {
+        textContent += cleanText(profilContentElement.textContent);
         observer.disconnect();  // Setelah teks dimuat, kita hentikan pengamatan
-        // console.log("Teks dari profil-content telah dimuat:", profilContentElement.innerText);
+        console.log("Teks dari profil-content telah dimuat:", textContent);
       }
     });
     observer.observe(profilContentElement, { childList: true, subtree: true });
-  } else if (profilContentElement && profilContentElement.innerHTML.trim() !== '') {
-    textContent += cleanText(profilContentElement.innerHTML);  // Jika teks sudah ada, langsung tambahkan
+  } else if (profilContentElement && profilContentElement.textContent.trim() !== '') {
+    textContent += cleanText(profilContentElement.textContent);  // Jika teks sudah ada, langsung tambahkan
   }
 
   // Pastikan teks diambil setelah API dimuat (jika profil-content menggunakan API)
@@ -171,4 +169,14 @@ document.addEventListener('DOMContentLoaded', function() {
     voices = synth.getVoices();
     console.log("Daftar suara:", voices);
   };
+
+  /**
+   * Contoh penambahan konten dinamis setelah 3 detik
+   * Anda dapat menghapus atau menyesuaikan bagian ini sesuai kebutuhan
+   */
+  setTimeout(() => {
+    const profilContent = document.getElementById('profil-content');
+    profilContent.innerHTML = '<p><em>Profil pengguna telah dimuat secara dinamis!</em></p>';
+    console.log("Konten dinamis ditambahkan ke profil-content.");
+  }, 3000);
 });
