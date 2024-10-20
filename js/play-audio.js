@@ -2,54 +2,32 @@ document.addEventListener('DOMContentLoaded', function() {
   const isiHalamanElement = document.querySelector('.isi-halaman');  // Ambil elemen dengan class "isi-halaman"
   const profilContentElement = document.getElementById('profil-content');  // Ambil elemen dengan id "profil-content"
 
-  /**
-   * Fungsi untuk membersihkan teks dari tag HTML, entitas, dan simbol lainnya.
-   * @param {string} text - Teks yang mungkin mengandung tag HTML atau simbol.
-   * @returns {string} - Teks yang telah dibersihkan.
-   */
-  function cleanText(text) {
-    // 1. Dekode entitas HTML
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = text;
-    text = textarea.value;
-
-    // 2. Hapus tag HTML dan kontennya jika ada (misalnya, <p>makan</p> menjadi makan)
-    text = text.replace(/<[^>]*>/g, '');
-
-    // 3. Hapus simbol atau karakter khusus yang tidak diinginkan
-    //    Misalnya, menghapus karakter selain huruf, angka, spasi, dan tanda baca dasar
-    text = text.replace(/[^\w\s.,!?'"-]/g, '');
-
-    // 4. Menghapus spasi berlebih
-    return text.replace(/\s+/g, ' ').trim();
-  }
-
   // Gabungkan konten dari kedua elemen jika keduanya ada
   let textContent = '';
-  if (isiHalamanElement && isiHalamanElement.textContent.trim() !== '') {
-    textContent += cleanText(isiHalamanElement.textContent) + ' ';  // Tambahkan teks bersih dari class "isi-halaman"
+  if (isiHalamanElement && isiHalamanElement.innerText.trim() !== '') {
+    textContent += isiHalamanElement.innerText + ' ';  // Tambahkan teks dari class "isi-halaman"
   }
 
-  if (profilContentElement && profilContentElement.textContent.trim() === '') {
+  if (profilContentElement && profilContentElement.innerText.trim() === '') {
     // Jika profil-content belum ada teksnya, kita awasi dengan MutationObserver
     const observer = new MutationObserver(() => {
-      if (profilContentElement.textContent.trim() !== '') {
-        textContent += cleanText(profilContentElement.textContent);
+      if (profilContentElement.innerText.trim() !== '') {
+        textContent += profilContentElement.innerText;
         observer.disconnect();  // Setelah teks dimuat, kita hentikan pengamatan
-        console.log("Teks dari profil-content telah dimuat:", textContent);
+        // console.log("Teks dari profil-content telah dimuat:", profilContentElement.innerText);
       }
     });
     observer.observe(profilContentElement, { childList: true, subtree: true });
-  } else if (profilContentElement && profilContentElement.textContent.trim() !== '') {
-    textContent += cleanText(profilContentElement.textContent);  // Jika teks sudah ada, langsung tambahkan
+  } else if (profilContentElement && profilContentElement.innerText.trim() !== '') {
+    textContent += profilContentElement.innerText;  // Jika teks sudah ada, langsung tambahkan
   }
 
   // Pastikan teks diambil setelah API dimuat (jika profil-content menggunakan API)
   const checkTextContent = () => {
     if (textContent.trim() === '') {
-      console.error("Tidak ada teks yang dapat dibacakan.");
+      // console.error("Tidak ada teks yang dapat dibacakan.");
     } else {
-      console.log("Teks yang akan dibacakan:", textContent);  // Log untuk melihat teks yang akan dibacakan
+      // console.log("Teks yang akan dibacakan:", textContent);  // Tambahkan log untuk melihat teks yang akan dibacakan
     }
   };
 
@@ -80,22 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, { once: true });
 
-  /**
-   * Fungsi untuk memulai atau melanjutkan ucapan.
-   */
+  // Fungsi untuk memulai ucapan
   function startSpeech() {
     if (isPaused && !isStopped) {
       synth.resume();  // Melanjutkan ucapan yang dijeda
       isPaused = false;
     } else if (!synth.speaking || isStopped) {
-      // Pastikan textContent sudah dibersihkan sebelum diucapkan
-      const cleanSpeechText = textContent.split(' ').slice(resumeIndex).join(' ');
-      if (cleanSpeechText.trim() === '') {
-        console.error("Tidak ada teks yang dapat dibacakan setelah pembersihan.");
-        return;
-      }
-
-      utterance = new SpeechSynthesisUtterance(cleanSpeechText);
+      utterance = new SpeechSynthesisUtterance(textContent.split(' ').slice(resumeIndex).join(' '));
       utterance.lang = 'id-ID';  // Bahasa ucapan diatur ke bahasa Indonesia
 
       // Menentukan voice secara eksplisit
@@ -117,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
       utterance.onend = function () {
         isStopped = true;
         resumeIndex = 0;
-        console.log("Ucapan selesai.");
+        // console.log("Ucapan selesai.");
       };
 
       // Mulai mengucapkan teks
@@ -127,9 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  /**
-   * Fungsi untuk menjeda ucapan.
-   */
+  // Fungsi untuk menjeda ucapan
   function pauseSpeech() {
     if (synth.speaking && !synth.paused) {
       synth.pause();  // Menjeda ucapan
@@ -137,16 +104,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  /**
-   * Fungsi untuk menghentikan ucapan.
-   */
+  // Fungsi untuk menghentikan ucapan
   function stopSpeech() {
     if (synth.speaking || synth.paused) {
       synth.cancel();  // Menghentikan ucapan dan membatalkan sisa teks yang belum diucapkan
       isStopped = true;
       isPaused = false;
       resumeIndex = 0;  // Reset posisi ucapan
-      console.log("Ucapan dihentikan.");
     }
   }
 
@@ -167,16 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Event untuk memuat voices setelah tersedia
   synth.onvoiceschanged = () => {
     voices = synth.getVoices();
-    console.log("Daftar suara:", voices);
+    // console.log("Daftar suara:", voices);
   };
-
-  /**
-   * Contoh penambahan konten dinamis setelah 3 detik
-   * Anda dapat menghapus atau menyesuaikan bagian ini sesuai kebutuhan
-   */
-  setTimeout(() => {
-    const profilContent = document.getElementById('profil-content');
-    profilContent.innerHTML = '<p><em>Profil pengguna telah dimuat secara dinamis!</em></p>';
-    console.log("Konten dinamis ditambahkan ke profil-content.");
-  }, 3000);
 });
