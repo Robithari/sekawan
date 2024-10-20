@@ -2,32 +2,46 @@ document.addEventListener('DOMContentLoaded', function() {
   const isiHalamanElement = document.querySelector('.isi-halaman');  // Ambil elemen dengan class "isi-halaman"
   const profilContentElement = document.getElementById('profil-content');  // Ambil elemen dengan id "profil-content"
 
-  // Gabungkan konten dari kedua elemen jika keduanya ada
-  let textContent = '';
-  if (isiHalamanElement && isiHalamanElement.innerText.trim() !== '') {
-    textContent += isiHalamanElement.innerText + ' ';  // Tambahkan teks dari class "isi-halaman"
+  /**
+   * Fungsi untuk membersihkan teks dari tag HTML dan simbol lainnya.
+   * @param {string} html - Teks yang mungkin mengandung tag HTML.
+   * @returns {string} - Teks yang telah dibersihkan.
+   */
+  function cleanText(html) {
+    // Buat elemen sementara untuk memanfaatkan browser dalam menghapus tag HTML
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = html;
+    const text = tempElement.innerText || tempElement.textContent || '';
+    // Opsional: Tambahkan pembersihan tambahan jika diperlukan
+    return text.replace(/\s+/g, ' ').trim();  // Menghapus spasi berlebih
   }
 
-  if (profilContentElement && profilContentElement.innerText.trim() === '') {
+  // Gabungkan konten dari kedua elemen jika keduanya ada
+  let textContent = '';
+  if (isiHalamanElement && isiHalamanElement.innerHTML.trim() !== '') {
+    textContent += cleanText(isiHalamanElement.innerHTML) + ' ';  // Tambahkan teks bersih dari class "isi-halaman"
+  }
+
+  if (profilContentElement && profilContentElement.innerHTML.trim() === '') {
     // Jika profil-content belum ada teksnya, kita awasi dengan MutationObserver
     const observer = new MutationObserver(() => {
-      if (profilContentElement.innerText.trim() !== '') {
-        textContent += profilContentElement.innerText;
+      if (profilContentElement.innerHTML.trim() !== '') {
+        textContent += cleanText(profilContentElement.innerHTML);
         observer.disconnect();  // Setelah teks dimuat, kita hentikan pengamatan
         // console.log("Teks dari profil-content telah dimuat:", profilContentElement.innerText);
       }
     });
     observer.observe(profilContentElement, { childList: true, subtree: true });
-  } else if (profilContentElement && profilContentElement.innerText.trim() !== '') {
-    textContent += profilContentElement.innerText;  // Jika teks sudah ada, langsung tambahkan
+  } else if (profilContentElement && profilContentElement.innerHTML.trim() !== '') {
+    textContent += cleanText(profilContentElement.innerHTML);  // Jika teks sudah ada, langsung tambahkan
   }
 
   // Pastikan teks diambil setelah API dimuat (jika profil-content menggunakan API)
   const checkTextContent = () => {
     if (textContent.trim() === '') {
-      // console.error("Tidak ada teks yang dapat dibacakan.");
+      console.error("Tidak ada teks yang dapat dibacakan.");
     } else {
-      // console.log("Teks yang akan dibacakan:", textContent);  // Tambahkan log untuk melihat teks yang akan dibacakan
+      console.log("Teks yang akan dibacakan:", textContent);  // Log untuk melihat teks yang akan dibacakan
     }
   };
 
@@ -58,13 +72,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, { once: true });
 
-  // Fungsi untuk memulai ucapan
+  /**
+   * Fungsi untuk memulai atau melanjutkan ucapan.
+   */
   function startSpeech() {
     if (isPaused && !isStopped) {
       synth.resume();  // Melanjutkan ucapan yang dijeda
       isPaused = false;
     } else if (!synth.speaking || isStopped) {
-      utterance = new SpeechSynthesisUtterance(textContent.split(' ').slice(resumeIndex).join(' '));
+      // Pastikan textContent sudah dibersihkan sebelum diucapkan
+      const cleanSpeechText = textContent.split(' ').slice(resumeIndex).join(' ');
+      if (cleanSpeechText.trim() === '') {
+        console.error("Tidak ada teks yang dapat dibacakan setelah pembersihan.");
+        return;
+      }
+
+      utterance = new SpeechSynthesisUtterance(cleanSpeechText);
       utterance.lang = 'id-ID';  // Bahasa ucapan diatur ke bahasa Indonesia
 
       // Menentukan voice secara eksplisit
@@ -86,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
       utterance.onend = function () {
         isStopped = true;
         resumeIndex = 0;
-        // console.log("Ucapan selesai.");
+        console.log("Ucapan selesai.");
       };
 
       // Mulai mengucapkan teks
@@ -96,7 +119,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Fungsi untuk menjeda ucapan
+  /**
+   * Fungsi untuk menjeda ucapan.
+   */
   function pauseSpeech() {
     if (synth.speaking && !synth.paused) {
       synth.pause();  // Menjeda ucapan
@@ -104,13 +129,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Fungsi untuk menghentikan ucapan
+  /**
+   * Fungsi untuk menghentikan ucapan.
+   */
   function stopSpeech() {
     if (synth.speaking || synth.paused) {
       synth.cancel();  // Menghentikan ucapan dan membatalkan sisa teks yang belum diucapkan
       isStopped = true;
       isPaused = false;
       resumeIndex = 0;  // Reset posisi ucapan
+      console.log("Ucapan dihentikan.");
     }
   }
 
@@ -131,6 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Event untuk memuat voices setelah tersedia
   synth.onvoiceschanged = () => {
     voices = synth.getVoices();
-    // console.log("Daftar suara:", voices);
+    console.log("Daftar suara:", voices);
   };
 });
