@@ -2,32 +2,40 @@ document.addEventListener('DOMContentLoaded', function() {
   const isiHalamanElement = document.querySelector('.isi-halaman');  // Ambil elemen dengan class "isi-halaman"
   const profilContentElement = document.getElementById('profil-content');  // Ambil elemen dengan id "profil-content"
 
+  // Fungsi untuk menghapus semua tag HTML dari teks
+  function sanitizeText(text) {
+    return text.replace(/<\/?[^>]+(>|$)/g, ""); // Menghapus semua tag HTML
+  }
+
   // Gabungkan konten dari kedua elemen jika keduanya ada
   let textContent = '';
   if (isiHalamanElement && isiHalamanElement.innerText.trim() !== '') {
-    textContent += isiHalamanElement.innerText + ' ';  // Tambahkan teks dari class "isi-halaman"
+    textContent += sanitizeText(isiHalamanElement.innerText) + ' ';  // Tambahkan teks dari class "isi-halaman" setelah sanitasi
   }
 
-  if (profilContentElement && profilContentElement.innerText.trim() === '') {
-    // Jika profil-content belum ada teksnya, kita awasi dengan MutationObserver
-    const observer = new MutationObserver(() => {
-      if (profilContentElement.innerText.trim() !== '') {
-        textContent += profilContentElement.innerText;
-        observer.disconnect();  // Setelah teks dimuat, kita hentikan pengamatan
-        // console.log("Teks dari profil-content telah dimuat:", profilContentElement.innerText);
-      }
-    });
-    observer.observe(profilContentElement, { childList: true, subtree: true });
-  } else if (profilContentElement && profilContentElement.innerText.trim() !== '') {
-    textContent += profilContentElement.innerText;  // Jika teks sudah ada, langsung tambahkan
+  if (profilContentElement) {
+    if (profilContentElement.innerText.trim() === '') {
+      // Jika profil-content belum ada teksnya, awasi dengan MutationObserver
+      const observer = new MutationObserver(() => {
+        if (profilContentElement.innerText.trim() !== '') {
+          textContent += sanitizeText(profilContentElement.innerText);
+          observer.disconnect();  // Setelah teks dimuat, hentikan pengamatan
+          console.log("Teks dari profil-content telah dimuat:", profilContentElement.innerText);
+        }
+      });
+      observer.observe(profilContentElement, { childList: true, subtree: true });
+    } else {
+      // Jika teks sudah ada, langsung tambahkan
+      textContent += sanitizeText(profilContentElement.innerText);
+    }
   }
 
-  // Pastikan teks diambil setelah API dimuat (jika profil-content menggunakan API)
+  // Fungsi untuk memastikan teks diambil setelah API dimuat (jika profil-content menggunakan API)
   const checkTextContent = () => {
     if (textContent.trim() === '') {
-      // console.error("Tidak ada teks yang dapat dibacakan.");
+      console.error("Tidak ada teks yang dapat dibacakan.");
     } else {
-      // console.log("Teks yang akan dibacakan:", textContent);  // Tambahkan log untuk melihat teks yang akan dibacakan
+      console.log("Teks yang akan dibacakan:", textContent);  // Log teks untuk debugging
     }
   };
 
@@ -64,7 +72,9 @@ document.addEventListener('DOMContentLoaded', function() {
       synth.resume();  // Melanjutkan ucapan yang dijeda
       isPaused = false;
     } else if (!synth.speaking || isStopped) {
-      utterance = new SpeechSynthesisUtterance(textContent.split(' ').slice(resumeIndex).join(' '));
+      // Ucapan baru dimulai dari resumeIndex
+      const textToSpeak = textContent.split(' ').slice(resumeIndex).join(' ');
+      utterance = new SpeechSynthesisUtterance(textToSpeak);
       utterance.lang = 'id-ID';  // Bahasa ucapan diatur ke bahasa Indonesia
 
       // Menentukan voice secara eksplisit
@@ -86,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
       utterance.onend = function () {
         isStopped = true;
         resumeIndex = 0;
-        // console.log("Ucapan selesai.");
+        console.log("Ucapan selesai.");
       };
 
       // Mulai mengucapkan teks
@@ -131,6 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Event untuk memuat voices setelah tersedia
   synth.onvoiceschanged = () => {
     voices = synth.getVoices();
-    // console.log("Daftar suara:", voices);
+    console.log("Daftar suara:", voices);
   };
 });

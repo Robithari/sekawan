@@ -28,7 +28,12 @@ async function loadArticle() {
             document.getElementById("photoUrl").src = article.photoUrl;
             document.getElementById("photoUrl").alt = article.caption;
             document.getElementById("caption").innerText = article.caption;
-            document.getElementById("articles").innerHTML = article.content;
+
+            // Jika konten disimpan dengan tag yang di-escape, dekode terlebih dahulu
+            const parser = new DOMParser();
+            const decodedContent = parser.parseFromString(article.content, 'text/html').body.innerHTML;
+
+            document.getElementById("articles").innerHTML = decodedContent;
         } else {
             // Jika artikel tidak ditemukan
             document.body.innerHTML = "<h1>Artikel tidak ditemukan!</h1>";
