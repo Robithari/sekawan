@@ -1,33 +1,46 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const articlesElement = document.getElementById('articles');  // Ambil elemen dengan id "articles"
+  const isiHalamanElement = document.querySelector('.isi-halaman');  // Ambil elemen dengan class "isi-halaman"
+  const profilContentElement = document.getElementById('profil-content');  // Ambil elemen dengan id "profil-content"
 
-  // Fungsi untuk mendapatkan teks terstruktur dengan titik setelah elemen blok
-  function getStructuredText(element) {
-    let text = '';
-    element.childNodes.forEach(node => {
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        const tag = node.tagName.toLowerCase();
-        // Daftar tag blok yang ingin kita tambahkan titik setelahnya
-        if (['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote', 'div', 'section'].includes(tag)) {
-          // Tambahkan teks dari elemen dan akhiri dengan titik
-          text += node.textContent.trim() + '. ';
-        }
-      } else if (node.nodeType === Node.TEXT_NODE) {
-        // Tambahkan teks biasa
-        text += node.textContent.trim() + ' ';
-      }
-    });
-    return text;
+  // Fungsi untuk menghapus semua tag HTML dari teks
+  function sanitizeText(text) {
+    return text.replace(/<\/?[^>]+(>|$)/g, ""); // Menghapus semua tag HTML
   }
 
-  // Ambil teks terstruktur dengan titik
+  // Gabungkan konten dari kedua elemen jika keduanya ada
   let textContent = '';
-  if (articlesElement) {
-    textContent = getStructuredText(articlesElement);
+  if (isiHalamanElement && isiHalamanElement.innerText.trim() !== '') {
+    textContent += sanitizeText(isiHalamanElement.innerText) + ' ';  // Tambahkan teks dari class "isi-halaman" setelah sanitasi
   }
 
-  // Log teks untuk debugging
-  console.log("Teks yang akan dibacakan:", textContent);
+  if (profilContentElement) {
+    if (profilContentElement.innerText.trim() === '') {
+      // Jika profil-content belum ada teksnya, awasi dengan MutationObserver
+      const observer = new MutationObserver(() => {
+        if (profilContentElement.innerText.trim() !== '') {
+          textContent += sanitizeText(profilContentElement.innerText);
+          observer.disconnect();  // Setelah teks dimuat, hentikan pengamatan
+          console.log("Teks dari profil-content telah dimuat:", profilContentElement.innerText);
+        }
+      });
+      observer.observe(profilContentElement, { childList: true, subtree: true });
+    } else {
+      // Jika teks sudah ada, langsung tambahkan
+      textContent += sanitizeText(profilContentElement.innerText);
+    }
+  }
+
+  // Fungsi untuk memastikan teks diambil setelah API dimuat (jika profil-content menggunakan API)
+  const checkTextContent = () => {
+    if (textContent.trim() === '') {
+      console.error("Tidak ada teks yang dapat dibacakan.");
+    } else {
+      console.log("Teks yang akan dibacakan:", textContent);  // Log teks untuk debugging
+    }
+  };
+
+  // Tambahkan delay untuk memastikan observer selesai bekerja sebelum memeriksa textContent
+  setTimeout(checkTextContent, 1000);
 
   const synth = window.speechSynthesis;  // Inisialisasi Speech Synthesis
   let utterance;  // Objek untuk menyimpan ucapan
