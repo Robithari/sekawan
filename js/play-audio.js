@@ -1,57 +1,32 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const articlesElement = document.getElementById('articles');  // Ambil elemen dengan id "articles"
+  const isiHalamanElement = document.querySelector('.isi-halaman');  // Ambil elemen dengan class "isi-halaman"
   const profilContentElement = document.getElementById('profil-content');  // Ambil elemen dengan id "profil-content"
 
-  // Daftar tag blok yang ingin kita tambahkan jeda setelahnya
-  const blockTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote', 'div', 'section'];
-
-  // Fungsi untuk mendapatkan teks terstruktur dengan jeda setelah elemen blok
-  function getStructuredText(element) {
-    let text = '';
-    element.childNodes.forEach(node => {
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        const tag = node.tagName.toLowerCase();
-        // Cek apakah tag termasuk dalam daftar tag blok
-        if (blockTags.includes(tag)) {
-          // Tambahkan teks dari elemen dan akhiri dengan tiga titik untuk jeda
-          text += node.textContent.trim() + '... ';
-        }
-      } else if (node.nodeType === Node.TEXT_NODE) {
-        // Tambahkan teks biasa diikuti dengan spasi
-        text += node.textContent.trim() + ' ';
-      }
-    });
-    return text;
-  }
-
-  // Fungsi untuk menghapus semua tag HTML dari teks (jika diperlukan)
+  // Fungsi untuk menghapus semua tag HTML dari teks
   function sanitizeText(text) {
     return text.replace(/<\/?[^>]+(>|$)/g, ""); // Menghapus semua tag HTML
   }
 
   // Gabungkan konten dari kedua elemen jika keduanya ada
   let textContent = '';
-  
-  // Ambil dan format teks dari elemen "articles"
-  if (articlesElement && articlesElement.textContent.trim() !== '') {
-    textContent += getStructuredText(articlesElement);
+  if (isiHalamanElement && isiHalamanElement.innerText.trim() !== '') {
+    textContent += sanitizeText(isiHalamanElement.innerText) + ' ';  // Tambahkan teks dari class "isi-halaman" setelah sanitasi
   }
 
-  // Ambil dan format teks dari elemen "profil-content"
   if (profilContentElement) {
-    if (profilContentElement.textContent.trim() === '') {
+    if (profilContentElement.innerText.trim() === '') {
       // Jika profil-content belum ada teksnya, awasi dengan MutationObserver
       const observer = new MutationObserver(() => {
-        if (profilContentElement.textContent.trim() !== '') {
-          textContent += sanitizeText(profilContentElement.textContent) + '... ';
+        if (profilContentElement.innerText.trim() !== '') {
+          textContent += sanitizeText(profilContentElement.innerText);
           observer.disconnect();  // Setelah teks dimuat, hentikan pengamatan
-          console.log("Teks dari profil-content telah dimuat:", profilContentElement.textContent);
+          console.log("Teks dari profil-content telah dimuat:", profilContentElement.innerText);
         }
       });
       observer.observe(profilContentElement, { childList: true, subtree: true });
     } else {
-      // Jika teks sudah ada, langsung tambahkan dengan jeda
-      textContent += sanitizeText(profilContentElement.textContent) + '... ';
+      // Jika teks sudah ada, langsung tambahkan
+      textContent += sanitizeText(profilContentElement.innerText);
     }
   }
 
