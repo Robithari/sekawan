@@ -2,10 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const articlesElement = document.getElementById('articles');  // Ambil elemen dengan id "articles"
   const profilContentElement = document.getElementById('profil-content');  // Ambil elemen dengan id "profil-content"
 
-  // Fungsi untuk menghapus semua tag HTML dari teks
-  function sanitizeText(text) {
-    return text.replace(/<\/?[^>]+(>|$)/g, ""); // Menghapus semua tag HTML
-  }
+  // Daftar tag blok yang ingin kita tambahkan jeda setelahnya
+  const blockTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote', 'div', 'section'];
 
   // Fungsi untuk mendapatkan teks terstruktur dengan jeda setelah elemen blok
   function getStructuredText(element) {
@@ -13,25 +11,33 @@ document.addEventListener('DOMContentLoaded', function() {
     element.childNodes.forEach(node => {
       if (node.nodeType === Node.ELEMENT_NODE) {
         const tag = node.tagName.toLowerCase();
-        // Daftar tag blok yang ingin kita tambahkan jeda setelahnya
-        if (['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote', 'div', 'section'].includes(tag)) {
+        // Cek apakah tag termasuk dalam daftar tag blok
+        if (blockTags.includes(tag)) {
           // Tambahkan teks dari elemen dan akhiri dengan tiga titik untuk jeda
           text += node.textContent.trim() + '... ';
         }
       } else if (node.nodeType === Node.TEXT_NODE) {
-        // Tambahkan teks biasa
+        // Tambahkan teks biasa diikuti dengan spasi
         text += node.textContent.trim() + ' ';
       }
     });
     return text;
   }
 
+  // Fungsi untuk menghapus semua tag HTML dari teks (jika diperlukan)
+  function sanitizeText(text) {
+    return text.replace(/<\/?[^>]+(>|$)/g, ""); // Menghapus semua tag HTML
+  }
+
   // Gabungkan konten dari kedua elemen jika keduanya ada
   let textContent = '';
+  
+  // Ambil dan format teks dari elemen "articles"
   if (articlesElement && articlesElement.textContent.trim() !== '') {
     textContent += getStructuredText(articlesElement);
   }
 
+  // Ambil dan format teks dari elemen "profil-content"
   if (profilContentElement) {
     if (profilContentElement.textContent.trim() === '') {
       // Jika profil-content belum ada teksnya, awasi dengan MutationObserver
