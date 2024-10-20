@@ -1,3 +1,5 @@
+// splas-screen-start.js
+
 document.addEventListener('DOMContentLoaded', function () {
   const splashScreen = document.getElementById('loading-screen');
   const mainContent = document.getElementById('main-content');
@@ -8,15 +10,24 @@ document.addEventListener('DOMContentLoaded', function () {
   // Ambil URL API dari elemen data atau variabel global
   const apiUrl = window.splashScreenApiUrl || '';
 
-  // Simpan referensi asli dari console.log
+  // **Menghapus atau Mengomentari Semua console.log**
+  // Jika Anda masih ingin mengatur ulang console.log untuk tujuan tertentu, Anda dapat melakukannya di sini.
+  // Namun, dalam kasus ini, kita akan menghapus semua console.log untuk mencegah pesan muncul di konsol.
+
+  /*
+  // Simpan referensi asli dari console.log (Opsional)
   const originalConsoleLog = console.log;
 
-  // Modifikasi console.log untuk menyembunyikan pesan tertentu
+  // Modifikasi console.log untuk menyembunyikan pesan tertentu (Opsional)
   console.log = function (...args) {
     if (!args[0] || typeof args[0] !== 'string' || !args[0].includes('API Response:')) {
       originalConsoleLog.apply(console, args);
     }
   };
+  */
+
+  // **Menghapus Semua console.log**
+  // Pastikan untuk menghapus atau mengomentari semua pernyataan console.log berikut ini.
 
   // Fungsi untuk memeriksa apakah API siap
   function checkAPIStatus() {
@@ -35,7 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return response.json();
       })
       .then(data => {
-        console.log('API Response:', data); // Pesan ini akan disembunyikan jika modifikasi berhasil
+        // **Hapus atau Komentari Baris Ini**
+        // console.log('API Response:', data); // Pesan ini akan disembunyikan jika modifikasi berhasil
 
         // Validasi respons API
         if (data && Object.keys(data).length > 0) {
