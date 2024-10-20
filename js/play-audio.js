@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const profilContentElement = document.getElementById('profil-content');  // Ambil elemen dengan id "profil-content"
 
   /**
-   * Fungsi untuk membersihkan teks dari tag HTML dan simbol lainnya.
+   * Fungsi untuk membersihkan teks dari tag HTML, entitas, dan simbol lainnya.
    * @param {string} html - Teks yang mungkin mengandung tag HTML.
    * @returns {string} - Teks yang telah dibersihkan.
    */
@@ -11,9 +11,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Buat elemen sementara untuk memanfaatkan browser dalam menghapus tag HTML
     const tempElement = document.createElement('div');
     tempElement.innerHTML = html;
-    const text = tempElement.innerText || tempElement.textContent || '';
-    // Opsional: Tambahkan pembersihan tambahan jika diperlukan
-    return text.replace(/\s+/g, ' ').trim();  // Menghapus spasi berlebih
+    let text = tempElement.textContent || tempElement.innerText || '';
+
+    // Dekode entitas HTML jika ada
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    text = textarea.value;
+
+    // Hapus karakter yang tidak diinginkan menggunakan regex
+    // Misalnya, menghapus karakter selain huruf, angka, spasi, dan tanda baca dasar
+    text = text.replace(/[^\w\s.,!?]/g, '');
+
+    // Menghapus spasi berlebih
+    return text.replace(/\s+/g, ' ').trim();
   }
 
   // Gabungkan konten dari kedua elemen jika keduanya ada
