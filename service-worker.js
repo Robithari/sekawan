@@ -1,33 +1,55 @@
-self.addEventListener('install', function(event) {
-  // Tidak ada file yang dicache selama proses instalasi
-  self.skipWaiting(); // Memaksa service worker baru untuk segera aktif
+self.addEventListener('install', function (event) {
+  console.log('Service Worker diinstal.');
+  self.skipWaiting(); // Memaksa SW untuk langsung aktif
 });
 
-self.addEventListener('activate', function(event) {
-  // Menghapus semua cache yang ada
+self.addEventListener('activate', function (event) {
+  console.log('Service Worker diaktifkan.');
+
+  // Menghapus cache lama jika ada
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
+    caches.keys().then(function (cacheNames) {
       return Promise.all(
-        cacheNames.map(function(cacheName) {
+        cacheNames.map(function (cacheName) {
           return caches.delete(cacheName);
         })
       );
-    }).catch(function(error) {
-      console.error('Failed to delete caches:', error);
+    }).catch(function (error) {
+      console.error('Gagal menghapus cache:', error);
     })
   );
-  self.clients.claim(); // Memastikan semua tab yang terbuka menggunakan SW yang baru
+
+  self.clients.claim(); // Memastikan semua tab menggunakan SW baru
 });
 
-self.addEventListener('fetch', function(event) {
-  // Always fetch the latest version from the network for all requests
+// Mendengarkan permintaan fetch dan mengelola respons
+self.addEventListener('fetch', function (event) {
   event.respondWith(
     fetch(event.request)
-      .then(function(networkResponse) {
+      .then(function (networkResponse) {
         return networkResponse;
       })
-      .catch(function(error) {
-        console.error('Failed to fetch:', error);
+      .catch(function (error) {
+        console.error('Gagal memuat dari jaringan:', error);
+        // Tambahkan fallback respons jika diperlukan
+        return new Response('Konten tidak tersedia saat ini.', {
+          status: 503,
+          statusText: 'Service Unavailable'
+        });
       })
   );
+});
+
+// Menjaga koneksi agar tetap aktif saat aplikasi di latar belakang
+self.addEventListener('message', (event) => {
+  if (event.data === 'keepalive') {
+    console.log('Menerima pesan keep-alive dari klien.');
+    event.waitUntil(
+      self.clients.matchAll().then((clients) => {
+        clients.forEach((client) => {
+          client.postMessage('keepalive-response');
+        });
+      })
+    );
+  }
 });
