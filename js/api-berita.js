@@ -21,6 +21,12 @@ async function loadBerita() {
         if (!querySnapshot.empty) {
             const berita = querySnapshot.docs[0].data();
 
+            // Mengisi title halaman dan meta Open Graph
+            document.title = berita.title || "Berita tidak tersedia"; 
+            document.querySelector('meta[property="og:title"]').setAttribute("content", berita.title || '');
+            document.querySelector('meta[property="og:description"]').setAttribute("content", berita.titleKeterangan || '');
+            document.querySelector('meta[property="og:image"]').setAttribute("content", berita.photoUrl || '');
+
             // Tampilkan data berita ke elemen HTML
             document.getElementById("title").innerText = berita.title || "Judul tidak tersedia";
             document.getElementById("titleKeterangan").innerText = berita.titleKeterangan || '';
@@ -34,6 +40,12 @@ async function loadBerita() {
             const decodedContent = parser.parseFromString(berita.content || '', 'text/html').body.innerHTML;
 
             document.getElementById("articles").innerHTML = decodedContent;
+
+            // Kirim event page_view ke Google Analytics setelah data siap
+            gtag('event', 'page_view', {
+                'page_title': document.title,
+                'page_location': window.location.href
+            });
         } else {
             document.body.innerHTML = "<h1>Berita tidak ditemukan!</h1>";
         }

@@ -1,6 +1,6 @@
 // Import Firebase dan Firestore dependencies
 import { 
-    getFirestore, collection, query, getDocs 
+    getFirestore, collection, query, getDocs, orderBy 
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
@@ -27,8 +27,8 @@ async function loadBerita() {
     try {
         console.log('Mengambil data berita dari Firestore...');
         
-        // Ambil semua berita tanpa filter
-        const q = query(beritaCollectionRef);
+        // Ambil semua berita dan urutkan berdasarkan tanggalPembuatan secara menurun
+        const q = query(beritaCollectionRef, orderBy('tanggalPembuatan', 'desc'));
         const querySnapshot = await getDocs(q);
 
         console.log('Jumlah berita ditemukan:', querySnapshot.size);

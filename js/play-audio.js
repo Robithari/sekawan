@@ -9,14 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
   let utterance;
   let isPaused = false;
   let isStopped = true;
+  let lastPosition = 0;
 
   const synth = window.speechSynthesis;
 
   // Fungsi untuk menghapus semua tag HTML dan karakter tidak terlihat dari teks
   function sanitizeText(text) {
-    // Hapus tag HTML
     let cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
-    // Hapus karakter BOM
     cleanText = cleanText.replace(/\uFEFF/g, '');
     return cleanText;
   }
@@ -93,9 +92,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isPaused && !isStopped) {
       synth.resume();
       isPaused = false;
-      console.log('Ucapan dilanjutkan.');
+      console.log('Ucapan dilanjutkan dari posisi terakhir.');
     } else if (!synth.speaking || isStopped) {
-      utterance = new SpeechSynthesisUtterance(textContent);
+      utterance = new SpeechSynthesisUtterance(textContent.slice(lastPosition));
       utterance.lang = 'id-ID';
 
       const idIDVoice = voices.find(voice => voice.lang === 'id-ID');
@@ -106,6 +105,10 @@ document.addEventListener('DOMContentLoaded', function () {
         console.warn("Voice 'id-ID' tidak tersedia. Menggunakan voice default.");
       }
 
+      utterance.onboundary = function(event) {
+        lastPosition = event.charIndex;
+      };
+
       utterance.onpause = function () {
         console.log('Ucapan dijeda.');
         isPaused = true;
@@ -114,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
       utterance.oncancel = function () {
         console.log('Ucapan dibatalkan.');
         isStopped = true;
+        lastPosition = 0;
       };
 
       utterance.onerror = function (event) {
@@ -123,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       utterance.onend = function () {
         isStopped = true;
+        lastPosition = 0;
         console.log('Ucapan selesai.');
       };
 
@@ -148,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
       synth.cancel();
       isStopped = true;
       isPaused = false;
+      lastPosition = 0;
       console.log('Ucapan dihentikan.');
     }
   }
@@ -159,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Event listener untuk tombol
   if (playBtn) {
-    playBtn.disabled = true; // Awalnya dinonaktifkan hingga teks dan voices tersedia
+    playBtn.disabled = true;
     playBtn.addEventListener('click', startSpeech);
   } else {
     console.warn('Tombol play tidak ditemukan.');
@@ -176,4 +182,15 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
     console.warn('Tombol stop tidak ditemukan.');
   }
+
+  // Deteksi perubahan visibility halaman
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && synth.speaking) {
+      pauseSpeech();
+    } else if (!document.hidden && isPaused && !isStopped) {
+      synth.resume();
+      isPaused = false;
+      console.log('Ucapan dilanjutkan setelah kembali ke halaman.');
+    }
+  });
 });

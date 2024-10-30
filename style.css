@@ -155,10 +155,7 @@ h6 {
   margin-top: 3px;
 }
 
-#event-data {
-  margin-top: -6px;
-  padding-bottom: 2px;
-}
+
 
 .countdown-box {
   padding: 0;
@@ -186,11 +183,15 @@ h6 {
   font-family: Tahoma, Geneva, sans-serif;
   font-size: 9px;
   word-spacing: 1px;
-  color: #FF0000;
+  color: green;
   font-weight: 700;
   text-decoration: none;
   margin-top: -2px;
   padding-top: 2px;
+}
+
+#countdown {
+  color: aqua;
 }
 
 /*======================================================= BUTTON =======================================================*/
@@ -220,6 +221,9 @@ h6 {
 }
 
 /*======================================================= BERITA DAN ARTIKEL =======================================================*/
+.berita {
+  margin-bottom: -3px;
+}
 .container-berita {
   font-size: 20px;
   color: #06713f;

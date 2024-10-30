@@ -1,6 +1,16 @@
 // Import Firebase dependencies
 import {
-    getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, where, getDoc
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    updateDoc,
+    doc,
+    query,
+    where,
+    orderBy, // Ditambahkan orderBy
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
@@ -84,7 +94,9 @@ function resetBeritaForm() {
 async function fetchBerita() {
     beritaSelection.innerHTML = "";
     try {
-        const querySnapshot = await getDocs(beritaCollectionRef);
+        // Menggunakan query dengan orderBy untuk mengurutkan berdasarkan tanggalPembuatan secara menurun
+        const beritaQuery = query(beritaCollectionRef, orderBy("tanggalPembuatan", "desc"));
+        const querySnapshot = await getDocs(beritaQuery);
         if (querySnapshot.empty) {
             beritaSelection.innerHTML = "<p>Tidak ada berita yang tersedia.</p>";
             return;
@@ -102,7 +114,7 @@ async function fetchBerita() {
 
 // Generate berita card HTML
 function generateBeritaCard(id, berita) {
-    const truncatedContent = berita.content.substring(0, 200) + "...";
+    const truncatedContent = berita.content.length > 200 ? berita.content.substring(0, 200) + "..." : berita.content;
     return `
         <div class="col-md-4 mb-4">
             <div class="card h-100">
