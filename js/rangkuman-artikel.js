@@ -24,14 +24,17 @@ async function loadArticles() {
     const container = document.getElementById('articles-container');
     container.innerHTML = ''; // Bersihkan konten sebelumnya
 
+    // Aktifkan atau nonaktifkan mode debug
+    const isDebugMode = false;
+
     try {
-        console.log('Mengambil data artikel dari Firestore...');
+        if (isDebugMode) console.log('Mengambil data artikel dari Firestore...');
         
         // Ambil semua artikel dan urutkan berdasarkan tanggalPembuatan secara menurun
         const q = query(articleCollectionRef, orderBy('tanggalPembuatan', 'desc'));
         const querySnapshot = await getDocs(q);
 
-        console.log('Jumlah artikel ditemukan:', querySnapshot.size);
+        if (isDebugMode) console.log('Jumlah artikel ditemukan:', querySnapshot.size);
 
         if (querySnapshot.empty) {
             container.innerHTML = '<p>Tidak ada artikel yang tersedia.</p>';
@@ -40,7 +43,7 @@ async function loadArticles() {
 
         querySnapshot.forEach((docSnapshot) => {
             const article = docSnapshot.data();
-            console.log('Artikel ditemukan:', article);
+            if (isDebugMode) console.log('Artikel ditemukan:', article);
 
             const articleHTML = generateArticleCard(article);
             container.insertAdjacentHTML('beforeend', articleHTML);

@@ -24,14 +24,17 @@ async function loadBerita() {
     const container = document.getElementById('berita-container');
     container.innerHTML = ''; // Bersihkan konten sebelumnya
 
+    // Aktifkan atau nonaktifkan mode debug
+    const isDebugMode = false;
+
     try {
-        console.log('Mengambil data berita dari Firestore...');
+        if (isDebugMode) console.log('Mengambil data berita dari Firestore...');
         
         // Ambil semua berita dan urutkan berdasarkan tanggalPembuatan secara menurun
         const q = query(beritaCollectionRef, orderBy('tanggalPembuatan', 'desc'));
         const querySnapshot = await getDocs(q);
 
-        console.log('Jumlah berita ditemukan:', querySnapshot.size);
+        if (isDebugMode) console.log('Jumlah berita ditemukan:', querySnapshot.size);
 
         if (querySnapshot.empty) {
             container.innerHTML = '<p>Tidak ada berita yang tersedia.</p>';
@@ -40,7 +43,7 @@ async function loadBerita() {
 
         querySnapshot.forEach((docSnapshot) => {
             const berita = docSnapshot.data();
-            console.log('Berita ditemukan:', berita);
+            if (isDebugMode) console.log('Berita ditemukan:', berita);
 
             const beritaHTML = generateBeritaCard(berita);
             container.insertAdjacentHTML('beforeend', beritaHTML);
