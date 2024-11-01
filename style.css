@@ -195,30 +195,82 @@ h6 {
 }
 
 /*======================================================= BUTTON =======================================================*/
+/* Styling untuk Container Button */
 .container-button {
-  margin-top: 15px;
-  padding: 0 30px;
-  border-radius: 9px;
+  margin-top: 25px;
+  padding: 0 15px;
 }
 
+/* Styling untuk Tombol */
 .custom-btn {
-  width: 100%;
-  height: 35px;
-  font-size: 12px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  text-align: center;
-  background-color: #121b67;
-  padding: 0;
-  line-height: 1;
-  box-shadow: 2px 2px 6px 2px rgba(255, 162, 1, 0.3);
+  background-color: #4c4cfd;
+  justify-content: flex-start;
   color: #fff;
-  border: none;
-  cursor: pointer;
+  padding: 5px;
+  border-radius: 20px;
   text-decoration: none;
-  border-radius: 5px;
+  height: 100%;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.1);
 }
+
+/* Efek Klik (Active State) */
+.custom-btn:active {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling untuk Ikon */
+.custom-btn .menu-icon {
+  width: 70px;            /* Ukuran ikon */
+  height: 70px;
+  margin-bottom: 10px;    /* Spasi antara ikon dan teks */
+  object-fit: contain;    /* Memastikan gambar tidak terdistorsi */
+}
+
+/* Styling untuk Teks */
+.custom-btn span {
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Gutter Kustom untuk Row dengan Kelas .custom-gutter */
+.custom-gutter {
+  --bs-gutter-x: 2.5rem; /* Sesuaikan nilai gutter sesuai kebutuhan */
+  margin-right: calc(-.1* var(--bs-gutter-x));
+  margin-left: calc(-.1* var(--bs-gutter-x));
+}
+
+
+/* Responsivitas untuk Perangkat Besar */
+@media (min-width: 768px) {
+  .custom-btn .menu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .custom-btn span {
+    font-size: 10px;
+  }
+}
+
+/* Responsivitas untuk Perangkat Kecil */
+@media (max-width: 576px) {
+
+  .custom-btn .menu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .custom-btn span {
+    font-size: 10px;
+    margin-top: -5px;
+  }
+}
+
+
 
 /*======================================================= BERITA DAN ARTIKEL =======================================================*/
 .berita {

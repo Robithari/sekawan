@@ -41,11 +41,22 @@ async function loadBerita() {
 
             document.getElementById("articles").innerHTML = decodedContent;
 
-            // Kirim event page_view ke Google Analytics setelah data siap
-            gtag('event', 'page_view', {
-                'page_title': document.title,
-                'page_location': window.location.href
-            });
+            // Tambahkan delay 5 detik sebelum mengirim data ke Analytics
+            setTimeout(() => {
+                // Kode dataLayer.push untuk mengirim virtual pageview ke GTM setelah data Firestore berhasil dimuat
+                window.dataLayer.push({
+                    'event': 'pageDataLoaded',
+                    'pagePath': `/berita/${slug}`, // Path atau URL halaman spesifik
+                    'pageTitle': berita.title // Judul halaman setelah data dimuat
+                });
+
+                // Jika Anda menggunakan gtag.js secara langsung
+                gtag('event', 'page_view', {
+                    'page_title': berita.title,
+                    'page_location': window.location.href
+                });
+            }, 5000); // Delay 5 detik (5000 ms)
+
         } else {
             document.body.innerHTML = "<h1>Berita tidak ditemukan!</h1>";
         }
