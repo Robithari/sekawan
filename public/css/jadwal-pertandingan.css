@@ -1,0 +1,123 @@
+.container-kas {
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-top: auto;
+}
+
+h5 {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 10px auto;
+}
+
+table {
+  width: 100%; /* Membuat tabel mengambil lebar 100% dari kontainer */
+  border-collapse: collapse; /* Menghilangkan jarak antar border */
+  table-layout: auto; /* Biarkan browser mengatur lebar kolom secara otomatis */
+}
+
+th, td {
+  padding: 8px 12px; /* Padding di dalam sel */
+  border: 1px solid #ddd; /* Batas antar sel */
+  word-wrap: break-word; /* Pecah kata jika terlalu panjang */
+  word-break: break-word; /* Pecah kata di dalam sel */
+}
+
+th {
+  background-color: #f4f4f4; /* Warna latar belakang untuk header */
+  text-align: center; /* Rata tengah untuk header */
+}
+
+td {
+  text-align: left; /* Rata kiri untuk data dalam tabel */
+}
+
+/* --- Kolom TANGGAL (Kolom 1) --- */
+th:nth-child(1),
+td:nth-child(1) {
+  width: 17%; /* Atur lebar kolom Tanggal menjadi 15% */
+  /* Kamu bisa ubah angka ini sesuai kebutuhan */
+}
+
+/* --- Kolom HARI (Kolom 2) --- */
+th:nth-child(2),
+td:nth-child(2) {
+  width: 13%; /* Atur lebar kolom Hari menjadi 10% */
+  /* Ubah angka ini jika ingin kolom lebih kecil atau besar */
+}
+
+/* --- Kolom PUKUL (Kolom 3) --- */
+th:nth-child(3),
+td:nth-child(3) {
+  width: 16%; /* Atur lebar kolom Pukul menjadi 15% */
+  /* Sesuaikan persentase ini dengan panjang teks */
+}
+
+/* --- Kolom PMATCH (Kolom 4) --- */
+th:nth-child(4),
+td:nth-child(4) {
+  width: 199; /* Atur lebar kolom Pertandingan menjadi 25% */
+  /* Lebih besar karena nama pertandingan biasanya panjang */
+}
+
+/* --- Kolom KETERANGAN (Kolom 5) --- */
+th:nth-child(5),
+td:nth-child(5) {
+  width: 25%; /* Atur lebar kolom Keterangan menjadi 20% */
+  /* Kamu bisa ubah sesuai dengan panjang deskripsi */
+}
+
+/* --- Kolom TEMPAT (Kolom 6) --- */
+th:nth-child(6),
+td:nth-child(6) {
+  width: 15%; /* Atur lebar kolom Tempat menjadi 15% */
+  /* Sesuaikan angka ini jika ingin lebar lebih besar/kecil */
+}
+
+/* --- Media Queries untuk Responsif (Ukuran Lebih Kecil) --- */
+@media (max-width: 600px) {
+  table, th, td {
+      font-size: 14px; /* Ukuran font lebih kecil di layar sempit */
+  }
+
+  th, td {
+      padding: 6px 10px; /* Padding lebih kecil */
+  }
+}
+
+@media (max-width: 400px) {
+  table, th, td {
+      font-size: 12px; /* Ukuran font lebih kecil di layar sangat sempit */
+  }
+
+  th, td {
+      padding: 4px 8px; /* Padding lebih kecil */
+  }
+}
+
+/* --- Pengaturan untuk Orientasi Portrait --- */
+@media (orientation: portrait) {
+  table, th, td {
+      font-size: 9px; /* Ukuran font lebih kecil untuk layar portrait */
+  }
+
+  th, td {
+      padding: 4px 6px; /* Padding lebih kecil untuk portrait */
+  }
+}
+
+/* --- Pengaturan untuk Orientasi Landscape --- */
+@media (orientation: landscape) {
+  table, th, td {
+      font-size: 12px; /* Ukuran font lebih besar untuk landscape */
+  }
+
+  th, td {
+      padding: 4px 6px; /* Padding sedikit lebih besar di landscape */
+  }
+}
