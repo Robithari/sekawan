@@ -304,7 +304,6 @@ app.get('/artikel-home.html', async (req, res) => {
                                 <script type="module" src="firebase-config.js"></script>
                                 <script src="js/share-link.js"></script>
                                 <script src="js/cek-login.js"></script>
-                                <script type="module" src="./ujicoba-website.js"></script>
                                 <script type="module" src="firebase-config.js"></script>
                                 <script type="module" src="js/api-artikel.js"></script>
                                 <script src="js/play-audio.js"></script>
@@ -659,7 +658,6 @@ app.get('/berita-home.html', async (req, res) => {
                                 <script type="module" src="firebase-config.js"></script>
                                 <script src="js/share-link.js"></script>
                                 <script src="js/cek-login.js"></script>
-                                <script type="module" src="./ujicoba-website.js"></script>
                                 <script type="module" src="firebase-config.js"></script>
                                 <script type="module" src="js/api-berita.js"></script>
                                 <script src="js/play-audio.js"></script>
