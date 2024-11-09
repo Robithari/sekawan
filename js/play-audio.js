@@ -1,136 +1,196 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const isiHalamanElement = document.querySelector('.isi-halaman');  // Ambil elemen dengan class "isi-halaman"
-  const profilContentElement = document.getElementById('profil-content');  // Ambil elemen dengan id "profil-content"
+document.addEventListener('DOMContentLoaded', function () {
+  const isiHalamanElement = document.querySelector('.isi-halaman');
+  const playBtn = document.getElementById('play-btn');
+  const pauseBtn = document.getElementById('pause-btn');
+  const stopBtn = document.getElementById('stop-btn');
 
-  // Gabungkan konten dari kedua elemen jika keduanya ada
   let textContent = '';
-  if (isiHalamanElement && isiHalamanElement.innerText.trim() !== '') {
-    textContent += isiHalamanElement.innerText + ' ';  // Tambahkan teks dari class "isi-halaman"
+  let voices = [];
+  let utterance;
+  let isPaused = false;
+  let isStopped = true;
+  let lastPosition = 0;
+
+  const synth = window.speechSynthesis;
+
+  // Fungsi untuk menghapus semua tag HTML dan karakter tidak terlihat dari teks
+  function sanitizeText(text) {
+    let cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
+    cleanText = cleanText.replace(/\uFEFF/g, '');
+    return cleanText;
   }
 
-  if (profilContentElement && profilContentElement.innerText.trim() === '') {
-    // Jika profil-content belum ada teksnya, kita awasi dengan MutationObserver
+  // Fungsi untuk memperbarui textContent dari isiHalamanElement
+  function updateTextContent() {
+    if (isiHalamanElement && isiHalamanElement.innerText.trim() !== '') {
+      textContent = sanitizeText(isiHalamanElement.innerText);
+      console.log('textContent updated:', textContent);
+      checkTextContent();
+    }
+  }
+
+  // Inisialisasi textContent dengan MutationObserver
+  if (isiHalamanElement) {
     const observer = new MutationObserver(() => {
-      if (profilContentElement.innerText.trim() !== '') {
-        textContent += profilContentElement.innerText;
-        observer.disconnect();  // Setelah teks dimuat, kita hentikan pengamatan
-        // console.log("Teks dari profil-content telah dimuat:", profilContentElement.innerText);
+      if (isiHalamanElement.innerText.trim() !== '') {
+        updateTextContent();
+        observer.disconnect();
       }
     });
-    observer.observe(profilContentElement, { childList: true, subtree: true });
-  } else if (profilContentElement && profilContentElement.innerText.trim() !== '') {
-    textContent += profilContentElement.innerText;  // Jika teks sudah ada, langsung tambahkan
+    observer.observe(isiHalamanElement, { childList: true, subtree: true, characterData: true });
+  } else {
+    console.warn('isiHalamanElement tidak ditemukan.');
   }
 
-  // Pastikan teks diambil setelah API dimuat (jika profil-content menggunakan API)
-  const checkTextContent = () => {
-    if (textContent.trim() === '') {
-      // console.error("Tidak ada teks yang dapat dibacakan.");
+  // Fungsi untuk mengisi daftar suara
+  function populateVoices() {
+    voices = synth.getVoices();
+    if (voices.length !== 0) {
+      console.log('Daftar suara:', voices);
+      checkVoicesReady();
     } else {
-      // console.log("Teks yang akan dibacakan:", textContent);  // Tambahkan log untuk melihat teks yang akan dibacakan
+      console.warn('Daftar suara masih kosong.');
     }
-  };
-
-  // Tambahkan delay untuk memastikan observer selesai bekerja sebelum memeriksa textContent
-  setTimeout(checkTextContent, 1000);
-
-  const synth = window.speechSynthesis;  // Inisialisasi Speech Synthesis
-  let utterance;  // Objek untuk menyimpan ucapan
-  let isPaused = false;  // Status untuk mengecek apakah ucapan dalam kondisi jeda
-  let isStopped = true;  // Status untuk mengecek apakah ucapan dalam kondisi berhenti
-  let resumeIndex = 0;  // Index untuk melanjutkan ucapan yang dijeda
-
-  const playBtn = document.getElementById('play-btn');  // Tombol Play
-  const pauseBtn = document.getElementById('pause-btn');  // Tombol Pause
-  const stopBtn = document.getElementById('stop-btn');  // Tombol Stop
-
-  let voices = [];
-
-  // Fungsi untuk memeriksa apakah perangkat adalah perangkat mobile
-  function isMobileDevice() {
-    return /Mobi|Android/i.test(navigator.userAgent);
   }
 
-  // Fungsi untuk memastikan Speech Synthesis bekerja di perangkat mobile
-  document.addEventListener('click', () => {
-    if (isMobileDevice() && synth && synth.paused && !synth.speaking) {
-      synth.resume();
+  synth.addEventListener('voiceschanged', populateVoices);
+  populateVoices();
+
+  let voicesReady = false;
+
+  function checkVoicesReady() {
+    if (voices.length > 0) {
+      voicesReady = true;
+      checkCanPlay();
     }
-  }, { once: true });
+  }
+
+  function checkCanPlay() {
+    if (voicesReady && textContent && textContent.trim() !== '') {
+      if (playBtn) {
+        playBtn.disabled = false;
+      }
+    } else {
+      if (playBtn) {
+        playBtn.disabled = true;
+      }
+    }
+  }
 
   // Fungsi untuk memulai ucapan
   function startSpeech() {
-    if (isPaused && !isStopped) {
-      synth.resume();  // Melanjutkan ucapan yang dijeda
-      isPaused = false;
-    } else if (!synth.speaking || isStopped) {
-      utterance = new SpeechSynthesisUtterance(textContent.split(' ').slice(resumeIndex).join(' '));
-      utterance.lang = 'id-ID';  // Bahasa ucapan diatur ke bahasa Indonesia
+    if (!voicesReady) {
+      console.warn('Voices belum siap. Silakan tunggu sebentar.');
+      return;
+    }
 
-      // Menentukan voice secara eksplisit
+    if (!textContent || textContent.trim() === '') {
+      console.warn('Tidak ada teks untuk dibacakan.');
+      return;
+    }
+
+    if (isPaused && !isStopped) {
+      synth.resume();
+      isPaused = false;
+      console.log('Ucapan dilanjutkan dari posisi terakhir.');
+    } else if (!synth.speaking || isStopped) {
+      utterance = new SpeechSynthesisUtterance(textContent.slice(lastPosition));
+      utterance.lang = 'id-ID';
+
       const idIDVoice = voices.find(voice => voice.lang === 'id-ID');
       if (idIDVoice) {
         utterance.voice = idIDVoice;
+        console.log('Menggunakan suara:', idIDVoice.name);
       } else {
         console.warn("Voice 'id-ID' tidak tersedia. Menggunakan voice default.");
       }
 
-      // Menyimpan posisi terakhir kata yang diucapkan
-      utterance.onboundary = function (event) {
-        if (event.name === 'word') {
-          resumeIndex += 1;  // Menambahkan index kata untuk melanjutkan jika dijeda
-        }
+      utterance.onboundary = function(event) {
+        lastPosition = event.charIndex;
       };
 
-      // Reset ketika ucapan selesai
+      utterance.onpause = function () {
+        console.log('Ucapan dijeda.');
+        isPaused = true;
+      };
+
+      utterance.oncancel = function () {
+        console.log('Ucapan dibatalkan.');
+        isStopped = true;
+        lastPosition = 0;
+      };
+
+      utterance.onerror = function (event) {
+        console.error('Terjadi kesalahan saat ucapan:', event.error);
+        isStopped = true;
+      };
+
       utterance.onend = function () {
         isStopped = true;
-        resumeIndex = 0;
-        // console.log("Ucapan selesai.");
+        lastPosition = 0;
+        console.log('Ucapan selesai.');
       };
 
-      // Mulai mengucapkan teks
       synth.speak(utterance);
       isStopped = false;
       isPaused = false;
+      console.log('Ucapan dimulai.');
     }
   }
 
   // Fungsi untuk menjeda ucapan
   function pauseSpeech() {
     if (synth.speaking && !synth.paused) {
-      synth.pause();  // Menjeda ucapan
+      synth.pause();
       isPaused = true;
+      console.log('Ucapan dijeda.');
     }
   }
 
   // Fungsi untuk menghentikan ucapan
   function stopSpeech() {
     if (synth.speaking || synth.paused) {
-      synth.cancel();  // Menghentikan ucapan dan membatalkan sisa teks yang belum diucapkan
+      synth.cancel();
       isStopped = true;
       isPaused = false;
-      resumeIndex = 0;  // Reset posisi ucapan
+      lastPosition = 0;
+      console.log('Ucapan dihentikan.');
     }
   }
 
-  // Event listener untuk tombol Play
-  playBtn.addEventListener('click', () => {
-    startSpeech();  // Mulai atau melanjutkan ucapan setelah interaksi pengguna
+  // Fungsi untuk menonaktifkan atau mengaktifkan tombol Play
+  function checkTextContent() {
+    checkCanPlay();
+  }
+
+  // Event listener untuk tombol
+  if (playBtn) {
+    playBtn.disabled = true;
+    playBtn.addEventListener('click', startSpeech);
+  } else {
+    console.warn('Tombol play tidak ditemukan.');
+  }
+
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', pauseSpeech);
+  } else {
+    console.warn('Tombol pause tidak ditemukan.');
+  }
+
+  if (stopBtn) {
+    stopBtn.addEventListener('click', stopSpeech);
+  } else {
+    console.warn('Tombol stop tidak ditemukan.');
+  }
+
+  // Deteksi perubahan visibility halaman
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && synth.speaking) {
+      pauseSpeech();
+    } else if (!document.hidden && isPaused && !isStopped) {
+      synth.resume();
+      isPaused = false;
+      console.log('Ucapan dilanjutkan setelah kembali ke halaman.');
+    }
   });
-
-  // Event listener untuk tombol Pause
-  pauseBtn.addEventListener('click', pauseSpeech);
-
-  // Event listener untuk tombol Stop
-  stopBtn.addEventListener('click', stopSpeech);
-
-  // Menghentikan ucapan jika pengguna keluar dari halaman
-  window.addEventListener('beforeunload', stopSpeech);
-
-  // Event untuk memuat voices setelah tersedia
-  synth.onvoiceschanged = () => {
-    voices = synth.getVoices();
-    // console.log("Daftar suara:", voices);
-  };
 });

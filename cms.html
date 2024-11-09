@@ -196,60 +196,138 @@
 
 
 
-                <section id="berita-section" class="mb-5 d-none">
-                    <h2>Kelola Berita</h2>
-                    <p>Belum ada konten yang tersedia di sini.</p>
-                </section>
-
-<!-- artikel formulir -->
-<section id="artikel-section" class="mb-5 d-none">
-    <h2 id="form-title">Kelola Artikel</h2>
-    <form id="addContentForm">
+<!-- Berita Formulir -->
+<!-- Berita Formulir -->
+<section id="berita-section" class="mb-5">
+    <h2 id="form-title-berita">Kelola Berita</h2>
+    <form id="addBeritaForm">
         <!-- Form Fields -->
         <div class="mb-3">
-            <label for="title" class="form-label">Judul</label>
-            <input type="text" id="title" class="form-control" placeholder="Masukkan judul" required>
+            <label for="beritaTitle" class="form-label">Judul</label>
+            <input type="text" id="beritaTitle" class="form-control" placeholder="Masukkan judul" required>
         </div>
         <div class="mb-3">
-            <label for="titleKeterangan" class="form-label">Title Keterangan</label>
-            <input type="text" id="titleKeterangan" class="form-control" placeholder="Masukkan keterangan judul" required>
+            <label for="beritaTitleKeterangan" class="form-label">Title Keterangan</label>
+            <input type="text" id="beritaTitleKeterangan" class="form-control" placeholder="Masukkan keterangan judul" required>
         </div>
         <div class="mb-3">
-            <label for="tanggalPembuatan" class="form-label">Tanggal Pembuatan</label>
-            <input type="date" id="tanggalPembuatan" class="form-control" required>
+            <label for="beritaTanggalPembuatan" class="form-label">Tanggal Pembuatan</label>
+            <input type="date" id="beritaTanggalPembuatan" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="content" class="form-label">Konten</label>
-            <textarea id="content" class="form-control" placeholder="Masukkan konten" rows="5" required></textarea>
+            <label for="beritaContent" class="form-label">Konten</label>
+            <textarea id="beritaContent" class="form-control" placeholder="Masukkan konten" rows="5" required></textarea>
         </div>
         <div class="mb-3">
-            <label for="photoUrl" class="form-label">URL Foto</label>
-            <input type="url" id="photoUrl" class="form-control" placeholder="Masukkan URL foto" required>
+            <label for="beritaPhotoUrl" class="form-label">URL Foto</label>
+            <input type="url" id="beritaPhotoUrl" class="form-control" placeholder="Masukkan URL foto" required>
         </div>
         <div class="mb-3">
-            <label for="caption" class="form-label">Keterangan Foto</label>
-            <input type="text" id="caption" class="form-control" placeholder="Masukkan keterangan foto" required>
+            <label for="beritaCaption" class="form-label">Keterangan Foto</label>
+            <input type="text" id="beritaCaption" class="form-control" placeholder="Masukkan keterangan foto" required>
         </div>
-        
+
         <!-- Buttons -->
-        <button type="submit" id="add-btn" class="btn btn-primary">Tambah Artikel</button>
-        <button type="submit" id="update-btn" class="btn btn-success d-none">Selesai</button>
-        <button type="button" id="cancel-profil-btn" class="btn btn-secondary d-none">Batal</button>
+        <button type="submit" id="berita-add-btn" class="btn btn-primary">Tambah Berita</button>
+        <button type="submit" id="berita-update-btn" class="btn btn-success d-none">Selesai</button>
+        <button type="button" id="berita-cancel-btn" class="btn btn-secondary d-none">Batal</button>
     </form>
 
-    <div id="message" class="mt-3 d-none alert alert-info"></div>
+    <div id="berita-message" class="mt-3 d-none alert alert-info"></div>
 
-    <h2 class="mt-5">Daftar Artikel</h2>
-    <div id="artikel-selection" class="row"></div>
+    <h2 class="mt-5">Daftar Berita</h2>
+    <div id="berita-selection" class="row"></div>
 </section>
-<!-- end artikel formulir -->
+<!-- End Berita Formulir -->
 
+                <!-- end berita formulir -->
 
+                <!-- artikel formulir -->
+                <section id="artikel-section" class="mb-5 d-none">
+                    <h2 id="form-title">Kelola Artikel</h2>
+                    <form id="addContentForm">
+                        <!-- Form Fields -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Judul</label>
+                            <input type="text" id="title" class="form-control" placeholder="Masukkan judul" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="titleKeterangan" class="form-label">Title Keterangan</label>
+                            <input type="text" id="titleKeterangan" class="form-control"
+                                placeholder="Masukkan keterangan judul" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggalPembuatan" class="form-label">Tanggal Pembuatan</label>
+                            <input type="date" id="tanggalPembuatan" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Konten</label>
+                            <textarea id="content" class="form-control" placeholder="Masukkan konten" rows="5"
+                                required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="photoUrl" class="form-label">URL Foto</label>
+                            <input type="url" id="photoUrl" class="form-control" placeholder="Masukkan URL foto"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="caption" class="form-label">Keterangan Foto</label>
+                            <input type="text" id="caption" class="form-control" placeholder="Masukkan keterangan foto"
+                                required>
+                        </div>
 
-                <section id="jadwal-section" class="mb-5 d-none">
-                    <h2>Jadwal Pertandingan</h2>
-                    <p>Belum ada konten yang tersedia di sini.</p>
+                        <!-- Buttons -->
+                        <button type="submit" id="add-btn" class="btn btn-primary">Tambah Artikel</button>
+                        <button type="submit" id="update-btn" class="btn btn-success d-none">Selesai</button>
+                        <button type="button" id="cancel-profil-btn" class="btn btn-secondary d-none">Batal</button>
+                    </form>
+
+                    <div id="message" class="mt-3 d-none alert alert-info"></div>
+
+                    <h2 class="mt-5">Daftar Artikel</h2>
+                    <div id="artikel-selection" class="row"></div>
                 </section>
+                <!-- end artikel formulir -->
+
+
+                <!-- Jadwal Pertandingan -->
+                <section id="jadwal-section" class="mb-5">
+                    <h2 id="form-title-pertandingan">Kelola Jadwal Pertandingan</h2>
+                    <form id="addPertandinganForm">
+                        <!-- Form Fields -->
+                        <div class="mb-3">
+                            <label for="timA" class="form-label">Tim A</label>
+                            <input type="text" id="timA" class="form-control" placeholder="Nama Tim A" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="timB" class="form-label">Tim B</label>
+                            <input type="text" id="timB" class="form-control" placeholder="Nama Tim B" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="hari" class="form-label">Hari</label>
+                            <input type="text" id="hari" class="form-control" placeholder="Hari Pertandingan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggalPertandingan" class="form-label">Tanggal Pertandingan</label>
+                            <input type="date" id="tanggalPertandingan" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="waktu" class="form-label">Waktu Pertandingan</label>
+                            <input type="text" id="waktu" class="form-control" placeholder="Waktu Pertandingan (HH.MM)" required>
+                        </div>
+                
+                        <!-- Buttons -->
+                        <button type="submit" id="pertandingan-update-btn" class="btn btn-success d-none">Selesai</button>
+                        <button type="button" id="pertandingan-cancel-btn" class="btn btn-secondary d-none">Batal</button>
+                    </form>
+                
+                    <div id="pertandingan-message" class="mt-3 d-none alert alert-info"></div>
+                
+                    <h2 class="mt-5">Daftar Pertandingan</h2>
+                    <div id="pertandingan-selection" class="row"></div>
+                </section>
+                <!-- END Jadwal Pertandingan -->
+                
 
                 <section id="kas-section" class="mb-5 d-none">
                     <h2>Laporan Kas</h2>
@@ -271,6 +349,7 @@
                     <p>Belum ada konten yang tersedia di sini.</p>
                 </section>
 
+                <!-- SLIDE -->
                 <section id="carousel-section" class="mb-5 d-none">
                     <h2>Kelola Carousel / Slide Show</h2>
                     <form id="carouselForm">
@@ -321,6 +400,9 @@
                     </form>
                     <div id="footerMessage" class="mt-3"></div>
                 </section>
+                                <!-- END Footer -->
+
+
             </div>
         </div>
         <!-- /#page-content-wrapper -->
@@ -333,6 +415,11 @@
     <script type="module" src="cms/js/profil-selection.js"></script>
     <script type="module" src="cms/js/article-selection.js"></script>
     <script type="module" src="cms/js/toggle-sidebar.js"></script>
+    <script type="module" src="cms/js/berita-selection.js"></script>
+    <script type="module" src="cms/js/jadwal-pertandingan-selection.js"></script>
+
+
+    
 
     <!-- Firebase Auth State Handling Script -->
     <script type="module">

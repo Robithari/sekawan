@@ -155,10 +155,7 @@ h6 {
   margin-top: 3px;
 }
 
-#event-data {
-  margin-top: -6px;
-  padding-bottom: 2px;
-}
+
 
 .countdown-box {
   padding: 0;
@@ -186,40 +183,99 @@ h6 {
   font-family: Tahoma, Geneva, sans-serif;
   font-size: 9px;
   word-spacing: 1px;
-  color: #FF0000;
+  color: green;
   font-weight: 700;
   text-decoration: none;
   margin-top: -2px;
   padding-top: 2px;
 }
 
-/*======================================================= BUTTON =======================================================*/
-.container-button {
-  margin-top: 15px;
-  padding: 0 30px;
-  border-radius: 9px;
+#countdown {
+  color: aqua;
 }
 
-.custom-btn {
-  width: 100%;
-  height: 35px;
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background-color: #121b67;
-  padding: 0;
-  line-height: 1;
-  box-shadow: 2px 2px 6px 2px rgba(255, 162, 1, 0.3);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  border-radius: 5px;
+/*======================================================= BUTTON =======================================================*/
+/* Styling untuk Container Button */
+.container-button {
+  margin-top: 25px;
+  padding: 0 15px;
 }
+
+/* Styling untuk Tombol */
+.custom-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #4c4cfd;
+  justify-content: flex-start;
+  color: #fff;
+  padding: 5px;
+  border-radius: 20px;
+  text-decoration: none;
+  height: 100%;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.1);
+}
+
+/* Efek Klik (Active State) */
+.custom-btn:active {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling untuk Ikon */
+.custom-btn .menu-icon {
+  width: 70px;            /* Ukuran ikon */
+  height: 70px;
+  margin-bottom: 10px;    /* Spasi antara ikon dan teks */
+  object-fit: contain;    /* Memastikan gambar tidak terdistorsi */
+}
+
+/* Styling untuk Teks */
+.custom-btn span {
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Gutter Kustom untuk Row dengan Kelas .custom-gutter */
+.custom-gutter {
+  --bs-gutter-x: 2.5rem; /* Sesuaikan nilai gutter sesuai kebutuhan */
+  margin-right: calc(-.1* var(--bs-gutter-x));
+  margin-left: calc(-.1* var(--bs-gutter-x));
+}
+
+
+/* Responsivitas untuk Perangkat Besar */
+@media (min-width: 768px) {
+  .custom-btn .menu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .custom-btn span {
+    font-size: 10px;
+  }
+}
+
+/* Responsivitas untuk Perangkat Kecil */
+@media (max-width: 576px) {
+
+  .custom-btn .menu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .custom-btn span {
+    font-size: 10px;
+    margin-top: -5px;
+  }
+}
+
+
 
 /*======================================================= BERITA DAN ARTIKEL =======================================================*/
+.berita {
+  margin-bottom: -3px;
+}
 .container-berita {
   font-size: 20px;
   color: #06713f;
