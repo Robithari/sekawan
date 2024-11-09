@@ -1,0 +1,63 @@
+@-webkit-keyframes move {
+  100% {
+    -webkit-transform: translate3d(0, 0, 1px) rotate(360deg);
+  }
+}
+
+@-moz-keyframes move {
+  100% {
+    -moz-transform: translate3d(0, 0, 1px) rotate(360deg);
+  }
+}
+
+@keyframes move {
+  100% {
+    transform: translate3d(0, 0, 1px) rotate(360deg);
+  }
+}
+
+.background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: #3E1E68;
+  overflow: hidden;
+}
+
+.background span {
+  width: 9vmin;
+  height: 9vmin;
+  border-radius: 9vmin;
+  backface-visibility: hidden;
+  position: absolute;
+  -webkit-animation: move;
+  -moz-animation: move;
+  animation: move;
+  animation-duration: 48s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.background span:nth-child(1) {
+  color: #FFACAC;
+  top: 52%;
+  left: 77%;
+  animation-duration: 12s;
+  animation-delay: -2s;
+  transform-origin: 22vw 25vh;
+  box-shadow: 18vmin 0 2vmin currentColor;
+}
+
+/* ...perbaiki elemen lainnya dengan cara yang sama... */
+
+.background span:nth-child(20) {
+  color: #CDDEFF;
+  top: 49%;
+  left: 45%;
+  animation-duration: 30s;
+  animation-delay: -7s;
+  transform-origin: 22vw 25vh;
+  box-shadow: 18vmin 0 1.5vmin currentColor;
+}

@@ -1,0 +1,16 @@
+.judul-halaman {
+    margin-top: 70px;
+    text-align: center;
+}
+
+#logout-btn {
+    background-color: #f44336; /* Warna background */
+    color: white; /* Warna teks */
+    padding: 10px 20px; /* Jarak dalam tombol */
+    font-size: 16px; /* Ukuran font */
+    border: none; /* Hilangkan border */
+    border-radius: 5px; /* Membuat pojok tombol bulat */
+    cursor: pointer; /* Ganti kursor menjadi pointer saat hover */
+    width: 100px; /* Atur lebar tombol */
+    height: 40px; /* Atur tinggi tombol */
+    transition: background-color 0.3s ease; /* Efek transisi */

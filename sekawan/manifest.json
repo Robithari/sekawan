@@ -1,0 +1,30 @@
+{
+  "name": "Sekawan FC",
+  "short_name": "SekawanFC",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Aplikasi Sekawan FC dengan dukungan audio di latar belakang.",
+  "icons": [
+    {
+      "src": "/icon/android-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "permissions": [
+    "wake-lock"
+  ],
+  "background": {
+    "scripts": ["service-worker.js"]
+  }
+}
