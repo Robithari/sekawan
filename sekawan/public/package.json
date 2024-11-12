@@ -2,10 +2,10 @@
   "name": "sekawanfc",
   "version": "1.0.0",
   "description": "Website Sekawan FC",
-  "main": "index.js",
+  "main": "api/server.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node api/server.js",
+    "dev": "nodemon api/server.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -14,6 +14,10 @@
     "serverless-http": "^3.2.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "eslint": "^9.14.0",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.12.0",
     "nodemon": "^3.1.7"
   },
   "engines": {

@@ -1,0 +1,151 @@
+/* Basic Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h5 {
+    text-align: center;
+    margin-top: 60px;
+}
+
+/* Table Container */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 10px auto;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+}
+
+/* Table Header */
+th {
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+/* Table Data */
+td {
+    text-align: left;
+}
+
+/* Column Widths */
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(4),
+td:nth-child(4),
+th:nth-child(5),
+td:nth-child(5) {
+    width: 20%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Media Queries */
+@media (max-width: 600px) {
+    table,
+    th,
+    td {
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    table,
+    th,
+    td {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 4px 8px;
+    }
+}
+
+@media (orientation: portrait) {
+    table,
+    th,
+    td {
+        font-size: 9px;
+    }
+
+    th,
+    td {
+        padding: 4px 6px;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 20%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 40%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3),
+    th:nth-child(4),
+    td:nth-child(4),
+    th:nth-child(5),
+    td:nth-child(5) {
+        width: 13.333%;
+    }
+}
+
+@media (orientation: landscape) {
+    table,
+    th,
+    td {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 4px 6px;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 15%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 50%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3),
+    th:nth-child(4),
+    td:nth-child(4),
+    th:nth-child(5),
+    td:nth-child(5) {
+        width: 11.6667%;
+    }
+}
+
+/* Container Padding */
+.container-kas {
+    padding: 0 5px;
+}

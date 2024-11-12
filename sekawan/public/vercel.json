@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/berita-home/(?<slug>[^/]+)",
+      "dest": "/api/server.js"
+    },
+    {
+      "src": "/artikel-home/(?<slug>[^/]+)",
+      "dest": "/api/server.js"
+    },
+    {
+      "src": "/berita-home.html",
+      "dest": "/api/server.js"
+    },
+    {
+      "src": "/artikel-home.html",
+      "dest": "/api/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

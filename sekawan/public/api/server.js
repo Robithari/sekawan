@@ -1,13 +1,9 @@
 // api/server.js
 
-require('dotenv').config(); // Memuat variabel lingkungan dari .env
-
 const express = require('express');
+const serverless = require('serverless-http');
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, getDocs, query, where } = require("firebase/firestore");
-// Jika menggunakan Realtime Database, Anda dapat mengimpor getDatabase
-// const { getDatabase } = require("firebase/database");
-const path = require('path'); // Untuk menangani path file
 
 // Fungsi untuk menyandikan karakter HTML guna mencegah XSS
 function escapeHtml(text) {
@@ -44,43 +40,31 @@ const firebaseConfig = {
 // Inisialisasi Firebase
 initializeApp(firebaseConfig);
 const db = getFirestore();
-// Jika menggunakan Realtime Database
-// const realtimeDb = getDatabase();
 
-// Middleware untuk mengatur header Content-Type sebagai text/html
+// Middleware untuk log setiap permintaan
 app.use((req, res, next) => {
-    res.setHeader('Content-Type', 'text/html');
+    console.log(`${req.method} ${req.url}`);
     next();
 });
-
-// Melayani file statis dari root direktori
-app.use(express.static(path.join(__dirname, '..')));
 
 // Rute untuk mendapatkan artikel dengan path parameter
 app.get('/artikel-home/:slug', async (req, res) => {
     const slug = req.params.slug;
+    console.log(`Mencari artikel dengan slug: ${slug}`);
 
     if (!slug) {
-        return res.status(400).send(`
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <title>Bad Request</title>
-            </head>
-            <body>
-                <h1>Bad Request: Missing 'slug' parameter.</h1>
-            </body>
-            </html>
-        `);
+        console.log("Slug tidak ditemukan dalam parameter.");
+        return res.status(400).send("Bad Request: Missing 'slug' parameter.");
     }
 
     try {
         const q = query(collection(db, "articles"), where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
+        console.log(`Jumlah dokumen yang ditemukan: ${querySnapshot.size}`);
         const article = querySnapshot.empty ? null : querySnapshot.docs[0].data();
 
         if (article) {
+            console.log(`Artikel ditemukan: ${article.title}`);
             // Sanitasi data untuk keamanan dan pemurnian konten
             const title = escapeHtml(article.title);
             const titleKeterangan = escapeHtml(article.titleKeterangan);
@@ -89,7 +73,7 @@ app.get('/artikel-home/:slug', async (req, res) => {
             const tanggalPembuatan = escapeHtml(article.tanggalPembuatan || ''); // Asumsikan ada field tanggal
 
             // Pastikan photoUrl adalah absolute URL
-            if (photoUrl && !photoUrl.startsWith('http')) {
+            if (!photoUrl.startsWith('http')) {
                 photoUrl = `https://sekawanfc.fun/${photoUrl.replace(/^\/+/, '')}`;
             }
 
@@ -99,7 +83,7 @@ app.get('/artikel-home/:slug', async (req, res) => {
             // Meta tags OG yang dihasilkan di server
             const metaTags = `
                 <meta property="og:title" content="${title}" />
-                <meta property="og:description" content="${cleanedContent.substring(0, 160)}" />
+                <meta property="og:description" content="${cleanedContent}" />
                 <meta property="og:image" content="${photoUrl}" />
                 <meta property="og:image:width" content="1200">
                 <meta property="og:image:height" content="630">
@@ -178,24 +162,7 @@ app.get('/artikel-home/:slug', async (req, res) => {
                             <div class="wrapper">
                                 <!-- LOADING SCREEN -->
                                 <div id="loading-screen" class="background">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
-                                    <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
+                                    <!-- ... (Konten loading screen) ... -->
                                 </div>
                                 <!-- END LOADING SCREEN -->
 
@@ -246,7 +213,7 @@ app.get('/artikel-home/:slug', async (req, res) => {
                                     <!-- End Navbar -->
                                 </div>
 
-                                <!-- Artikel -->
+                                <!-- Konten Artikel -->
                                 <div class="judul-halaman">
                                     <h1 id="title" class="detail-title">${title}</h1>
                                     <div class="title-keterangan">
@@ -362,6 +329,7 @@ app.get('/artikel-home/:slug', async (req, res) => {
                 </html>
             `);
         } else {
+            console.log("Artikel tidak ditemukan.");
             res.status(404).send(`
                 <!DOCTYPE html>
                 <html lang="en">
@@ -389,63 +357,345 @@ app.get('/artikel-home/:slug', async (req, res) => {
                 </html>
             `);
         }
-    } catch (error) {
-        // Menangani error saat pengambilan data
-        console.error("Error fetching article:", error);
-        res.status(500).send(`
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <title>Error</title>
-                <style>
-                    body { 
-                        display: flex; 
-                        justify-content: center; 
-                        align-items: center; 
-                        height: 100vh; 
-                        background-color: #f8d7da; 
-                        color: #721c24; 
-                        font-family: Arial, sans-serif; 
-                    }
-                    h1 {
-                        color: #721c24;
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>Terjadi kesalahan saat memuat artikel.</h1>
-            </body>
-            </html>
-        `);
-    }
-});
+    });
+
+    // Rute untuk mendapatkan berita dengan path parameter
+    app.get('/berita-home/:slug', async (req, res) => {
+        const slug = req.params.slug;
+        console.log(`Mencari berita dengan slug: ${slug}`);
+
+        if (!slug) {
+            console.log("Slug tidak ditemukan dalam parameter.");
+            return res.status(400).send("Bad Request: Missing 'slug' parameter.");
+        }
+
+        try {
+            const q = query(collection(db, "berita"), where("slug", "==", slug));
+            const querySnapshot = await getDocs(q);
+            console.log(`Jumlah dokumen yang ditemukan: ${querySnapshot.size}`);
+            const berita = querySnapshot.empty ? null : querySnapshot.docs[0].data();
+
+            if (berita) {
+                console.log(`Berita ditemukan: ${berita.title}`);
+                // Sanitasi data untuk keamanan dan pemurnian konten
+                const title = escapeHtml(berita.title);
+                const titleKeterangan = escapeHtml(berita.titleKeterangan);
+                let photoUrl = escapeHtml(berita.photoUrl);
+                const content = escapeHtml(berita.content);
+                const tanggalPembuatan = escapeHtml(berita.tanggalPembuatan || '');
+
+                // Validasi dan proses URL gambar (photoUrl)
+                if (photoUrl && !photoUrl.startsWith('http')) {
+                    photoUrl = `https://sekawanfc.fun/${photoUrl.replace(/^\/+/, '')}`;
+                }
+
+                // Jika photoUrl kosong, sediakan fallback gambar default
+                if (!photoUrl) {
+                    photoUrl = 'https://sekawanfc.fun/default-image.jpg'; // Sediakan gambar default
+                }
+
+                // Bersihkan konten dari tag HTML untuk meta tag deskripsi
+                const cleanedContent = stripHtmlTags(berita.content);
+
+                // Meta tags OG yang dihasilkan di server untuk preview link di media sosial
+                const metaTags = `
+                    <meta property="og:title" content="${title}" />
+                    <meta property="og:description" content="${cleanedContent.substring(0, 160)}" /> <!-- Ambil 160 karakter pertama -->
+                    <meta property="og:image" content="${photoUrl}" />
+                    <meta property="og:image:width" content="1200">
+                    <meta property="og:image:height" content="630">
+                    <meta property="og:type" content="article" />
+                    <meta property="og:url" content="https://sekawanfc.fun/berita-home/${encodeURIComponent(slug)}" />
+                `;
+
+                // Mengirimkan HTML yang berisi meta tag OG dan konten berita
+                res.send(`
+                    <!DOCTYPE html>
+                    <html lang="en" translate="no">
+                    <head>
+                        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+                        <meta http-equiv="Pragma" content="no-cache">
+                        <meta http-equiv="Expires" content="0">
+
+                        <!-- Google Analytics -->
+                        <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
+                        <script>
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag() { dataLayer.push(arguments); }
+                            gtag('js', new Date());
+                            gtag('config', 'G-CD0MHD1RBP');
+                        </script>
+                        <!-- link preview -->
+                        ${metaTags}
+                        <!-- Cache Control -->
+                        <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+                        <meta http-equiv="Pragma" content="no-cache">
+                        <meta http-equiv="Expires" content="-5">
+
+                        <!-- Viewport and Meta -->
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+                        <meta charset="UTF-8">
+                        <meta name="google" content="notranslate">
+
+                        <!-- Bootstrap and Styles -->
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+                            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+                        <link rel="stylesheet" href="style.css">
+                        <link rel="stylesheet" href="css/loading.css">
+                        <link rel="stylesheet" href="css/berita.css">
+                        <link rel="stylesheet" href="css/play-audio.css">
+
+                        <!-- Icons -->
+                        <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
+                        <link rel="apple-touch-icon" sizes="60x60" href="icon/apple-icon-60x60.png">
+                        <link rel="apple-touch-icon" sizes="72x72" href="icon/apple-icon-72x72.png">
+                        <link rel="apple-touch-icon" sizes="76x76" href="icon/apple-icon-76x76.png">
+                        <link rel="apple-touch-icon" sizes="114x114" href="icon/apple-icon-114x114.png">
+                        <link rel="apple-touch-icon" sizes="120x120" href="icon/apple-icon-120x120.png">
+                        <link rel="apple-touch-icon" sizes="144x144" href="icon/apple-icon-144x144.png">
+                        <link rel="apple-touch-icon" sizes="152x152" href="icon/apple-icon-152x152.png">
+                        <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-icon-180x180.png">
+                        <link rel="icon" type="image/png" sizes="192x192" href="icon/android-icon-192x192.png">
+                        <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+                        <link rel="icon" type="image/png" sizes="96x96" href="icon/favicon-96x96.png">
+                        <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+                        <link rel="manifest" href="manifest.json">
+                        <meta name="msapplication-TileColor" content="#ffffff">
+                        <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
+                        <meta name="theme-color" content="#ffffff">
+
+                        <!-- Firebase -->
+                        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+                        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+                        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+                        <title>${title}</title>
+                    </head>
+
+                    <body>
+                        <div class="mobile-only">
+                            <div class="content-wrapper">
+                                <!-- Tambahkan wrapper di sini -->
+                                <div class="wrapper">
+                                    <!-- LOADING SCREEN -->
+                                    <div id="loading-screen" class="background">
+                                        <!-- ... (Konten loading screen) ... -->
+                                        <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
+                                        <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
+                                    </div>
+                                    <!-- END LOADING SCREEN -->
+
+                                    <div id="main-content" style="display: none;">
+                                        <!-- Navbar -->
+                                        <nav class="navbar navbar-expand-lg custom-navbar">
+                                            <div class="container-fluid">
+                                                <a class="navbar-brand text-white fw-bold" href="index.html">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
+                                                        <span class="ms-2">SEKAWAN FC</span>
+                                                    </div>
+                                                </a>
+                                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                                    aria-expanded="false" aria-label="Toggle navigation">
+                                                    <span class="navbar-toggler-icon"></span>
+                                                </button>
+                                                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" style="color: white;" aria-current="page"
+                                                                href="index.html">Home</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" style="color: white;" href="profil.html">Profil</a>
+                                                        </li>
+                                                        <li class="nav-item dropdown">
+                                                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false"
+                                                                style="color: white;">Informasi</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a class="dropdown-item disabled text-black"
+                                                                        href="proses.html">Berita</a></li>
+                                                                <li><a class="dropdown-item disabled text-black"
+                                                                        href="proses.html">Artikel</a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" id="login-logout-link" style="color: white;"
+                                                                href="login.html">Masuk / Daftar</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </nav>
+                                        <!-- End Navbar -->
+                                    </div>
+
+                                    <!-- Konten Artikel -->
+                                    <div class="judul-halaman">
+                                        <h1 id="title" class="detail-title">${title}</h1>
+                                        <div class="title-keterangan">
+                                            <p id="titleKeterangan">${titleKeterangan}</p>
+                                            <p id="tanggalPembuatan">${tanggalPembuatan}</p>
+                                        </div>
+                                    </div>
+                                    <div class="container-foto">
+                                        <img id="photoUrl" class="custom-foto" src="${photoUrl}" alt="Foto Artikel">
+                                    </div>
+                                    <p id="caption" class="keterangan-foto"></p>
+                                    <!-- PLAY AUDIO -->
+                                    <div class="audio-player-container desktop-only">
+                                        <div class="audio-player-title">MENDENGARKAN ISI HALAMAN</div>
+                                        <div class="audio-player">
+                                            <div class="controls">
+                                                <button id="play-btn" class="btn-play">&#9658;</button> <!-- Simbol Play -->
+                                                <button id="pause-btn" class="btn-pause">&#10074;&#10074;</button> <!-- Simbol Pause -->
+                                                <button id="stop-btn" class="btn-stop">&#9632;</button> <!-- Simbol Stop -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END PLAY AUDIO -->
+                                    <div class="isi-halaman">
+                                        <div id="articles">${content}</div>
+                                    </div>
+                                    <!-- End Artikel -->
+
+                                    <!-- Tombol tautan -->
+                                    <div class="container-tautan">
+                                        <!-- Ikon untuk Salin Tautan menggunakan gambar -->
+                                        <span id="copyLink" class="link-icon">
+                                            <img src="img/icon-link.png" alt="Ikon Share Link" class="icon-link">
+                                            Share Link
+                                        </span>
+                                        <!-- Pesan Notifikasi -->
+                                        <div id="tautan-notification" class="tautan-notification">
+                                            Tautan sudah di copi dan siap di paste, silahkan share
+                                        </div>
+                                    </div>
+                                    <!-- End Tombol tautan -->
+
+                                    <!-- FOOTER -->
+                                    <footer class="custom-footer">
+                                        <div class="footer-content">
+                                            <div class="footer-section">
+                                                <h6>Ikuti Kami</h6>
+                                                <div class="social-icons">
+                                                    <a href="proses.html" class="social-icon" target="_blank">
+                                                        <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
+                                                            alt="Ikon Facebook" class="icon-image">
+                                                    </a>
+                                                    <a href="proses.html" class="social-icon" target="_blank">
+                                                        <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
+                                                            alt="Ikon Instagram" class="icon-image">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="footer-section">
+                                                <h6>Hubungi Kami</h6>
+                                                <p class="footer-email">Email: <a class="footer-email-link"
+                                                        href="mailto:admin@sekawanfc.com">admin@sekawanfc.com</a></p>
+                                                <p class="footer-telephone">Telepon: +62 813 363 06253</p>
+                                            </div>
+                                        </div>
+                                        <div class="footer-bottom">
+                                            <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
+                                            <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
+                                        </div>
+                                    </footer>
+                                    <!-- END FOOTER -->
+                                </div>
+                                <!-- SCRIPTS -->
+                                <div class="container-js">
+                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                                        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+                                        crossorigin="anonymous"></script>
+                                    <script src="js/pencarian.js"></script>
+                                    <script src="js/hapus-cookie.js"></script>
+                                    <script src="js/splas-screen-start.js"></script>
+                                    <script src="js/kunci-layar.js"></script>
+                                    <script type="module" src="firebase-config.js"></script>
+                                    <script src="js/share-link.js"></script>
+                                    <script src="js/cek-login.js"></script>
+                                    <script type="module" src="./ujicoba-website.js"></script>
+                                    <script type="module" src="firebase-config.js"></script>
+                                    <script type="module" src="js/api-artikel.js"></script>
+                                    <script src="js/play-audio.js"></script>
+
+                                    <script>
+                                        window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
+                                    </script>
+                                </div>
+                                <!-- END SCRIPTS -->
+
+                                <!-- Service Worker -->
+                                <script>
+                                    if ('serviceWorker' in navigator) {
+                                        window.addEventListener('load', function () {
+                                            navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+                                                // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
+                                            }, function (error) {
+                                                console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
+                                            });
+                                        });
+                                    }
+                                </script>
+                                <!-- END Service Worker -->
+                            </div>
+                        </div>
+                    </div>
+                </body>
+
+                </html>
+            `);
+        } catch (error) {
+            console.error("Error fetching artikel:", error);
+            res.status(500).send(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Error</title>
+                    <style>
+                        body { 
+                            display: flex; 
+                            justify-content: center; 
+                            align-items: center; 
+                            height: 100vh; 
+                            background-color: #f8d7da; 
+                            color: #721c24; 
+                            font-family: Arial, sans-serif; 
+                        }
+                        h1 {
+                            color: #721c24;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Terjadi kesalahan saat memuat artikel.</h1>
+                </body>
+                </html>
+            `);
+        }
+    });
 
 // Rute untuk mendapatkan berita dengan path parameter
 app.get('/berita-home/:slug', async (req, res) => {
     const slug = req.params.slug;
+    console.log(`Mencari berita dengan slug: ${slug}`);
 
     if (!slug) {
-        return res.status(400).send(`
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <title>Bad Request</title>
-            </head>
-            <body>
-                <h1>Bad Request: Missing 'slug' parameter.</h1>
-            </body>
-            </html>
-        `);
+        console.log("Slug tidak ditemukan dalam parameter.");
+        return res.status(400).send("Bad Request: Missing 'slug' parameter.");
     }
 
     try {
         const q = query(collection(db, "berita"), where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
+        console.log(`Jumlah dokumen yang ditemukan: ${querySnapshot.size}`);
         const berita = querySnapshot.empty ? null : querySnapshot.docs[0].data();
 
         if (berita) {
+            console.log(`Berita ditemukan: ${berita.title}`);
             // Sanitasi data untuk keamanan dan pemurnian konten
             const title = escapeHtml(berita.title);
             const titleKeterangan = escapeHtml(berita.titleKeterangan);
@@ -478,376 +728,6 @@ app.get('/berita-home/:slug', async (req, res) => {
             `;
 
             // Mengirimkan HTML yang berisi meta tag OG dan konten berita
-            res.send(`
-                <!DOCTYPE html>
-                <html lang="en" translate="no">
-                <head>
-                    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-                    <meta http-equiv="Pragma" content="no-cache">
-                    <meta http-equiv="Expires" content="0">
-
-                    <!-- Google Analytics -->
-                    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
-                    <script>
-                        window.dataLayer = window.dataLayer || [];
-                        function gtag() { dataLayer.push(arguments); }
-                        gtag('js', new Date());
-                        gtag('config', 'G-CD0MHD1RBP');
-                    </script>
-                    <!-- Link Preview Meta Tags -->
-                    ${metaTags}
-                    <!-- Cache Control -->
-                    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-                    <meta http-equiv="Pragma" content="no-cache">
-                    <meta http-equiv="Expires" content="-5">
-
-                    <!-- Viewport and Meta -->
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-                    <meta charset="UTF-8">
-                    <meta name="google" content="notranslate">
-
-                    <!-- Bootstrap and Styles -->
-                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-                        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-                    <link rel="stylesheet" href="/css/loading.css">
-                    <link rel="stylesheet" href="/css/berita.css">
-                    <link rel="stylesheet" href="/css/play-audio.css">
-                                        <link rel="stylesheet" href="/style.css">
-
-
-                    <!-- Icons -->
-                    <link rel="apple-touch-icon" sizes="57x57" href="/icon/apple-icon-57x57.png">
-                    <link rel="apple-touch-icon" sizes="60x60" href="/icon/apple-icon-60x60.png">
-                    <link rel="apple-touch-icon" sizes="72x72" href="/icon/apple-icon-72x72.png">
-                    <link rel="apple-touch-icon" sizes="76x76" href="/icon/apple-icon-76x76.png">
-                    <link rel="apple-touch-icon" sizes="114x114" href="/icon/apple-icon-114x114.png">
-                    <link rel="apple-touch-icon" sizes="120x120" href="/icon/apple-icon-120x120.png">
-                    <link rel="apple-touch-icon" sizes="144x144" href="/icon/apple-icon-144x144.png">
-                    <link rel="apple-touch-icon" sizes="152x152" href="/icon/apple-icon-152x152.png">
-                    <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-icon-180x180.png">
-                    <link rel="icon" type="image/png" sizes="192x192" href="/icon/android-icon-192x192.png">
-                    <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
-                    <link rel="icon" type="image/png" sizes="96x96" href="/icon/favicon-96x96.png">
-                    <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
-                    <link rel="manifest" href="/manifest.json">
-                    <meta name="msapplication-TileColor" content="#ffffff">
-                    <meta name="msapplication-TileImage" content="/icon/ms-icon-144x144.png">
-                    <meta name="theme-color" content="#ffffff">
-
-                    <!-- Firebase -->
-                    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-                    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-                    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-                    <!-- Tambahkan ini jika menggunakan Realtime Database -->
-                    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-                    <title>${title}</title>
-                </head>
-
-                <body>
-                    <div class="mobile-only">
-                        <div class="content-wrapper">
-                            <!-- Wrapper -->
-                            <div class="wrapper">
-                                <!-- LOADING SCREEN -->
-                                <div id="loading-screen" class="background">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <img class="loading-logo" src="/SekawanFC.jpg" alt="Loading...">
-                                    <img class="loading-wait" src="/img/loading4.gif" alt="Loading...">
-                                </div>
-                                <!-- END LOADING SCREEN -->
-
-                                <div id="main-content" style="display: none;">
-                                    <!-- Navbar -->
-                                    <nav class="navbar navbar-expand-lg custom-navbar">
-                                        <div class="container-fluid">
-                                            <a class="navbar-brand text-white fw-bold" href="/index.html">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="/SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
-                                                    <span class="ms-2">SEKAWAN FC</span>
-                                                </div>
-                                            </a>
-                                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                                aria-expanded="false" aria-label="Toggle navigation">
-                                                <span class="navbar-toggler-icon"></span>
-                                            </button>
-                                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" style="color: white;" aria-current="page"
-                                                            href="/index.html">Home</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" style="color: white;" href="/profil.html">Profil</a>
-                                                    </li>
-                                                    <li class="nav-item dropdown">
-                                                        <a class="nav-link dropdown-toggle" href="#" role="button"
-                                                            data-bs-toggle="dropdown" aria-expanded="false"
-                                                            style="color: white;">Informasi</a>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item disabled text-black"
-                                                                    href="/proses.html">Berita</a></li>
-                                                            <li><a class="dropdown-item disabled text-black"
-                                                                    href="/proses.html">Artikel</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" id="login-logout-link" style="color: white;"
-                                                            href="/login.html">Masuk / Daftar</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </nav>
-                                    <!-- End Navbar -->
-                                </div>
-
-                                <!-- Judul Halaman -->
-                                <div class="judul-halaman">
-                                    <h1 id="title" class="detail-title">${title}</h1>
-                                    <div class="title-keterangan">
-                                        <p id="titleKeterangan">${titleKeterangan}</p>
-                                        <p id="tanggalPembuatan">${tanggalPembuatan}</p>
-                                    </div>
-                                </div>
-                                <div class="container-foto">
-                                    <img id="photoUrl" class="custom-foto" src="${photoUrl}" alt="Foto Berita">
-                                </div>
-                                <p id="caption" class="keterangan-foto"></p>
-                                <!-- PLAY AUDIO -->
-                                <div class="audio-player-container desktop-only">
-                                    <div class="audio-player-title">MENDENGARKAN ISI HALAMAN</div>
-                                    <div class="audio-player">
-                                        <div class="controls">
-                                            <button id="play-btn" class="btn-play">&#9658;</button> <!-- Simbol Play -->
-                                            <button id="pause-btn" class="btn-pause">&#10074;&#10074;</button> <!-- Simbol Pause -->
-                                            <button id="stop-btn" class="btn-stop">&#9632;</button> <!-- Simbol Stop -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- END PLAY AUDIO -->
-                                <div class="isi-halaman">
-                                    <div id="articles">${content}</div>
-                                </div>
-                                <!-- End Berita -->
-
-                                <!-- Tombol tautan -->
-                                <div class="container-tautan">
-                                    <!-- Ikon untuk Salin Tautan menggunakan gambar -->
-                                    <span id="copyLink" class="link-icon">
-                                        <img src="/img/icon-link.png" alt="Ikon Share Link" class="icon-link">
-                                        Share Link
-                                    </span>
-                                    <!-- Pesan Notifikasi -->
-                                    <div id="tautan-notification" class="tautan-notification">
-                                        Tautan sudah di copi dan siap di paste, silahkan share
-                                    </div>
-                                </div>
-                                <!-- End Tombol tautan -->
-
-                                <!-- FOOTER -->
-                                <footer class="custom-footer">
-                                    <div class="footer-content">
-                                        <div class="footer-section">
-                                            <h6>Ikuti Kami</h6>
-                                            <div class="social-icons">
-                                                <a href="/proses.html" class="social-icon" target="_blank">
-                                                    <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
-                                                        alt="Ikon Facebook" class="icon-image">
-                                                </a>
-                                                <a href="/proses.html" class="social-icon" target="_blank">
-                                                    <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
-                                                        alt="Ikon Instagram" class="icon-image">
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="footer-section">
-                                            <h6>Hubungi Kami</h6>
-                                            <p class="footer-email">Email: <a class="footer-email-link"
-                                                    href="mailto:admin@sekawanfc.com">admin@sekawanfc.com</a></p>
-                                            <p class="footer-telephone">Telepon: +62 813 363 06253</p>
-                                        </div>
-                                    </div>
-                                    <div class="footer-bottom">
-                                        <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
-                                        <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
-                                    </div>
-                                </footer>
-                                <!-- END FOOTER -->
-                            </div>
-                            <!-- SCRIPTS -->
-                            <div class="container-js">
-                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-                                    crossorigin="anonymous"></script>
-                                <script src="/js/pencarian.js"></script>
-                                <script src="/js/hapus-cookie.js"></script>
-                                <script src="/js/splas-screen-start.js"></script>
-                                <script src="/js/kunci-layar.js"></script>
-                                <script type="module" src="/firebase-config.js"></script>
-                                <script src="/js/share-link.js"></script>
-                                <script src="/js/cek-login.js"></script>
-                                <script type="module" src="/ujicoba-website.js"></script>
-                                <script type="module" src="/js/api-artikel.js"></script>
-                                <script type="module" src="/js/api-berita.js"></script>
-                                <script src="/js/play-audio.js"></script>
-
-                                <script>
-                                    window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
-                                </script>
-                            </div>
-                            <!-- END SCRIPTS -->
-
-                            <!-- Service Worker -->
-                            <script>
-                                if ('serviceWorker' in navigator) {
-                                    window.addEventListener('load', function () {
-                                        navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
-                                            // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
-                                        }, function (error) {
-                                            console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
-                                        });
-                                    });
-                                }
-                            </script>
-                            <!-- END Service Worker -->
-                        </div>
-                    </div>
-                </body>
-
-                </html>
-            `);
-        } else {
-            res.status(404).send(`
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Artikel Tidak Ditemukan</title>
-                    <style>
-                        body { 
-                            display: flex; 
-                            justify-content: center; 
-                            align-items: center; 
-                            height: 100vh; 
-                            background-color: #f8d7da; 
-                            color: #721c24; 
-                            font-family: Arial, sans-serif; 
-                        }
-                        h1 {
-                            color: #721c24;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>Artikel tidak ditemukan!</h1>
-                </body>
-                </html>
-            `);
-        }
-    } catch (error) {
-        // Menangani error saat pengambilan data
-        console.error("Error fetching article:", error);
-        res.status(500).send(`
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <title>Error</title>
-                <style>
-                    body { 
-                        display: flex; 
-                        justify-content: center; 
-                        align-items: center; 
-                        height: 100vh; 
-                        background-color: #f8d7da; 
-                        color: #721c24; 
-                        font-family: Arial, sans-serif; 
-                    }
-                    h1 {
-                        color: #721c24;
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>Terjadi kesalahan saat memuat artikel.</h1>
-            </body>
-            </html>
-        `);
-    }
-});
-
-// Rute untuk mendapatkan berita dengan path parameter
-app.get('/berita-home/:slug', async (req, res) => {
-    const slug = req.params.slug;
-
-    if (!slug) {
-        return res.status(400).send(`
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <title>Bad Request</title>
-            </head>
-            <body>
-                <h1>Bad Request: Missing 'slug' parameter.</h1>
-            </body>
-            </html>
-        `);
-    }
-
-    try {
-        const q = query(collection(db, "berita"), where("slug", "==", slug));
-        const querySnapshot = await getDocs(q);
-        const berita = querySnapshot.empty ? null : querySnapshot.docs[0].data();
-
-        if (berita) {
-            // Sanitasi data untuk keamanan dan pemurnian konten
-            const title = escapeHtml(berita.title);
-            const titleKeterangan = escapeHtml(berita.titleKeterangan);
-            let photoUrl = escapeHtml(berita.photoUrl);
-            const content = escapeHtml(berita.content);
-            const tanggalPembuatan = escapeHtml(berita.tanggalPembuatan || '');
-
-            // Validasi dan proses URL gambar (photoUrl)
-            if (photoUrl && !photoUrl.startsWith('http')) {
-                photoUrl = `https://sekawanfc.fun/${photoUrl.replace(/^\/+/, '')}`;
-            }
-
-            // Jika photoUrl kosong, sediakan fallback gambar default
-            if (!photoUrl) {
-                photoUrl = 'https://sekawanfc.fun/default-image.jpg'; // Sediakan gambar default
-            }
-
-            // Bersihkan konten dari tag HTML untuk meta tag deskripsi
-            const cleanedContent = stripHtmlTags(berita.content);
-
-            // Meta tags OG yang dihasilkan di server untuk preview link di media sosial
-            const metaTags = `
-                <meta property="og:title" content="${title}" />
-                <meta property="og:description" content="${cleanedContent.substring(0, 160)}" /> <!-- Ambil 160 karakter pertama -->
-                <meta property="og:image" content="${photoUrl}" />
-                <meta property="og:image:width" content="1200">
-                <meta property="og:image:height" content="630">
-                <meta property="og:type" content="article" />
-                <meta property="og:url" content="https://sekawanfc.fun/berita-home/${encodeURIComponent(slug)}" />
-            `;
-
-                       // Mengirimkan HTML yang berisi meta tag OG dan konten berita
             res.send(`
                 <!DOCTYPE html>
                 <html lang="en" translate="no">
@@ -918,20 +798,7 @@ app.get('/berita-home/:slug', async (req, res) => {
                             <div class="wrapper">
                                 <!-- LOADING SCREEN -->
                                 <div id="loading-screen" class="background">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
+                                    <!-- ... (Konten loading screen) ... -->
                                     <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
                                     <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
                                 </div>
@@ -983,7 +850,7 @@ app.get('/berita-home/:slug', async (req, res) => {
                                     <!-- End Navbar -->
                                 </div>
 
-                                <!-- Berita -->
+                                <!-- Konten Berita -->
                                 <div class="judul-halaman">
                                     <h1 id="title" class="detail-title">${title}</h1>
                                     <div class="title-keterangan">
@@ -1070,7 +937,7 @@ app.get('/berita-home/:slug', async (req, res) => {
                                 <script src="js/cek-login.js"></script>
                                 <script type="module" src="./ujicoba-website.js"></script>
                                 <script type="module" src="firebase-config.js"></script>
-                                <script type="module" src="js/api-berita.js"></script>
+                                <script type="module" src="js/api-artikel.js"></script>
                                 <script src="js/play-audio.js"></script>
 
                                 <script>
@@ -1098,36 +965,8 @@ app.get('/berita-home/:slug', async (req, res) => {
 
                 </html>
             `);
-        } else {
-            res.status(404).send(`
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Berita Tidak Ditemukan</title>
-                    <style>
-                        body { 
-                            display: flex; 
-                            justify-content: center; 
-                            align-items: center; 
-                            height: 100vh; 
-                            background-color: #f8d7da; 
-                            color: #721c24; 
-                            font-family: Arial, sans-serif; 
-                        }
-                        h1 {
-                            color: #721c24;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>Berita tidak ditemukan!</h1>
-                </body>
-                </html>
-            `);
         }
     } catch (error) {
-        // Menangani error saat pengambilan data
         console.error("Error fetching berita:", error);
         res.status(500).send(`
             <!DOCTYPE html>
@@ -1158,5 +997,26 @@ app.get('/berita-home/:slug', async (req, res) => {
     }
 });
 
-// Mengekspor aplikasi Express
-module.exports = app;
+// (Optional) Redirect dari URL lama dengan query parameter ke URL baru dengan path parameter
+app.get('/artikel-home.html', (req, res) => {
+    const slug = req.query.slug;
+    if (slug) {
+        console.log(`Redirecting /artikel-home.html?slug=${slug} ke /artikel-home/${slug}`);
+        res.redirect(`/artikel-home/${encodeURIComponent(slug)}`);
+    } else {
+        res.status(400).send("Bad Request: Missing 'slug' parameter.");
+    }
+});
+
+app.get('/berita-home.html', (req, res) => {
+    const slug = req.query.slug;
+    if (slug) {
+        console.log(`Redirecting /berita-home.html?slug=${slug} ke /berita-home/${slug}`);
+        res.redirect(`/berita-home/${encodeURIComponent(slug)}`);
+    } else {
+        res.status(400).send("Bad Request: Missing 'slug' parameter.");
+    }
+});
+
+// Mengekspor handler serverless
+module.exports.handler = serverless(app);

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-CD0MHD1RBP');
+    </script>
+    <!-- link preview -->
+    <meta property="og:title"
+        content="Olahraga Rutin: Rahasia Hidup Sehat dan Sejahtera Sepanjang Masa - SEKAWANFC.fun" />
+    <meta property="og:description"
+        content="Artikel ini membahas manfaat olahraga rutin, termasuk kesehatan fisik, mental, dan emosional." />
+    <meta property="og:image" content="https://th.bing.com/th/id/OIP.MYbCcYDh7j9v2wIzcCJH1QHaE7?rs=1&pid=ImgDetMain" />
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="article" />
+
+    <!-- link preview -->
+
+    <!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-5">
+
+    <!-- Viewport and Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+
+    <!-- Bootstrap and Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <link rel="stylesheet" href="css/berita.css">
+
+
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="icon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="icon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="icon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="icon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="icon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <title>Olahraga Rutin: Rahasia Hidup Sehat dan Sejahtera Sepanjang Masa - Sekawan FC</title>
+
+</head>
+
+<body>
+    <div class="mobile-only">
+        <div class="content-wrapper">
+            <!-- Tambahkan wrapper di sini -->
+            <div class="wrapper">
+                <!-- LOADING SCREEN -->
+                <div id="loading-screen" class="background">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
+                    <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
+                </div>
+                <!-- END LOADING SCREEN -->
+
+
+                <div id="main-content" style="display: none;">
+                    <!-- Navbar -->
+                    <nav class="navbar navbar-expand-lg custom-navbar">
+                        <div class="container-fluid">
+                            <a class="navbar-brand text-white fw-bold" href="index.html">
+                                <div class="d-flex align-items-center">
+                                    <img src="SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
+                                    <span class="ms-2">SEKAWAN FC</span>
+                                </div>
+                            </a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                    <li class="nav-item">
+                                        <a class="nav-link" style="color: white;" aria-current="page"
+                                            href="index.html">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" style="color: white;" href="profil.html">Profil</a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false"
+                                            style="color: white;">Informasi</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item disabled text-black"
+                                                    href="proses.html">Berita</a></li>
+                                            <li><a class="dropdown-item disabled text-black"
+                                                    href="proses.html">Artikel</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="login-logout-link" style="color: white;"
+                                            href="login.html">Masuk /
+                                            Daftar</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                    <!-- End Navbar -->
+                </div>
+                <!-- Artikel -->
+                <div class="judul-halaman">
+                    <h1 class="detail-title">Olahraga Rutin: Rahasia Hidup Sehat dan Sejahtera Sepanjang Masa</h1>
+                    <div class="title-keterangan">
+                        <p><strong>Obit - SekawanFC.fun</strong></p>
+                        <p>26 September 2024</p>
+                    </div>
+                </div>
+                <div class="container-foto">
+                    <img src="https://th.bing.com/th/id/OIP.MYbCcYDh7j9v2wIzcCJH1QHaE7?rs=1&pid=ImgDetMain"
+                        class="custom-foto" alt="Olahraga Rutin">
+                </div>
+                <p class="keterangan-foto">
+                    Semangat Olahraga di Bawah Langit Biru Memanfaatkan Momen untuk Hidup Sehat
+                </p>
+
+                <div class="isi-halaman">
+                    <p><strong>SEKAWANFC.fun</strong> - Dalam kehidupan modern yang penuh kesibukan dan tuntutan
+                        waktu, olahraga sering kali menjadi
+                        hal yang terlupakan. Banyak orang lebih terfokus pada pekerjaan, aktivitas digital, atau
+                        gaya hidup yang lebih santai di rumah. Namun, tahukah Anda bahwa olahraga memiliki peran
+                        yang sangat penting dalam menjaga keseimbangan hidup? Olahraga tidak hanya bermanfaat untuk
+                        kesehatan fisik, tetapi juga memberikan dampak positif bagi kesehatan mental dan emosional.
+                        Dengan melakukan olahraga secara teratur, kita bisa meraih kesejahteraan hidup yang lebih
+                        baik dan menikmati hari-hari dengan energi yang lebih optimal.</p>
+
+                    <p>Artikel ini akan mengupas lebih dalam mengenai manfaat olahraga rutin, mulai dari bagaimana
+                        olahraga dapat menjaga kesehatan jantung hingga bagaimana aktivitas fisik dapat menjadi
+                        kunci untuk mencapai kebahagiaan emosional. Mari kita lihat bersama berbagai keuntungan yang
+                        bisa didapat dari rutinitas olahraga sehari-hari!</p>
+
+                    <h2 class="title-sub">Manfaat Kesehatan Fisik</h2>
+                    <p><strong>Meningkatkan Kesehatan Jantung:</strong> Salah satu manfaat terbesar dari olahraga
+                        rutin adalah peningkatan kesehatan jantung. Ketika kita berolahraga, jantung kita akan
+                        bekerja lebih keras untuk memompa darah ke seluruh tubuh. Hal ini membantu memperkuat otot
+                        jantung dan meningkatkan sirkulasi darah. Aktivitas fisik seperti berlari, berenang, atau
+                        bersepeda juga membantu menurunkan tekanan darah dan meningkatkan kadar kolesterol baik
+                        (HDL), yang sangat penting untuk mencegah penyakit jantung dan stroke. Dengan kata lain,
+                        jantung yang lebih kuat berarti hidup yang lebih panjang dan sehat.<sup><a
+                                href="#ref1">[1]</a></sup></p>
+
+                    <p><strong>Mengendalikan Berat Badan:</strong> Bagi banyak orang, salah satu tujuan utama
+                        berolahraga adalah untuk menjaga atau menurunkan berat badan. Namun, manfaat pengendalian
+                        berat badan melalui olahraga jauh lebih luas daripada sekadar penurunan angka di timbangan.
+                        Dengan meningkatkan metabolisme tubuh, olahraga membantu tubuh membakar kalori lebih
+                        efisien, bahkan setelah selesai berolahraga. Latihan aerobik seperti berlari, bersepeda,
+                        atau berenang membantu membakar kalori secara langsung, sedangkan latihan kekuatan seperti
+                        angkat beban membantu meningkatkan massa otot. Semakin banyak otot yang dimiliki tubuh,
+                        semakin tinggi pula tingkat metabolisme tubuh secara alami.<sup><a href="#ref2">[2]</a></sup>
+                    </p>
+
+                    <h2 class="title-sub">Manfaat Kesehatan Mental</h2>
+                    <p><strong>Mengurangi Stres dan Kecemasan:</strong> Apakah Anda sering merasa stres setelah hari
+                        yang panjang dan penuh tekanan? Olahraga bisa menjadi solusi yang tepat. Ketika kita
+                        berolahraga, tubuh kita melepaskan hormon endorfin, yang dikenal sebagai hormon kebahagiaan.
+                        Endorfin membantu mengurangi rasa sakit, meningkatkan suasana hati, dan memberikan perasaan
+                        tenang. Banyak penelitian telah menunjukkan bahwa orang yang rutin berolahraga memiliki
+                        tingkat stres dan kecemasan yang lebih rendah dibandingkan dengan mereka yang tidak.
+                        Olahraga juga memberikan waktu untuk refleksi dan melepaskan ketegangan, yang sangat penting
+                        dalam menghadapi tekanan hidup sehari-hari.<sup><a href="#ref3">[3]</a></sup></p>
+
+                    <p><strong>Meningkatkan Kualitas Tidur:</strong> Jika Anda sering kesulitan tidur atau merasa
+                        tidak cukup segar setelah bangun, berolahraga secara teratur mungkin bisa membantu. Orang
+                        yang aktif secara fisik cenderung memiliki pola tidur yang lebih baik, dengan durasi tidur
+                        yang lebih nyenyak. Olahraga membantu tubuh menggunakan energi secara efektif sehingga pada
+                        malam hari, tubuh lebih siap untuk beristirahat.<sup><a href="#ref5">[5]</a></sup></p>
+
+                    <h2 class="title-sub">Manfaat Emosional dan Sosial</h2>
+                    <p><strong>Meningkatkan Hubungan Sosial:</strong> Selain manfaat fisik dan mental, olahraga juga
+                        dapat memberikan manfaat sosial. Berolahraga dalam kelompok, seperti bergabung dengan klub
+                        olahraga, dapat membantu kita membangun hubungan
+                        sosial yang lebih kuat. Aktivitas bersama ini menciptakan rasa kebersamaan dan dukungan
+                        sosial, yang pada akhirnya dapat meningkatkan kesejahteraan emosional kita. Hubungan yang
+                        terjalin dalam konteks olahraga juga sering kali lebih positif dan produktif, karena
+                        semuanya didasarkan pada tujuan bersama untuk hidup lebih sehat.<sup><a
+                                href="#ref6">[6]</a></sup></p>
+
+                    <p><strong>Menciptakan Rutinitas Positif:</strong> Salah satu aspek penting dari olahraga rutin
+                        adalah bagaimana hal itu membantu menciptakan kebiasaan positif dalam kehidupan sehari-hari.
+                        Dengan menjadikan olahraga sebagai bagian dari rutinitas harian, kita membangun pola hidup
+                        yang lebih sehat dan terstruktur. Rutinitas ini tidak hanya meningkatkan kesehatan fisik,
+                        tetapi juga membantu menciptakan keseimbangan antara pekerjaan, istirahat, dan aktivitas
+                        rekreasi. Ketika kita merasa lebih teratur, kita pun akan lebih mampu mengelola stres dan
+                        menghadapi tantangan hidup dengan pikiran yang jernih.<sup><a href="#ref2">[2]</a></sup></p>
+
+                    <h2 class="title-sub">Kesimpulan</h2>
+                    <p>Olahraga secara rutin bukan hanya soal menjaga kebugaran fisik, tetapi juga menjadi kunci
+                        untuk mencapai kehidupan yang lebih seimbang dan sejahtera. Dengan berkomitmen untuk
+                        berolahraga secara teratur, kita dapat menjalani hidup yang lebih sehat, bahagia, dan
+                        produktif. Temukan jenis olahraga yang paling Anda nikmati, apakah itu berlari di taman,
+                        berenang, atau mengikuti kelas yoga, dan jadikan itu bagian dari rutinitas harian Anda.
+                        Tidak perlu memaksakan diri untuk berolahraga berlebihan—yang terpenting adalah konsistensi
+                        dan menikmati setiap momen ketika Anda bergerak untuk kesehatan yang lebih baik!</p>
+                </div>
+                <!-- End Artikel -->
+
+
+                <!-- Daftar Referensi -->
+                <div class="container-referensi">
+                    <h5>Referensi</h5>
+                    <ul>
+                        <li id="ref1">[1] Mayo Clinic. *Exercise: 7 benefits of regular physical activity*. Diakses dari
+                            <a
+                                href="https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise/art-20048389">Mayo
+                                Clinic</a>.
+                        </li>
+                        <li id="ref2">[2] CDC. *Benefits of Physical Activity*. Diakses dari <a
+                                href="https://www.cdc.gov/physical-activity-basics/benefits/?CDC_AAref_Val=https://www.cdc.gov/physicalactivity/basics/pa-health/index.htm">CDC</a>.
+                        </li>
+                        <li id="ref3">[3] U.S. Department of Health & Human Services. *Physical Activity Is Good for the
+                            Mind and the Body*. Diakses dari <a
+                                href="https://health.gov/news/202112/physical-activity-good-mind-and-body">Health.gov</a>.
+                        </li>
+                        <li id="ref5">[5] Mayo Clinic. *Exercise: 7 benefits of regular physical activity*. Diakses dari
+                            <a
+                                href="https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise/art-20048389">Mayo
+                                Clinic</a>.
+                        </li>
+                        <li id="ref6">[6] CDC. *Benefits of Physical Activity*. Diakses dari <a
+                                href="https://www.cdc.gov/physicalactivity/basics/pa-health/index.htm">CDC</a>.</li>
+                    </ul>
+                </div>
+                <!-- End Referensi -->
+
+
+                <!-- Tombol tautan -->
+                <div class="container-tautan">
+                    <!-- Ikon untuk Salin Tautan menggunakan gambar -->
+                    <span id="copyLink" class="link-icon">
+                        <img src="img/icon-link.png" alt="Ikon Share Link" class="icon-link">
+                        Share Link
+                    </span>
+                    <!-- Pesan Notifikasi -->
+                    <div id="tautan-notification" class="tautan-notification">
+                        Tautan sudah di copi dan siap di paste, silahkan share
+                    </div>
+                </div>
+                <!-- End Tombol tautan -->
+
+                <!-- FOOTER -->
+                <footer class="custom-footer">
+                    <div class="footer-content">
+                        <div class="footer-section">
+                            <h6>Ikuti Kami</h6>
+                            <div class="social-icons">
+                                <a href="proses.html" class="social-icon" target="_blank">
+                                    <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
+                                        alt="Ikon Facebook" class="icon-image">
+                                </a>
+                                <a href="proses.html" class="social-icon" target="_blank">
+                                    <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
+                                        alt="Ikon Instagram" class="icon-image">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="footer-section">
+                            <h6>Hubungi Kami</h6>
+                            <p class="footer-email">Email: <a class="footer-email-link"
+                                    href="mailto:admin@sekawanfc.com">admin@sekawanfc.com</a></p>
+                            <p class="footer-telephone">Telepon: +62 813 363 06253</p>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
+                        <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
+                    </div>
+                </footer>
+                <!-- END FOOTER -->
+            </div>
+            <!-- SCRIPTS -->
+            <div class="container-js">
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+                    crossorigin="anonymous"></script>
+                <script src="js/pencarian.js"></script>
+                <script src="js/hapus-cookie.js"></script>
+                <script src="js/splas-screen-start.js"></script>
+                <script src="js/kunci-layar.js"></script>
+                <script type="module" src="firebase-config.js"></script>
+                <script src="js/share-link.js"></script>
+
+                <script src="js/cek-login.js"></script>
+
+                <script type="module" src="firebase-config.js"></script>
+                <script>
+                    window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
+                </script>
+            </div>
+            <!-- END SCRIPTS -->
+
+
+            <!-- Service Worker -->
+            <script>
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', function () {
+                        navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+                            // console.log('Service Worker registered with scope:', registration.scope); // Pesan ini telah dikomentari
+                        }, function (error) {
+                            console.error('Service Worker registration failed:', error); // Tetap tampilkan error untuk debugging
+                        });
+                    });
+                }
+            </script>
+            <!-- END Service Worker -->
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
