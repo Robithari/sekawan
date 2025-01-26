@@ -1,0 +1,70 @@
+/* Container utama */
+.audio-player-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+background-color: #2c3e50;
+padding: 5px;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+max-width: 300px;
+margin: auto;
+text-align: center;
+margin-top: -10px;
+margin-bottom: 10px;
+}
+
+/* Teks header */
+.audio-player-title {
+  font-size: 10px;
+  color: #f5f5dc;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Kontainer tombol */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Tombol */
+.controls button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 5px 7.5px;
+  font-size: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover efek tombol */
+.controls button:hover {
+  background-color: #45a049;
+}
+
+/* Tombol play khusus */
+.btn-play {
+  background-color: #2196F3;
+}
+
+/* Tombol pause khusus */
+.btn-pause {
+  background-color: #f0ad4e;
+}
+
+/* Tombol stop khusus */
+.btn-stop {
+  background-color: #d9534f;
+}
+
+/* Sembunyikan tombol pause pada perangkat seluler */
+@media only screen and (max-width: 768px) {
+  .desktop-only #pause-btn {
+    display: none;
+  }
+}

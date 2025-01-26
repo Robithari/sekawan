@@ -1,0 +1,742 @@
+/* Universal Styles */
+*,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-size: cover;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+h6 {
+  color: white;
+}
+
+/* Wrapper untuk seluruh halaman agar footer berada di bawah */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Konten utama yang fleksibel */
+.content {
+  flex: 1;
+}
+
+/*======================================================= LOADING SCREEN =======================================================*/
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+
+#main-content {
+  opacity: 0;
+  transition: opacity 3s ease;
+}
+
+#main-content.show {
+  opacity: 1;
+}
+
+.loading-logo,
+.loading-wait {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/*======================================================= NAVBAR =======================================================*/
+.custom-navbar {
+  background-color: #571ec9;
+  background: linear-gradient(90deg, rgba(38, 0, 255, 1) 0%, rgba(196, 60, 207, 0.9612219887955182) 74%, rgba(38, 0, 255, 1) 100%);
+  padding: 0 5px 5px 5px;
+  display: flex;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.icon-img {
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+.navbar-toggler {
+  margin-top: 3px;
+  color: navy;
+}
+
+.navbar-toggler-icon {
+  background-color: rgb(199, 184, 184);
+  border-radius: 5px;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.dropdown-item.text-dark {
+  color: black !important;
+}
+
+.navbar-brand {
+  color: whitesmoke;
+  padding: 0 5px 0 0;
+}
+
+/* ======================================================= SLIDE =======================================================*/
+#carouselExampleDark {
+  margin-top: 40px;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.carousel-item {
+  margin-top: 0px;
+}
+
+.custom-carousel-image {
+  padding: 0 25px;
+  object-fit: cover;
+  width: auto;
+  height: 200px;
+  border-radius: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  filter: drop-shadow(0px 3px 5px rgb(255, 7, 7, 7));
+}
+
+.carousel-item:hover {
+  background: #e1e1e1;
+  box-shadow: 0 0 0 2px #d0d0d0;
+}
+
+/*======================================================= BOX =======================================================*/
+.container-box {
+  line-height: 1.3;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.underline-text {
+  padding-top: 3px;
+  color: black;
+}
+
+#teams {
+  margin-top: 3px;
+}
+
+
+
+.countdown-box {
+  padding: 0;
+  font-size: 12px;
+  width: 165px;
+  background-color: #b1ffbe;
+  border-radius: 10px;
+  box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
+  text-align: center;
+  margin: 0 auto;
+  font-weight: bold;
+}
+
+.countdown-box hr {
+  margin: 0;
+}
+
+.countdown-box h3,
+.countdown-box p {
+  margin: -3px 0;
+  font-size: 11px;
+}
+
+.waktu-mundur {
+  font-family: Tahoma, Geneva, sans-serif;
+  font-size: 9px;
+  word-spacing: 1px;
+  color: green;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: -2px;
+  padding-top: 2px;
+}
+
+#countdown {
+  color: aqua;
+}
+
+/*======================================================= BUTTON =======================================================*/
+/* Styling untuk Container Button */
+.container-button {
+  margin-top: 25px;
+  padding: 0 15px;
+}
+
+/* Styling untuk Tombol */
+.custom-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #4c4cfd;
+  justify-content: flex-start;
+  color: #fff;
+  padding: 5px;
+  border-radius: 20px;
+  text-decoration: none;
+  height: 100%;
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.1);
+}
+
+/* Efek Klik (Active State) */
+.custom-btn:active {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling untuk Ikon */
+.custom-btn .menu-icon {
+  width: 70px;            /* Ukuran ikon */
+  height: 70px;
+  margin-bottom: 10px;    /* Spasi antara ikon dan teks */
+  object-fit: contain;    /* Memastikan gambar tidak terdistorsi */
+}
+
+/* Styling untuk Teks */
+.custom-btn span {
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Gutter Kustom untuk Row dengan Kelas .custom-gutter */
+.custom-gutter {
+  --bs-gutter-x: 2.5rem; /* Sesuaikan nilai gutter sesuai kebutuhan */
+  margin-right: calc(-.1* var(--bs-gutter-x));
+  margin-left: calc(-.1* var(--bs-gutter-x));
+}
+
+
+/* Responsivitas untuk Perangkat Besar */
+@media (min-width: 768px) {
+  .custom-btn .menu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .custom-btn span {
+    font-size: 10px;
+  }
+}
+
+/* Responsivitas untuk Perangkat Kecil */
+@media (max-width: 576px) {
+
+  .custom-btn .menu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .custom-btn span {
+    font-size: 10px;
+    margin-top: -5px;
+  }
+}
+
+
+
+/*======================================================= BERITA DAN ARTIKEL =======================================================*/
+.berita {
+  margin-bottom: -3px;
+}
+.container-berita {
+  font-size: 20px;
+  color: #06713f;
+  font-weight: bold;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: left;
+  margin-top: -15px;
+  margin-bottom: -5px;
+}
+
+.custom-image {
+  width: 85px;
+  height: 85px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.custom-title {
+  border: none;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 14px;
+  position: absolute;
+  top: 20px;
+  line-height: 1.3;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.card-text {
+  position: absolute;
+  top: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #6c757d; /* Warna sekunder yang digunakan oleh Bootstrap */
+  font-size: 12px;
+}
+
+.card-body {
+  padding-right: 10px;
+  width: 110%;
+  border: none;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  border: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.container-readmore {
+  display: inline-block;
+  background-color: #007bff; /* Warna background biru */
+  color: white; /* Warna teks putih */
+  font-size: 14px; /* Ukuran teks default */
+  padding: 1px 3px; /* Padding di sekitar teks */
+  border-radius: 5px; /* Membuat sudut kolom melengkung */
+  text-align: center;
+  text-decoration: none; /* Menghapus garis bawah */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Efek bayangan */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Efek transisi saat hover */
+}
+
+
+
+/*======================================================= FOOTER =======================================================*/
+.custom-footer {
+  background: rgb(38, 0, 255);
+  background: linear-gradient(90deg, rgba(38, 0, 255, 1) 0%, rgba(118, 25, 125, 0.9612219887955182) 50%, rgba(38, 0, 255, 1) 100%);
+  color: black;
+  font-size: 14px;
+  text-align: center;
+  padding: 10px;
+  margin-top: auto;
+}
+
+.footer-content {
+  padding-top: 0.1px;
+}
+
+.social-icons {
+  margin-top: 10px;
+}
+
+.social-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.footer-section {
+  padding-top: 1px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.footer-section p {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .footer-section {
+    padding: 0;
+  }
+}
+
+.icon-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+}
+
+.social-icon i {
+  transition: color 0.3s;
+}
+
+.social-icon:hover i {
+  color: #C13584;
+}
+
+.footer-bottom {
+  font-size: 12px;
+  color: black;
+  font-weight: bold;
+  margin-top: -10px;
+}
+
+.footer-bottom p {
+  margin-top: 1px;
+  margin-bottom: 0.5px;
+  padding-bottom: 2px;
+  color: white;
+}
+
+.footer-telephone {
+  margin-top: 0px;
+}
+.footer-telephone p {
+  color: white;
+}
+
+.footer-email {
+  margin-top: -5px;
+  margin-bottom: 0rem;
+}
+.footer-email p {
+  color: white;
+}
+
+.footer-email-link {
+  text-decoration: underline !important;
+  color: white;
+}
+
+.footer-buttom-dibuat {
+  padding-bottom: 5px;
+}
+
+/* share link */
+.link-icon {
+  font-size: 12px;
+  cursor: pointer;
+  color: #f5f5dc;
+  text-decoration: none;
+  font-weight: bold;
+
+
+}
+
+.tautan-notification {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.container-tautan {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 5px; /* Rounded corners */
+  background: linear-gradient(135deg, #2d9802, #4cf279); /* Gradien gelap dari abu-abu tua ke biru tua */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 6px 6px rgba(0, 0, 0, 0.2); /* Deep shadow for elegance */
+  text-align: center;
+  width: auto; /* Lebar tetap */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-family: 'Arial', sans-serif; /* Font yang modern dan umum */
+}
+
+
+.container-tautan h5 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.container-tautan p {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+    /* Pengaturan ukuran ikon */
+    .link-icon img {
+      width: 14px;  /* Ubah ukuran sesuai kebutuhan */
+      height: 14px; /* Ubah ukuran sesuai kebutuhan */
+      margin-top: -6px;
+  }
+
+/*======================================================= Media Queries untuk Desktop =======================================================*/
+@media (min-width: 1024px) {
+
+  body {
+    background-color: white;
+  }
+
+  .wrapper {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 0;
+    box-sizing: border-box;
+    border-left: 4px solid #571ec9;
+    border-right: 4px solid #571ec9;
+    background-color: white;
+  }
+
+  .content-wrapper {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 0;
+    padding-bottom: 60px;
+    background-color: white;
+    box-sizing: border-box;
+  }
+
+  .custom-navbar {
+    padding: 0 5px 5px 5px;
+    width: 80%;
+    height: 70px;
+  }
+
+  .navbar-collapse {
+    justify-content: space-between;
+  }
+
+  .navbar-nav {
+    margin-left: 0;
+  }
+
+  .navbar-nav .nav-item {
+    margin-right: 10px;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 20px;
+  }
+
+  .dropdown-menu .dropdown-item {
+    font-size: 24px;
+  }
+
+  .dropdown-item.text-yellow-bold {
+    color: #FFD700 !important;
+    font-weight: bold;
+  }
+
+  #carouselExampleDark {
+    margin-top: 40px;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+
+
+
+  #carouselExampleDark .carousel-item {
+    height: 300px;
+    transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+    opacity: 0;
+    transform: scale(1.05);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  #carouselExampleDark .carousel-item.active,
+  #carouselExampleDark .carousel-item-next.carousel-item-left,
+  #carouselExampleDark .carousel-item-prev.carousel-item-right {
+    opacity: 1;
+    transform: scale(1);
+    position: relative;
+  }
+
+  #carouselExampleDark .carousel-item-next,
+  #carouselExampleDark .carousel-item-prev {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+
+  #carouselExampleDark .carousel-item img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    transition: transform 1.5s ease, opacity 1.5s ease;
+  }
+
+
+
+  .container-box {
+    margin: 20px 0;
+  }
+
+  .countdown-box {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+    width: 200px;
+    background-color: #b1ffbe;
+    border-radius: 10px;
+    box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
+    text-align: center;
+    margin: 0 auto;
+    font-weight: bold;
+  }
+
+  .custom-footer {
+    color: aliceblue;
+    margin-left: -6%;
+    margin-right: -6%;
+    background-color: #252bc2;
+    box-sizing: border-box;
+  }
+
+  .footer-bottom p {
+    margin-top: 1px;
+    margin-bottom: 0.5px;
+    padding-bottom: 2px;
+    color: white;
+  }
+
+  #loading-screen {
+    width: 80vw;
+    padding-left: 10%;
+    padding-right: 10%;
+    left: 10%;
+    box-sizing: border-box;
+    border-left: 4px solid #571ec9;
+    border-right: 4px solid #571ec9;
+  }
+
+  .loading-logo {
+    max-width: 50%;
+    margin: 0 auto;
+  }
+
+  .loading-wait {
+    max-width: 50%;
+    margin: 20px auto 0;
+  }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 10px;
+  }
+
+  .text-yellow-bold {
+    color: #FFD700;
+    font-weight: bold;
+  }
+}
+
+
+
+/*======================================================= Media Queries untuk Desktop dengan Tampilan iPad Pro =======================================================*/
+@media (min-width: 1024px) {
+  /* Mengatur tampilan desktop untuk menjadi seperti iPad Pro */
+  body {
+    max-width: 1024px;
+    margin: 0 auto;
+    background-color: white;
+  }
+
+  .wrapper {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding-left: 5%;
+    padding-right: 5%;
+    box-sizing: border-box;
+    background-color: white;
+  }
+
+  .custom-navbar {
+    width: 818px;
+    height: 40px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: -45px;
+}
+  
+
+  .navbar-nav .nav-item {
+    margin-right: 10px;
+  }
+
+  .nav-link {
+    color: white !important;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 18px; /* Ukuran font lebih kecil untuk tampilan iPad Pro */
+  }
+
+  #carouselExampleDark .carousel-item {
+    height: 400px; /* Tinggi carousel disesuaikan untuk tampilan iPad Pro */
+  }
+
+  .container-box {
+    margin: 20px 0;
+  }
+
+  .countdown-box {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+    width: 250px;
+    background-color: #b1ffbe;
+    border-radius: 10px;
+    box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
+    text-align: center;
+    margin: 0 auto;
+    font-weight: bold;
+  }
+
+  .custom-footer {
+    background-color: #252bc2;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .footer-bottom p {
+    margin-bottom: 0.5px;
+    padding-bottom: 2px;
+    color: white;
+  }
+
+  .icon-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+  }
+}

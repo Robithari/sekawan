@@ -1,10 +1,8 @@
 // api/server.js
 
 const express = require('express');
-const path = require('path');
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, getDocs, query, where } = require("firebase/firestore");
-require('dotenv').config(); // Untuk memuat variabel lingkungan dari .env
 
 // Fungsi untuk menyandikan karakter HTML guna mencegah XSS
 function escapeHtml(text) {
@@ -27,19 +25,6 @@ function stripHtmlTags(text) {
 // Inisialisasi aplikasi Express
 const app = express();
 
-// Middleware untuk menyajikan file statis dari direktori 'public'
-app.use(express.static(path.join(__dirname, '..', 'public')));
-
-// Middleware untuk parsing JSON dan URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Middleware logging (opsional, untuk debugging)
-app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
-    next();
-});
-
 // Konfigurasi Firebase menggunakan Environment Variables
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -55,49 +40,20 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 const db = getFirestore();
 
-// === Redirect dari URL lama ke URL baru ===
-
-// Redirect dari URL lama ke URL baru untuk Artikel
-app.get('/artikel-home.html', (req, res) => {
-    const slug = req.query.slug;
-    console.log(`Redirecting /artikel-home.html?slug=${slug} to /artikel-home/${slug}`);
-    if (slug) {
-        return res.redirect(301, `/artikel-home/${encodeURIComponent(slug)}`);
-    } else {
-        return res.status(400).send("Bad Request: Missing 'slug' parameter.");
-    }
-});
-
-// Redirect dari URL lama ke URL baru untuk Berita
-app.get('/berita-home.html', (req, res) => {
-    const slug = req.query.slug;
-    console.log(`Redirecting /berita-home.html?slug=${slug} to /berita-home/${slug}`);
-    if (slug) {
-        return res.redirect(301, `/berita-home/${encodeURIComponent(slug)}`);
-    } else {
-        return res.status(400).send("Bad Request: Missing 'slug' parameter.");
-    }
-});
-
-// === Rute Dinamis untuk Artikel ===
+// Rute untuk mendapatkan artikel
 app.get('/artikel-home/:slug', async (req, res) => {
-    const slug = req.params.slug;
-    console.log(`Menerima permintaan untuk artikel dengan slug: ${slug}`);
+    const { slug } = req.params; // Ambil slug dari parameter URL
 
     if (!slug) {
-        console.log("Slug tidak diberikan.");
         return res.status(400).send("Bad Request: Missing 'slug' parameter.");
     }
 
     try {
         const q = query(collection(db, "articles"), where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
-        console.log(`Jumlah dokumen ditemukan: ${querySnapshot.size}`);
-        const articleDoc = querySnapshot.empty ? null : querySnapshot.docs[0];
-        const article = articleDoc ? articleDoc.data() : null;
+        const article = querySnapshot.empty ? null : querySnapshot.docs[0].data();
 
         if (article) {
-            console.log(`Artikel ditemukan: ${article.title}`);
             // Sanitasi data untuk keamanan dan pemurnian konten
             const title = escapeHtml(article.title);
             const titleKeterangan = escapeHtml(article.titleKeterangan);
@@ -106,13 +62,8 @@ app.get('/artikel-home/:slug', async (req, res) => {
             const tanggalPembuatan = escapeHtml(article.tanggalPembuatan || ''); // Asumsikan ada field tanggal
 
             // Pastikan photoUrl adalah absolute URL
-            if (photoUrl && !photoUrl.startsWith('http')) {
+            if (!photoUrl.startsWith('http')) {
                 photoUrl = `https://sekawanfc.fun/${photoUrl.replace(/^\/+/, '')}`;
-            }
-
-            // Jika photoUrl kosong, sediakan fallback gambar default
-            if (!photoUrl) {
-                photoUrl = 'https://sekawanfc.fun/default-image.jpg'; // Sediakan gambar default
             }
 
             // Bersihkan konten dari tag HTML untuk meta tag deskripsi
@@ -121,18 +72,18 @@ app.get('/artikel-home/:slug', async (req, res) => {
             // Meta tags OG yang dihasilkan di server
             const metaTags = `
                 <meta property="og:title" content="${title}" />
-                <meta property="og:description" content="${cleanedContent.substring(0, 160)}" /> <!-- Ambil 160 karakter pertama -->
+                <meta property="og:description" content="${cleanedContent}" />
                 <meta property="og:image" content="${photoUrl}" />
                 <meta property="og:image:width" content="1200">
                 <meta property="og:image:height" content="630">
                 <meta property="og:type" content="article" />
-                <meta property="og:url" content="https://sekawanfc.fun/artikel-home/${encodeURIComponent(slug)}" />
+                <meta property="og:url" content="https://sekawanfc.fun/artikel-home.html?slug=${encodeURIComponent(slug)}" />
             `;
 
             // Mengirimkan HTML yang berisi meta tag OG dan konten artikel
             res.send(`
                 <!DOCTYPE html>
-                <html lang="id" translate="no">
+                <html lang="en" translate="no">
                 <head>
                     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
                     <meta http-equiv="Pragma" content="no-cache">
@@ -142,11 +93,11 @@ app.get('/artikel-home/:slug', async (req, res) => {
                     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
                     <script>
                         window.dataLayer = window.dataLayer || [];
-                        function gtag(){dataLayer.push(arguments);}
+                        function gtag() { dataLayer.push(arguments); }
                         gtag('js', new Date());
                         gtag('config', 'G-CD0MHD1RBP');
                     </script>
-                    <!-- Link Preview -->
+                    <!-- link preview -->
                     ${metaTags}
                     <!-- Cache Control -->
                     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
@@ -161,28 +112,28 @@ app.get('/artikel-home/:slug', async (req, res) => {
                     <!-- Bootstrap and Styles -->
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
                         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-                    <link rel="stylesheet" href="/css/style.css">
-                    <link rel="stylesheet" href="/css/loading.css">
-                    <link rel="stylesheet" href="/css/berita.css">
-                    <link rel="stylesheet" href="/css/play-audio.css">
+                    <link rel="stylesheet" href="/style.css">
+                    <link rel="stylesheet" href="css/loading.css">
+                    <link rel="stylesheet" href="css/berita.css">
+                    <link rel="stylesheet" href="css/play-audio.css">
 
                     <!-- Icons -->
-                    <link rel="apple-touch-icon" sizes="57x57" href="/icon/apple-icon-57x57.png">
-                    <link rel="apple-touch-icon" sizes="60x60" href="/icon/apple-icon-60x60.png">
-                    <link rel="apple-touch-icon" sizes="72x72" href="/icon/apple-icon-72x72.png">
-                    <link rel="apple-touch-icon" sizes="76x76" href="/icon/apple-icon-76x76.png">
-                    <link rel="apple-touch-icon" sizes="114x114" href="/icon/apple-icon-114x114.png">
-                    <link rel="apple-touch-icon" sizes="120x120" href="/icon/apple-icon-120x120.png">
-                    <link rel="apple-touch-icon" sizes="144x144" href="/icon/apple-icon-144x144.png">
-                    <link rel="apple-touch-icon" sizes="152x152" href="/icon/apple-icon-152x152.png">
-                    <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-icon-180x180.png">
-                    <link rel="icon" type="image/png" sizes="192x192" href="/icon/android-icon-192x192.png">
-                    <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
-                    <link rel="icon" type="image/png" sizes="96x96" href="/icon/favicon-96x96.png">
-                    <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
-                    <link rel="manifest" href="/manifest.json">
+                    <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
+                    <link rel="apple-touch-icon" sizes="60x60" href="icon/apple-icon-60x60.png">
+                    <link rel="apple-touch-icon" sizes="72x72" href="icon/apple-icon-72x72.png">
+                    <link rel="apple-touch-icon" sizes="76x76" href="icon/apple-icon-76x76.png">
+                    <link rel="apple-touch-icon" sizes="114x114" href="icon/apple-icon-114x114.png">
+                    <link rel="apple-touch-icon" sizes="120x120" href="icon/apple-icon-120x120.png">
+                    <link rel="apple-touch-icon" sizes="144x144" href="icon/apple-icon-144x144.png">
+                    <link rel="apple-touch-icon" sizes="152x152" href="icon/apple-icon-152x152.png">
+                    <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-icon-180x180.png">
+                    <link rel="icon" type="image/png" sizes="192x192" href="icon/android-icon-192x192.png">
+                    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+                    <link rel="icon" type="image/png" sizes="96x96" href="icon/favicon-96x96.png">
+                    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+                    <link rel="manifest" href="manifest.json">
                     <meta name="msapplication-TileColor" content="#ffffff">
-                    <meta name="msapplication-TileImage" content="/icon/ms-icon-144x144.png">
+                    <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
                     <meta name="theme-color" content="#ffffff">
 
                     <!-- Firebase -->
@@ -196,7 +147,7 @@ app.get('/artikel-home/:slug', async (req, res) => {
                 <body>
                     <div class="mobile-only">
                         <div class="content-wrapper">
-                            <!-- Wrapper -->
+                            <!-- Tambahkan wrapper di sini -->
                             <div class="wrapper">
                                 <!-- LOADING SCREEN -->
                                 <div id="loading-screen" class="background">
@@ -214,8 +165,10 @@ app.get('/artikel-home/:slug', async (req, res) => {
                                     <span></span>
                                     <span></span>
                                     <span></span>
-                                    <img class="loading-logo" src="/SekawanFC.jpg" alt="Loading...">
-                                    <img class="loading-wait" src="/img/loading4.gif" alt="Loading...">
+                                    <span></span>
+                                    <span></span>
+                                    <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
+                                    <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
                                 </div>
                                 <!-- END LOADING SCREEN -->
 
@@ -223,9 +176,9 @@ app.get('/artikel-home/:slug', async (req, res) => {
                                     <!-- Navbar -->
                                     <nav class="navbar navbar-expand-lg custom-navbar">
                                         <div class="container-fluid">
-                                            <a class="navbar-brand text-white fw-bold" href="/index.html">
+                                            <a class="navbar-brand text-white fw-bold" href="index.html">
                                                 <div class="d-flex align-items-center">
-                                                    <img src="/SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
+                                                    <img src="SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
                                                     <span class="ms-2">SEKAWAN FC</span>
                                                 </div>
                                             </a>
@@ -238,23 +191,26 @@ app.get('/artikel-home/:slug', async (req, res) => {
                                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                                                     <li class="nav-item">
                                                         <a class="nav-link" style="color: white;" aria-current="page"
-                                                            href="/index.html">Home</a>
+                                                            href="index.html">Home</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" style="color: white;" href="/profil.html">Profil</a>
+                                                        <a class="nav-link" style="color: white;" href="profil.html">Profil</a>
                                                     </li>
                                                     <li class="nav-item dropdown">
                                                         <a class="nav-link dropdown-toggle" href="#" role="button"
                                                             data-bs-toggle="dropdown" aria-expanded="false"
                                                             style="color: white;">Informasi</a>
                                                         <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="/berita-home">Berita</a></li>
-                                                            <li><a class="dropdown-item" href="/artikel-home">Artikel</a></li>
+                                                            <li><a class="dropdown-item disabled text-black"
+                                                                    href="proses.html">Berita</a></li>
+                                                            <li><a class="dropdown-item disabled text-black"
+                                                                    href="proses.html">Artikel</a></li>
                                                         </ul>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" id="login-logout-link" style="color: white;"
-                                                            href="/login.html">Masuk / Daftar</a>
+                                                            href="login.html">Masuk /
+                                                            Daftar</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -263,7 +219,7 @@ app.get('/artikel-home/:slug', async (req, res) => {
                                     <!-- End Navbar -->
                                 </div>
 
-                                <!-- Konten Artikel -->
+                                <!-- Artikel -->
                                 <div class="judul-halaman">
                                     <h1 id="title" class="detail-title">${title}</h1>
                                     <div class="title-keterangan">
@@ -296,12 +252,12 @@ app.get('/artikel-home/:slug', async (req, res) => {
                                 <div class="container-tautan">
                                     <!-- Ikon untuk Salin Tautan menggunakan gambar -->
                                     <span id="copyLink" class="link-icon">
-                                        <img src="/img/icon-link.png" alt="Ikon Share Link" class="icon-link">
+                                        <img src="img/icon-link.png" alt="Ikon Share Link" class="icon-link">
                                         Share Link
                                     </span>
                                     <!-- Pesan Notifikasi -->
                                     <div id="tautan-notification" class="tautan-notification">
-                                        Tautan sudah di copy dan siap di paste, silahkan share
+                                        Tautan sudah di copi dan siap di paste, silahkan share
                                     </div>
                                 </div>
                                 <!-- End Tombol tautan -->
@@ -312,11 +268,11 @@ app.get('/artikel-home/:slug', async (req, res) => {
                                         <div class="footer-section">
                                             <h6>Ikuti Kami</h6>
                                             <div class="social-icons">
-                                                <a href="https://www.facebook.com/sekawanfc" class="social-icon" target="_blank">
+                                                <a href="proses.html" class="social-icon" target="_blank">
                                                     <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
                                                         alt="Ikon Facebook" class="icon-image">
                                                 </a>
-                                                <a href="https://www.instagram.com/sekawanfc" class="social-icon" target="_blank">
+                                                <a href="proses.html" class="social-icon" target="_blank">
                                                     <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
                                                         alt="Ikon Instagram" class="icon-image">
                                                 </a>
@@ -341,19 +297,20 @@ app.get('/artikel-home/:slug', async (req, res) => {
                                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                                     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
                                     crossorigin="anonymous"></script>
-                                <script src="/js/pencarian.js"></script>
-                                <script src="/js/hapus-cookie.js"></script>
-                                <script src="/js/splash-screen-start.js"></script>
-                                <script src="/js/kunci-layar.js"></script>
-                                <script type="module" src="/firebase-config.js"></script>
-                                <script src="/js/share-link.js"></script>
-                                <script src="/js/cek-login.js"></script>
-                                <script type="module" src="/ujicoba-website.js"></script>
-                                <script type="module" src="/js/api-artikel.js"></script>
-                                <script src="/js/play-audio.js"></script>
+                                <script src="js/pencarian.js"></script>
+                                <script src="js/hapus-cookie.js"></script>
+                                <script src="js/splas-screen-start.js"></script>
+                                <script src="js/kunci-layar.js"></script>
+                                <script type="module" src="firebase-config.js"></script>
+                                <script src="js/share-link.js"></script>
+                                <script src="js/cek-login.js"></script>
+                                <script type="module" src="./ujicoba-website.js"></script>
+                                <script type="module" src="firebase-config.js"></script>
+                                <script type="module" src="js/api-artikel.js"></script>
+                                <script src="js/play-audio.js"></script>
 
                                 <script>
-                                    window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
+                                    window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
                                 </script>
                             </div>
                             <!-- END SCRIPTS -->
@@ -378,10 +335,9 @@ app.get('/artikel-home/:slug', async (req, res) => {
                 </html>
             `);
         } else {
-            console.log(`Tidak ada artikel yang ditemukan untuk slug: ${slug}`);
             res.status(404).send(`
                 <!DOCTYPE html>
-                <html lang="id">
+                <html lang="en">
                 <head>
                     <meta charset="UTF-8">
                     <title>Artikel Tidak Ditemukan</title>
@@ -401,16 +357,16 @@ app.get('/artikel-home/:slug', async (req, res) => {
                     </style>
                 </head>
                 <body>
-                    <h1>Slug tidak ditemukan di URL!</h1>
+                    <h1>Artikel tidak ditemukan!</h1>
                 </body>
                 </html>
             `);
         }
     } catch (error) {
-        console.error("Error fetching artikel:", error);
+        console.error("Error fetching article:", error);
         res.status(500).send(`
             <!DOCTYPE html>
-            <html lang="id">
+            <html lang="en">
             <head>
                 <meta charset="UTF-8">
                 <title>Error</title>
@@ -437,25 +393,20 @@ app.get('/artikel-home/:slug', async (req, res) => {
     }
 });
 
-// === Rute Dinamis untuk Berita ===
+// Rute untuk mendapatkan berita
 app.get('/berita-home/:slug', async (req, res) => {
-    const slug = req.params.slug;
-    console.log(`Menerima permintaan untuk berita dengan slug: ${slug}`);
+    const { slug } = req.params; // Ambil slug dari parameter URL
 
     if (!slug) {
-        console.log("Slug tidak diberikan.");
         return res.status(400).send("Bad Request: Missing 'slug' parameter.");
     }
 
     try {
         const q = query(collection(db, "berita"), where("slug", "==", slug));
         const querySnapshot = await getDocs(q);
-        console.log(`Jumlah dokumen ditemukan: ${querySnapshot.size}`);
-        const beritaDoc = querySnapshot.empty ? null : querySnapshot.docs[0];
-        const berita = beritaDoc ? beritaDoc.data() : null;
+        const berita = querySnapshot.empty ? null : querySnapshot.docs[0].data();
 
         if (berita) {
-            console.log(`Berita ditemukan: ${berita.title}`);
             // Sanitasi data untuk keamanan dan pemurnian konten
             const title = escapeHtml(berita.title);
             const titleKeterangan = escapeHtml(berita.titleKeterangan);
@@ -484,13 +435,13 @@ app.get('/berita-home/:slug', async (req, res) => {
                 <meta property="og:image:width" content="1200">
                 <meta property="og:image:height" content="630">
                 <meta property="og:type" content="article" />
-                <meta property="og:url" content="https://sekawanfc.fun/berita-home/${encodeURIComponent(slug)}" />
+                <meta property="og:url" content="https://sekawanfc.fun/berita-home.html?slug=${encodeURIComponent(slug)}" />
             `;
 
             // Mengirimkan HTML yang berisi meta tag OG dan konten berita
             res.send(`
                 <!DOCTYPE html>
-                <html lang="id" translate="no">
+                <html lang="en" translate="no">
                 <head>
                     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
                     <meta http-equiv="Pragma" content="no-cache">
@@ -500,11 +451,11 @@ app.get('/berita-home/:slug', async (req, res) => {
                     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
                     <script>
                         window.dataLayer = window.dataLayer || [];
-                        function gtag(){dataLayer.push(arguments);}
+                        function gtag() { dataLayer.push(arguments); }
                         gtag('js', new Date());
                         gtag('config', 'G-CD0MHD1RBP');
                     </script>
-                    <!-- Link Preview -->
+                    <!-- link preview -->
                     ${metaTags}
                     <!-- Cache Control -->
                     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
@@ -519,28 +470,28 @@ app.get('/berita-home/:slug', async (req, res) => {
                     <!-- Bootstrap and Styles -->
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
                         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-                    <link rel="stylesheet" href="/css/style.css">
-                    <link rel="stylesheet" href="/css/loading.css">
-                    <link rel="stylesheet" href="/css/berita.css">
-                    <link rel="stylesheet" href="/css/play-audio.css">
+                    <link rel="stylesheet" href="/style.css">
+                    <link rel="stylesheet" href="css/loading.css">
+                    <link rel="stylesheet" href="css/berita.css">
+                    <link rel="stylesheet" href="css/play-audio.css">
 
                     <!-- Icons -->
-                    <link rel="apple-touch-icon" sizes="57x57" href="/icon/apple-icon-57x57.png">
-                    <link rel="apple-touch-icon" sizes="60x60" href="/icon/apple-icon-60x60.png">
-                    <link rel="apple-touch-icon" sizes="72x72" href="/icon/apple-icon-72x72.png">
-                    <link rel="apple-touch-icon" sizes="76x76" href="/icon/apple-icon-76x76.png">
-                    <link rel="apple-touch-icon" sizes="114x114" href="/icon/apple-icon-114x114.png">
-                    <link rel="apple-touch-icon" sizes="120x120" href="/icon/apple-icon-120x120.png">
-                    <link rel="apple-touch-icon" sizes="144x144" href="/icon/apple-icon-144x144.png">
-                    <link rel="apple-touch-icon" sizes="152x152" href="/icon/apple-icon-152x152.png">
-                    <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-icon-180x180.png">
-                    <link rel="icon" type="image/png" sizes="192x192" href="/icon/android-icon-192x192.png">
-                    <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
-                    <link rel="icon" type="image/png" sizes="96x96" href="/icon/favicon-96x96.png">
-                    <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
-                    <link rel="manifest" href="/manifest.json">
+                    <link rel="apple-touch-icon" sizes="57x57" href="icon/apple-icon-57x57.png">
+                    <link rel="apple-touch-icon" sizes="60x60" href="icon/apple-icon-60x60.png">
+                    <link rel="apple-touch-icon" sizes="72x72" href="icon/apple-icon-72x72.png">
+                    <link rel="apple-touch-icon" sizes="76x76" href="icon/apple-icon-76x76.png">
+                    <link rel="apple-touch-icon" sizes="114x114" href="icon/apple-icon-114x114.png">
+                    <link rel="apple-touch-icon" sizes="120x120" href="icon/apple-icon-120x120.png">
+                    <link rel="apple-touch-icon" sizes="144x144" href="icon/apple-icon-144x144.png">
+                    <link rel="apple-touch-icon" sizes="152x152" href="icon/apple-icon-152x152.png">
+                    <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-icon-180x180.png">
+                    <link rel="icon" type="image/png" sizes="192x192" href="icon/android-icon-192x192.png">
+                    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+                    <link rel="icon" type="image/png" sizes="96x96" href="icon/favicon-96x96.png">
+                    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+                    <link rel="manifest" href="manifest.json">
                     <meta name="msapplication-TileColor" content="#ffffff">
-                    <meta name="msapplication-TileImage" content="/icon/ms-icon-144x144.png">
+                    <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
                     <meta name="theme-color" content="#ffffff">
 
                     <!-- Firebase -->
@@ -554,7 +505,7 @@ app.get('/berita-home/:slug', async (req, res) => {
                 <body>
                     <div class="mobile-only">
                         <div class="content-wrapper">
-                            <!-- Wrapper -->
+                            <!-- Tambahkan wrapper di sini -->
                             <div class="wrapper">
                                 <!-- LOADING SCREEN -->
                                 <div id="loading-screen" class="background">
@@ -572,8 +523,8 @@ app.get('/berita-home/:slug', async (req, res) => {
                                     <span></span>
                                     <span></span>
                                     <span></span>
-                                    <img class="loading-logo" src="/SekawanFC.jpg" alt="Loading...">
-                                    <img class="loading-wait" src="/img/loading4.gif" alt="Loading...">
+                                    <img class="loading-logo" src="SekawanFC.jpg" alt="Loading...">
+                                    <img class="loading-wait" src="img/loading4.gif" alt="Loading...">
                                 </div>
                                 <!-- END LOADING SCREEN -->
 
@@ -581,9 +532,9 @@ app.get('/berita-home/:slug', async (req, res) => {
                                     <!-- Navbar -->
                                     <nav class="navbar navbar-expand-lg custom-navbar">
                                         <div class="container-fluid">
-                                            <a class="navbar-brand text-white fw-bold" href="/index.html">
+                                            <a class="navbar-brand text-white fw-bold" href="index.html">
                                                 <div class="d-flex align-items-center">
-                                                    <img src="/SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
+                                                    <img src="SekawanFC.jpg" alt="Icon" class="icon-img" width="40" height="40">
                                                     <span class="ms-2">SEKAWAN FC</span>
                                                 </div>
                                             </a>
@@ -596,23 +547,25 @@ app.get('/berita-home/:slug', async (req, res) => {
                                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                                                     <li class="nav-item">
                                                         <a class="nav-link" style="color: white;" aria-current="page"
-                                                            href="/index.html">Home</a>
+                                                            href="index.html">Home</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" style="color: white;" href="/profil.html">Profil</a>
+                                                        <a class="nav-link" style="color: white;" href="profil.html">Profil</a>
                                                     </li>
                                                     <li class="nav-item dropdown">
                                                         <a class="nav-link dropdown-toggle" href="#" role="button"
                                                             data-bs-toggle="dropdown" aria-expanded="false"
                                                             style="color: white;">Informasi</a>
                                                         <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" href="/berita-home">Berita</a></li>
-                                                            <li><a class="dropdown-item" href="/artikel-home">Artikel</a></li>
+                                                            <li><a class="dropdown-item disabled text-black"
+                                                                    href="proses.html">Berita</a></li>
+                                                            <li><a class="dropdown-item disabled text-black"
+                                                                    href="proses.html">Artikel</a></li>
                                                         </ul>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" id="login-logout-link" style="color: white;"
-                                                            href="/login.html">Masuk / Daftar</a>
+                                                            href="login.html">Masuk / Daftar</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -621,7 +574,7 @@ app.get('/berita-home/:slug', async (req, res) => {
                                     <!-- End Navbar -->
                                 </div>
 
-                                <!-- Konten Berita -->
+                                <!-- Berita -->
                                 <div class="judul-halaman">
                                     <h1 id="title" class="detail-title">${title}</h1>
                                     <div class="title-keterangan">
@@ -654,12 +607,12 @@ app.get('/berita-home/:slug', async (req, res) => {
                                 <div class="container-tautan">
                                     <!-- Ikon untuk Salin Tautan menggunakan gambar -->
                                     <span id="copyLink" class="link-icon">
-                                        <img src="/img/icon-link.png" alt="Ikon Share Link" class="icon-link">
+                                        <img src="img/icon-link.png" alt="Ikon Share Link" class="icon-link">
                                         Share Link
                                     </span>
                                     <!-- Pesan Notifikasi -->
                                     <div id="tautan-notification" class="tautan-notification">
-                                        Tautan sudah di copy dan siap di paste, silahkan share
+                                        Tautan sudah di copi dan siap di paste, silahkan share
                                     </div>
                                 </div>
                                 <!-- End Tombol tautan -->
@@ -670,11 +623,11 @@ app.get('/berita-home/:slug', async (req, res) => {
                                         <div class="footer-section">
                                             <h6>Ikuti Kami</h6>
                                             <div class="social-icons">
-                                                <a href="https://www.facebook.com/sekawanfc" class="social-icon" target="_blank">
+                                                <a href="proses.html" class="social-icon" target="_blank">
                                                     <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
                                                         alt="Ikon Facebook" class="icon-image">
                                                 </a>
-                                                <a href="https://www.instagram.com/sekawanfc" class="social-icon" target="_blank">
+                                                <a href="proses.html" class="social-icon" target="_blank">
                                                     <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
                                                         alt="Ikon Instagram" class="icon-image">
                                                 </a>
@@ -699,19 +652,20 @@ app.get('/berita-home/:slug', async (req, res) => {
                                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                                     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
                                     crossorigin="anonymous"></script>
-                                <script src="/js/pencarian.js"></script>
-                                <script src="/js/hapus-cookie.js"></script>
-                                <script src="/js/splash-screen-start.js"></script>
-                                <script src="/js/kunci-layar.js"></script>
-                                <script type="module" src="/firebase-config.js"></script>
-                                <script src="/js/share-link.js"></script>
-                                <script src="/js/cek-login.js"></script>
-                                <script type="module" src="/ujicoba-website.js"></script>
-                                <script type="module" src="/js/api-artikel.js"></script>
-                                <script src="/js/play-audio.js"></script>
+                                <script src="js/pencarian.js"></script>
+                                <script src="js/hapus-cookie.js"></script>
+                                <script src="js/splas-screen-start.js"></script>
+                                <script src="js/kunci-layar.js"></script>
+                                <script type="module" src="firebase-config.js"></script>
+                                <script src="js/share-link.js"></script>
+                                <script src="js/cek-login.js"></script>
+                                <script type="module" src="./ujicoba-website.js"></script>
+                                <script type="module" src="firebase-config.js"></script>
+                                <script type="module" src="js/api-berita.js"></script>
+                                <script src="js/play-audio.js"></script>
 
                                 <script>
-                                    window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
+                                    window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
                                 </script>
                             </div>
                             <!-- END SCRIPTS -->
@@ -736,10 +690,9 @@ app.get('/berita-home/:slug', async (req, res) => {
                 </html>
             `);
         } else {
-            console.log(`Tidak ada berita yang ditemukan untuk slug: ${slug}`);
             res.status(404).send(`
                 <!DOCTYPE html>
-                <html lang="id">
+                <html lang="en">
                 <head>
                     <meta charset="UTF-8">
                     <title>Berita Tidak Ditemukan</title>
@@ -759,7 +712,7 @@ app.get('/berita-home/:slug', async (req, res) => {
                     </style>
                 </head>
                 <body>
-                    <h1>Slug tidak ditemukan di URL!</h1>
+                    <h1>Berita tidak ditemukan!</h1>
                 </body>
                 </html>
             `);
@@ -768,7 +721,7 @@ app.get('/berita-home/:slug', async (req, res) => {
         console.error("Error fetching berita:", error);
         res.status(500).send(`
             <!DOCTYPE html>
-            <html lang="id">
+            <html lang="en">
             <head>
                 <meta charset="UTF-8">
                 <title>Error</title>
@@ -795,18 +748,6 @@ app.get('/berita-home/:slug', async (req, res) => {
     }
 });
 
-// Menambahkan Rute Root untuk Pengujian
-app.get('/', (req, res) => {
-    res.send('Server Express Berjalan dengan Baik!');
-});
-
-// Menetapkan Port
-const PORT = process.env.PORT || 3000;
-
-// Menjalankan Server dan Mendengarkan pada Port Tertentu
-app.listen(PORT, () => {
-    console.log(`Server berjalan pada port ${PORT}`);
-});
 
 // Mengekspor aplikasi Express
 module.exports = app;

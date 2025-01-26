@@ -1,0 +1,115 @@
+.container-kas {
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-top: auto;
+}
+
+
+h5 {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 10px auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto; /* Biarkan browser mengatur lebar kolom secara otomatis */
+}
+
+
+#data-table th {
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+th,
+td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    text-align: center; /* Rata tengah untuk header */
+}
+
+td {
+    text-align: left; /* Rata kiri untuk data */
+}
+
+/* Atur lebar kolom Pemasukan, Pengeluaran, dan Saldo dengan penyesuaian otomatis */
+th:nth-child(3),
+td:nth-child(3),
+/* Kolom PEMASUKAN */
+th:nth-child(4),
+td:nth-child(4),
+/* Kolom PENGELUARAN */
+th:nth-child(5),
+td:nth-child(5)
+/* Kolom SALDO */
+    {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Tambahkan ... di akhir teks panjang */
+}
+
+/* Media Queries untuk responsif */
+@media (max-width: 600px) {
+    table,
+    th,
+    td {
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    table,
+    th,
+    td {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 4px 8px;
+    }
+}
+
+@media (orientation: portrait) {
+    table,
+    th,
+    td {
+        font-size: 9px;
+    }
+
+    th,
+    td {
+        padding: 4px 6px;
+    }
+}
+
+@media (orientation: landscape) {
+    table,
+    th,
+    td {
+        font-size: 12px;
+    }
+
+    th,
+    td {
+        padding: 4px 6px;
+    }
+}
+
