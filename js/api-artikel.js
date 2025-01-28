@@ -21,6 +21,12 @@ async function loadArticle() {
         if (!querySnapshot.empty) {
             const article = querySnapshot.docs[0].data();
 
+            // Mengisi title halaman dan meta Open Graph
+            document.title = article.title || "Artikel tidak tersedia"; 
+            document.querySelector('meta[property="og:title"]').setAttribute("content", article.title || '');
+            document.querySelector('meta[property="og:description"]').setAttribute("content", article.titleKeterangan || '');
+            document.querySelector('meta[property="og:image"]').setAttribute("content", article.photoUrl || '');
+
             // Tampilkan data artikel ke elemen HTML
             document.getElementById("title").innerText = article.title;
             document.getElementById("titleKeterangan").innerText = article.titleKeterangan;
