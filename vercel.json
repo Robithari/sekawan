@@ -2,16 +2,24 @@
   "version": 2,
   "routes": [
     {
-      "src": "/berita-home.html",
-      "dest": "/api/server.js"
+      "src": "/berita-home/(.*)",
+      "dest": "/berita-home.html"
     },
     {
-      "src": "/artikel-home.html",
-      "dest": "/api/server.js"
+      "src": "/artikel-home/(.*)",
+      "dest": "/artikel-home.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/public/$1"
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",  
+      "headers": {
+        "User-Agent": "Googlebot",  
+        "X-Prerender-Token": "Qda1wQOGSWl5EkcA8twU"  
+      },
+      "dest": "/api/prerender.js"  
     }
   ]
 }
