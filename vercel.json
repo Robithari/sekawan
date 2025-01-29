@@ -2,14 +2,6 @@
   "version": 2,
   "routes": [
     {
-      "src": "/berita-home/(.*)",
-      "dest": "/berita-home.html"
-    },
-    {
-      "src": "/artikel-home/(.*)",
-      "dest": "/artikel-home.html"
-    },
-    {
       "src": "/(.*)",
       "dest": "/$1"
     },
@@ -19,7 +11,7 @@
         "User-Agent": "Googlebot",  
         "X-Prerender-Token": "Qda1wQOGSWl5EkcA8twU"  
       },
-      "dest": "/api/prerender.js"  
+      "dest": "/api/prerender.js"
     }
   ]
 }
