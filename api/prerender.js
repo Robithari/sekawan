@@ -1,10 +1,6 @@
-// Mengimpor middleware dari file 'prerender-middleware.js'
-const prerender = require('./prerender-middleware');
+const prerender = require('prerender-node');
 
-// Fungsi utama untuk menangani permintaan API
 module.exports = (req, res) => {
-    // Menjalankan middleware yang sudah diatur
-    prerender(req, res, () => {
-        res.status(404).send('Halaman tidak ditemukan'); // Mengirim respons jika halaman tidak ditemukan
-    });
+  prerender.set('prerenderToken', 'Qda1wQOGSWl5EkcA8twU'); // Ganti dengan token Anda
+  prerender(req, res);
 };
