@@ -2,7 +2,7 @@
 const prerender = require('prerender-node');
 
 // Set token API Prerender.io
-prerender.set('prerenderToken', 'IyWIluiXLmkV6R3ba5Ns'); // Ganti dengan token Anda
+prerender.set('prerenderToken', 'Qda1wQOGSWl5EkcA8twU'); // Ganti dengan token Anda
 
 // Menambahkan log untuk mencatat URL yang sedang dirender
 prerender.on('beforeRender', (req, res) => {

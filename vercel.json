@@ -9,7 +9,7 @@
       "src": "/(.*)",  
       "headers": {
         "User-Agent": "Googlebot",  
-        "X-Prerender-Token": "IyWIluiXLmkV6R3ba5Ns"  
+        "X-Prerender-Token": "Qda1wQOGSWl5EkcA8twU"  
       },
       "dest": "/api/prerender.js"
     }

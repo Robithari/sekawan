@@ -5,7 +5,7 @@ const prerender = require('prerender-node');
 const app = express();
 
 // Gunakan Prerender.io dengan token yang benar
-app.use(prerender.set('prerenderToken', 'Qda1wQOGSWl5EkcA8twU')); // Ganti dengan token Anda
+app.use(prerender.set('prerenderToken', 'IyWIluiXLmkV6R3ba5Ns')); // Ganti dengan token Anda
 
 // Middleware untuk menangani halaman dinamis dengan query parameter
 app.use((req, res, next) => {
