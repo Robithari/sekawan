@@ -3,10 +3,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
-import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import db from './config/firebase.js';
 
 dotenv.config();
 
@@ -34,19 +32,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set view engine ke EJS
 app.set('view engine', 'ejs');
 
-// Koneksi ke MongoDB
-const DB_URI = process.env.DB_URI;
-mongoose.connect(DB_URI)
-  .then(() => console.log("🚀 Successfully connected to MongoDB Atlas"))
-  .catch((err) => console.error("❌ Error connecting to MongoDB Atlas:", err.message));
+// Jika Anda masih menggunakan database eksternal seperti Firebase, bisa menghapus kode koneksi MongoDB dan tetap menggunakan Firebase
+// const DB_URI = process.env.DB_URI;
+// mongoose.connect(DB_URI)
+//   .then(() => console.log("🚀 Successfully connected to MongoDB Atlas"))
+//   .catch((err) => console.error("❌ Error connecting to MongoDB Atlas:", err.message));
 
-// Import Routes
+// Import Routes (tanpa dependensi MongoDB, pastikan rute tidak mengandalkan MongoDB)
 import indexRoutes from './routes/index.js';
 import apiRoutes from './routes/api.js';
 import articleRoutes from './routes/articles.js';
 import beritaRoutes from './routes/berita.js';
 
-// Use Routes
+// Gunakan Routes
 app.use('/', indexRoutes);
 app.use('/api', apiRoutes);
 app.use('/articles', articleRoutes);
