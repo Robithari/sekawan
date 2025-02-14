@@ -1,14 +1,15 @@
-const express = require("express");
+import express from 'express';
+import { addBerita, getAllBerita, getBeritaBySlug, updateBerita, deleteBerita } from '../controllers/beritaController.js';
+import db from '../config/firebase.js';
+
 const router = express.Router();
-const db = require("../config/firebase");
-const beritaController = require("../controllers/beritaController");
 
 // Rute API
-router.post("/", beritaController.addBerita);
-router.get("/", beritaController.getAllBerita);
-router.get("/:slug", beritaController.getBeritaBySlug);
-router.put("/:id", beritaController.updateBerita);  // Pastikan controller ini ada
-router.delete("/:id", beritaController.deleteBerita);
+router.post("/", addBerita);
+router.get("/", getAllBerita);
+router.get("/:slug", getBeritaBySlug);
+router.put("/:id", updateBerita);
+router.delete("/:id", deleteBerita);
 
 // Rute untuk tampilan berita berdasarkan slug
 router.get("/view/:slug", async (req, res) => {
@@ -27,4 +28,4 @@ router.get("/view/:slug", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
