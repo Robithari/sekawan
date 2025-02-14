@@ -6,49 +6,47 @@ import path from 'path';
 import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import db from './config/firebase.js'; // Pastikan file ini ada dan dengan ekstensi .js
+import db from './config/firebase.js';
 
-// Load environment variables
 dotenv.config();
 
-// Inisialisasi aplikasi Express
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000", // Sesuaikan dengan URL frontend
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
   credentials: true
 }));
-app.use(morgan('dev')); // Logging
-app.use(express.json()); // Parsing JSON
-app.use(express.urlencoded({ extended: false })); // Parsing URL-encoded data
+app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// Mendapatkan direktori saat ini
+// Mendapatkan __dirname untuk path yang benar
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Set direktori views untuk EJS
+app.set('views', path.join(__dirname, 'views')); // Set folder views di Express
+
 // Menyajikan file statis dari folder 'public'
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('view engine', 'ejs'); // Mengatur view engine ke EJS
+
+// Set view engine ke EJS
+app.set('view engine', 'ejs');
 
 // Koneksi ke MongoDB
-const DB_URI = process.env.DB_URI; // Pastikan DB_URI ada di file .env
-
+const DB_URI = process.env.DB_URI;
 mongoose.connect(DB_URI)
-  .then(() => {
-    console.log("🚀 Successfully connected to MongoDB Atlas");
-  })
-  .catch((err) => {
-    console.error("❌ Error connecting to MongoDB Atlas:", err.message);
-  });
+  .then(() => console.log("🚀 Successfully connected to MongoDB Atlas"))
+  .catch((err) => console.error("❌ Error connecting to MongoDB Atlas:", err.message));
 
 // Import Routes
 import indexRoutes from './routes/index.js';
 import apiRoutes from './routes/api.js';
-import articleRoutes from './routes/articles.js'; // Pastikan file ini ada dan dengan ekstensi .js
-import beritaRoutes from './routes/berita.js'; // Pastikan file ini ada dan dengan ekstensi .js
+import articleRoutes from './routes/articles.js';
+import beritaRoutes from './routes/berita.js';
 
-// Gunakan Routes
+// Use Routes
 app.use('/', indexRoutes);
 app.use('/api', apiRoutes);
 app.use('/articles', articleRoutes);
@@ -60,6 +58,5 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-// Jalankan Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// Ekspor aplikasi untuk Vercel
+export default app;
