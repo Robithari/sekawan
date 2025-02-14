@@ -1,9 +1,11 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const PostSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
     title: String,
     content: String,
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
-module.exports = mongoose.model('Post', PostSchema);
+const Post = mongoose.model('Post', postSchema);
+
+export default Post;
