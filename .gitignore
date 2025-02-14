@@ -1,7 +1,5 @@
-.vercel
 node_modules
-node_modules
-
+firebase-service-account.json
+firebase-config.js
 .vercel
-
-.vercel
+.env
