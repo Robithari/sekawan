@@ -1,4 +1,11 @@
-node_modules
+# Ignore node_modules folder
+node_modules/
+
+# Ignore environment variables file
 .env
+
+# Ignore Firebase service account credentials
 firebase-service-account.json
+
+# Ignore specific project file (if it contains sensitive data)
 isi_proyek.txt
