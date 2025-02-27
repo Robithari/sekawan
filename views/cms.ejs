@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Template Profesional</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/cms.css">
+
+
+    <!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-5">
+
+
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
+    <!-- Firebase Configuration -->
+    <script type="module" src="firebase-config.js"></script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script to toggle sections -->
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll("section");
+            sections.forEach(section => section.classList.add("d-none"));
+            document.getElementById(sectionId).classList.remove("d-none");
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            showSection('berita-section');
+        });
+    </script>
+
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-CD0MHD1RBP');
+        </script>
+        
+</head>
+
+<body style="display: none;" id="body-content">
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="bg-dark">
+            <div class="sidebar-header text-center py-4">
+                <h3>Sekawan FC</h3>
+                <strong>ADMIN</strong>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('profil-section')">
+                        <i class="bi bi-building me-2"></i> Profil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" onclick="showSection('berita-section')">
+                        <i class="bi bi-newspaper me-2"></i> Berita
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('artikel-section')">
+                        <i class="bi bi-pencil-square me-2"></i> Artikel
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('jadwal-section')">
+                        <i class="bi bi-calendar-date me-2"></i> Jadwal Pertandingan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('kas-section')">
+                        <i class="bi bi-cash-coin me-2"></i> Laporan Kas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('dokumentasi-section')">
+                        <i class="bi bi-images me-2"></i> Dokumentasi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('inventaris-section')">
+                        <i class="bi bi-box-seam me-2"></i> Barang Inventaris
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('musyawarah-section')">
+                        <i class="bi bi-people me-2"></i> Musyawarah & Agenda
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('carousel-section')">
+                        <i class="bi bi-sliders me-2"></i> Carousel/Slide Show
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('footer-section')">
+                        <i class="bi bi-layout-text-window-reverse me-2"></i> Footer
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /#sidebar -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <div class="container-fluid">
+                    <!-- Hide toggle button on desktop -->
+                    <button class="btn btn-primary d-lg-none" id="menu-toggle" data-bs-toggle="collapse"
+                        data-bs-target="#sidebar">Toggle Menu</button>
+                    <!-- Admin CMS Button for Login/Logout -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="adminDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> Admin CMS
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <li><a class="dropdown-item" href="/login-cms">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Modal untuk Login -->
+            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal untuk Sign Up -->
+            <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="signupForm">
+                                <div class="mb-3">
+                                    <label for="signupName" class="form-label">Nama</label>
+                                    <input type="text" class="form-control" id="signupName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signupEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="signupEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signupPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="signupPassword" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Ulangi Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="adminCode" class="form-label">Kode Admin</label>
+                                    <input type="text" class="form-control" id="adminCode" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Sign Up</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="container-fluid mt-4">
+                <h1 class="mt-4">Dashboard Admin - Sekawan FC</h1>
+                <hr>
+
+
+
+<!-- Berita Formulir -->
+<!-- Berita Formulir -->
+<section id="berita-section" class="mb-5">
+    <h2 id="form-title-berita">Kelola Berita</h2>
+    <form id="addBeritaForm">
+        <!-- Form Fields -->
+        <div class="mb-3">
+            <label for="beritaTitle" class="form-label">Judul</label>
+            <input type="text" id="beritaTitle" class="form-control" placeholder="Masukkan judul" required>
+        </div>
+        <div class="mb-3">
+            <label for="beritaTitleKeterangan" class="form-label">Title Keterangan</label>
+            <input type="text" id="beritaTitleKeterangan" class="form-control" placeholder="Masukkan keterangan judul" required>
+        </div>
+        <div class="mb-3">
+            <label for="beritaTanggalPembuatan" class="form-label">Tanggal Pembuatan</label>
+            <input type="date" id="beritaTanggalPembuatan" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="beritaContent" class="form-label">Konten</label>
+            <textarea id="beritaContent" class="form-control" placeholder="Masukkan konten" rows="5" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="beritaPhotoUrl" class="form-label">URL Foto</label>
+            <input type="url" id="beritaPhotoUrl" class="form-control" placeholder="Masukkan URL foto" required>
+        </div>
+        <div class="mb-3">
+            <label for="beritaCaption" class="form-label">Keterangan Foto</label>
+            <input type="text" id="beritaCaption" class="form-control" placeholder="Masukkan keterangan foto" required>
+        </div>
+
+        <!-- Buttons -->
+        <button type="submit" id="berita-add-btn" class="btn btn-primary">Tambah Berita</button>
+        <button type="submit" id="berita-update-btn" class="btn btn-success d-none">Selesai</button>
+        <button type="button" id="berita-cancel-btn" class="btn btn-secondary d-none">Batal</button>
+    </form>
+
+    <div id="berita-message" class="mt-3 d-none alert alert-info"></div>
+
+    <h2 class="mt-5">Daftar Berita</h2>
+    <div id="berita-selection" class="row"></div>
+</section>
+<!-- End Berita Formulir -->
+
+                <!-- end berita formulir -->
+
+                <!-- artikel formulir -->
+                <section id="artikel-section" class="mb-5 d-none">
+                    <h2 id="form-title">Kelola Artikel</h2>
+                    <form id="addContentForm">
+                        <!-- Form Fields -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Judul</label>
+                            <input type="text" id="title" class="form-control" placeholder="Masukkan judul" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="titleKeterangan" class="form-label">Title Keterangan</label>
+                            <input type="text" id="titleKeterangan" class="form-control"
+                                placeholder="Masukkan keterangan judul" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggalPembuatan" class="form-label">Tanggal Pembuatan</label>
+                            <input type="date" id="tanggalPembuatan" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Konten</label>
+                            <textarea id="content" class="form-control" placeholder="Masukkan konten" rows="5"
+                                required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="photoUrl" class="form-label">URL Foto</label>
+                            <input type="url" id="photoUrl" class="form-control" placeholder="Masukkan URL foto"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="caption" class="form-label">Keterangan Foto</label>
+                            <input type="text" id="caption" class="form-control" placeholder="Masukkan keterangan foto"
+                                required>
+                        </div>
+
+                        <!-- Buttons -->
+                        <button type="submit" id="add-btn" class="btn btn-primary">Tambah Artikel</button>
+                        <button type="submit" id="update-btn" class="btn btn-success d-none">Selesai</button>
+                        <button type="button" id="cancel-profil-btn" class="btn btn-secondary d-none">Batal</button>
+                    </form>
+
+                    <div id="message" class="mt-3 d-none alert alert-info"></div>
+
+                    <h2 class="mt-5">Daftar Artikel</h2>
+                    <div id="artikel-selection" class="row"></div>
+                </section>
+                <!-- end artikel formulir -->
+
+
+                <!-- Jadwal Pertandingan -->
+                <section id="jadwal-section" class="mb-5">
+                    <h2 id="form-title-pertandingan">Kelola Jadwal Pertandingan</h2>
+                    <form id="addPertandinganForm">
+                        <!-- Form Fields -->
+                        <div class="mb-3">
+                            <label for="timA" class="form-label">Tim A</label>
+                            <input type="text" id="timA" class="form-control" placeholder="Nama Tim A" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="timB" class="form-label">Tim B</label>
+                            <input type="text" id="timB" class="form-control" placeholder="Nama Tim B" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="hari" class="form-label">Hari</label>
+                            <input type="text" id="hari" class="form-control" placeholder="Hari Pertandingan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggalPertandingan" class="form-label">Tanggal Pertandingan</label>
+                            <input type="date" id="tanggalPertandingan" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="waktu" class="form-label">Waktu Pertandingan</label>
+                            <input type="text" id="waktu" class="form-control" placeholder="Waktu Pertandingan (HH.MM)" required>
+                        </div>
+                
+                        <!-- Buttons -->
+                        <button type="submit" id="pertandingan-update-btn" class="btn btn-success d-none">Selesai</button>
+                        <button type="button" id="pertandingan-cancel-btn" class="btn btn-secondary d-none">Batal</button>
+                    </form>
+                
+                    <div id="pertandingan-message" class="mt-3 d-none alert alert-info"></div>
+                
+                    <h2 class="mt-5">Daftar Pertandingan</h2>
+                    <div id="pertandingan-selection" class="row"></div>
+                </section>
+                <!-- END Jadwal Pertandingan -->
+                
+
+                <section id="kas-section" class="mb-5 d-none">
+                    <h2>Laporan Kas</h2>
+                    <p>Belum ada konten yang tersedia di sini.</p>
+                </section>
+
+                <section id="dokumentasi-section" class="mb-5 d-none">
+                    <h2>Dokumentasi</h2>
+                    <p>Belum ada konten yang tersedia di sini.</p>
+                </section>
+
+                <section id="inventaris-section" class="mb-5 d-none">
+                    <h2>Barang Inventaris</h2>
+                    <p>Belum ada konten yang tersedia di sini.</p>
+                </section>
+
+                <section id="musyawarah-section" class="mb-5 d-none">
+                    <h2>Musyawarah Mufakat & Agenda</h2>
+                    <p>Belum ada konten yang tersedia di sini.</p>
+                </section>
+
+                <!-- SLIDE -->
+                <section id="carousel-section" class="mb-5 d-none">
+                    <h2>Kelola Carousel / Slide Show</h2>
+                    <form id="carouselForm">
+                        <div class="mb-3">
+                            <label for="fileInput" class="form-label">Upload Gambar</label>
+                            <input type="file" id="fileInput" class="form-control" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Tambahkan Gambar</button>
+                    </form>
+
+                    <h3 class="mt-4">Daftar Gambar Carousel</h3>
+                    <div id="carousel-selection" class="row"></div>
+                </section>
+
+                <!-- Footer -->
+                <section id="footer-section" class="mb-5 d-none">
+                    <h2>Daftar Footer</h2>
+                    <div id="footer-selection" class="row"></div>
+
+                    <!-- Judul dan Formulir Edit Footer, disembunyikan secara default -->
+                    <h2 id="kelola-footer-title" class="mt-5 d-none">Edit Footer</h2>
+                    <form id="footerForm" class="d-none">
+                        <div class="mb-3">
+                            <label for="facebook" class="form-label">Link Facebook</label>
+                            <input type="url" id="facebook" class="form-control" placeholder="Masukkan link Facebook"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="instagram" class="form-label">Link Instagram</label>
+                            <input type="url" id="instagram" class="form-control" placeholder="Masukkan link Instagram"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="Masukkan email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telephone" class="form-label">Telepon/WhatsApp</label>
+                            <input type="tel" id="telephone" class="form-control"
+                                placeholder="Masukkan nomor telepon/WhatsApp" required>
+                        </div>
+                        <button type="button" class="btn btn-success" id="update-footer-btn" style="display: none;">
+                            <i class="bi bi-check-circle me-2"></i> Update Footer
+                        </button>
+                        <button type="button" class="btn btn-danger" id="cancel-footer-btn" style="display: none;">
+                            <i class="bi bi-x-circle me-2"></i> Batal
+                        </button>
+                    </form>
+                    <div id="footerMessage" class="mt-3"></div>
+                </section>
+                                <!-- END Footer -->
+
+
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Custom JavaScript Modules -->
+    <script type="module" src="js/footer-selection.js"></script>
+    <script type="module" src="js/slide-selection.js"></script>
+    <script type="module" src="js/profil-selection.js"></script>
+    <script type="module" src="js/article-selection.js"></script>
+    <script type="module" src="js/toggle-sidebar.js"></script>
+    <script type="module" src="js/berita-selection.js"></script>
+    <script type="module" src="js/jadwal-pertandingan-selection.js"></script>
+
+
+    
+
+    <!-- Firebase Auth State Handling Script -->
+    <script type="module">
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+            authDomain: "sekawan-fc-427414.firebaseapp.com",
+            projectId: "sekawan-fc-427414",
+            storageBucket: "sekawan-fc-427414.appspot.com",
+            messagingSenderId: "399174955835",
+            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+            measurementId: "G-CD0MHD1RBP"
+        };
+
+        // Initialize Firebase app
+        let app;
+        if (!getApps().length) {
+            app = initializeApp(firebaseConfig);
+        } else {
+            app = getApps()[0];
+        }
+
+        const auth = getAuth(app);
+
+        // Cek status login user saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // Jika user sudah login, tampilkan konten CMS
+                    document.getElementById('body-content').style.display = 'block';
+                } else {
+                    // Jika user belum login, arahkan ke halaman login
+                    window.location.href = "/login-cms";
+                }
+            });
+        });
+
+        // Handle Logout
+        const logoutButton = document.querySelector("a[href='/login-cms']");
+        if (logoutButton) {
+            logoutButton.addEventListener("click", async (e) => {
+                e.preventDefault();
+                try {
+                    await signOut(auth);
+
+                    // Hapus session storage dan local storage              
+                    sessionStorage.clear();
+                    localStorage.clear();
+
+                    // Hapus cache browser untuk memastikan halaman CMS tidak di-cache
+                    if ('caches' in window) {
+                        caches.keys().then(function (names) {
+                            for (let name of names) caches.delete(name);
+                        });
+                    }
+
+                    alert("Logout berhasil!");
+                    window.location.href = "/login-cms"; // Redirect ke halaman login setelah logout
+                } catch (error) {
+                    console.error("Error logging out: ", error);
+                    alert(error.message);
+                }
+            });
+        }
+    </script>
+
+
+
+
+
+</body>
+
+</html>

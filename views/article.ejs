@@ -24,6 +24,8 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="article" />
+    <meta name="description" content="<%= article.titleKeterangan %>">
+    <link rel="canonical" href="https://sekawanfc.fun/articles/<%= article.slug %>" />
 
     <!-- Cache Control -->
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
@@ -65,9 +67,45 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-CD0MHD1RBP');
+    </script>
+
     <title>
         <%= article.title %>
     </title>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "<%= article.title %>",
+      "description": "<%= article.titleKeterangan %>",
+      "image": "<%= article.photoUrl %>",
+      "datePublished": "<%= article.createdAt %>",
+      "author": {
+        "@type": "Organization",
+        "name": "Sekawan FC"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Sekawan FC",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://sekawanfc.fun/icon/SekawanFC.jpg"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://sekawanfc.fun/articles/<%= article.slug %>"
+      }
+    }
+    </script>
 
 </head>
 
@@ -102,8 +140,7 @@
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                                     <li class="nav-item">
-                                        <a class="nav-link" style="color: white;" aria-current="page"
-                                            href="index.html">Home</a>
+                                        <a class="nav-link" style="color: white;" aria-current="page" href="/">Home</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" style="color: white;" href="profil.html">Profil</a>

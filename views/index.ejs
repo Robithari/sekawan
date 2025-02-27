@@ -91,10 +91,10 @@
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                                     <li class="nav-item">
-                                        <a class="nav-link text-white" aria-current="page" href="index.html">Home</a>
+                                        <a class="nav-link text-white" aria-current="page" href="/">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-white" href="profil.html">Profil</a>
+                                        <a class="nav-link text-white" href="/profil">Profil</a>
                                     </li>
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle text-white" href="#" role="button"
@@ -102,10 +102,8 @@
                                             Informasi
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item disabled text-black"
-                                                    href="proses.html">Berita</a></li>
-                                            <li><a class="dropdown-item disabled text-black"
-                                                    href="proses.html">Artikel</a></li>
+                                            <li><a class="dropdown-item text-black" href="/rangkuman-berita">Berita</a></li>
+                                            <li><a class="dropdown-item text-black" href="/rangkuman-artikel">Artikel</a></li>
                                         </ul>
                                     </li>
                                     <li class="nav-item">
@@ -165,19 +163,19 @@
                         <!-- Baris Pertama -->
                         <div class="row justify-content-center custom-gutter">
                             <div class="col-4 col-md-2 mb-3 custom-col">
-                                <a href="jadwal.html" class="custom-btn primary-btn" role="button">
+                                <a href="/jadwal" class="custom-btn primary-btn" role="button">
                                     <img src="img/kalender.png" alt="Ikon Jadwal Pertandingan" class="menu-icon">
-                                    <span>JADWAL</span>
+                                    <span class="btn-text">JADWAL</span>
                                 </a>
                             </div>
                             <div class="col-4 col-md-2 mb-3 custom-col">
-                                <a href="kas.html" class="custom-btn primary-btn" role="button">
+                                <a href="/kas" class="custom-btn primary-btn" role="button">
                                     <img src="img/kas.png" alt="Ikon Laporan Kas" class="menu-icon">
                                     <span>KAS</span>
                                 </a>
                             </div>
                             <div class="col-4 col-md-2 mb-3 custom-col">
-                                <a href="dokumentasi.html" class="custom-btn primary-btn" role="button">
+                                <a href="/dokumentasi" class="custom-btn primary-btn" role="button">
                                     <img src="img/dokumentasi.png" alt="Ikon Dokumentasi" class="menu-icon">
                                     <span>DOKUMENTASI</span>
                                 </a>
@@ -186,7 +184,7 @@
                         <!-- Baris Kedua -->
                         <div class="row justify-content-center custom-gutter">
                             <div class="col-4 col-md-2 mb-3 custom-col">
-                                <a href="inventaris.html" class="custom-btn primary-btn" role="button">
+                                <a href="/inventaris" class="custom-btn primary-btn" role="button">
                                     <img src="img/inventaris.png" alt="Ikon Barang Inventaris" class="menu-icon">
                                     <span>INVENTARIS</span>
                                 </a>
@@ -286,23 +284,26 @@
 
     <!-- Scripts -->
     <div class="container-js">
+        <!-- Lazysizes library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+        
         <!-- Bootstrap JS Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+            crossorigin="anonymous" defer></script>
 
         <!-- Custom JS Files -->
-        <script src="js/pencarian.js"></script>
-        <script src="js/splas-screen-start.js"></script>
-        <script src="js/kunci-layar.js"></script>
-        <script type="module" src="js/data-pertandingan.js"></script>
-        <script type="module" src="firebase-config.js"></script>
-        <script src="js/cek-login.js"></script>
-        <script src="js/share-link.js"></script>
-        <script type="module" src="js/api-slide.js"></script>
-        <script type="module" src="js/api-footer.js"></script>
-        <script type="module" src="js/rangkuman-artikel.js"></script>
-        <script type="module" src="js/rangkuman-berita.js"></script>
+        <script src="js/pencarian.js" defer></script>
+        <script src="js/splas-screen-start.js" defer></script>
+        <script src="js/kunci-layar.js" defer></script>
+        <script type="module" src="js/data-pertandingan.js" defer></script>
+        <script type="module" src="firebase-config.js" defer></script>
+        <script src="js/cek-login.js" defer></script>
+        <script src="js/share-link.js" defer></script>
+        <script type="module" src="js/api-slide.js" defer></script>
+        <script type="module" src="js/api-footer.js" defer></script>
+        <script type="module" src="js/rangkuman-artikel.js" defer></script>
+        <script type="module" src="js/rangkuman-berita.js" defer></script>
 
         <!-- Splash Screen API URL -->
         <script>

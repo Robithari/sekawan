@@ -1,7 +1,7 @@
-import db from '../config/firebase.js';
+const db = require("../config/firebase");
 
 // Tambah berita baru
-export const addBerita = async (req, res) => {
+exports.addBerita = async (req, res) => {
   try {
     const { title, content, photoUrl, caption, titleKeterangan } = req.body;
     const newBerita = {
@@ -16,14 +16,14 @@ export const addBerita = async (req, res) => {
 
     const beritaRef = await db.collection("berita").add(newBerita);
 
-    res.status(201).json({ id: beritaRef.id, message: "Berita berhasil ditambahkan!" });
+    res.status(201).json({ id: beritaRef.id, message: "Berita berhasil ditambahkan" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
 // Ambil semua berita
-export const getAllBerita = async (req, res) => {
+exports.getAllBerita = async (req, res) => {
   try {
     const snapshot = await db.collection("berita").orderBy("tanggalPembuatan", "desc").get();
     const berita = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -35,7 +35,7 @@ export const getAllBerita = async (req, res) => {
 };
 
 // Ambil berita berdasarkan slug
-export const getBeritaBySlug = async (req, res) => {
+exports.getBeritaBySlug = async (req, res) => {
   try {
     const q = db.collection("berita").where("slug", "==", req.params.slug);
     const snapshot = await q.get();
@@ -54,7 +54,7 @@ export const getBeritaBySlug = async (req, res) => {
 };
 
 // Perbarui berita berdasarkan ID
-export const updateBerita = async (req, res) => {
+exports.updateBerita = async (req, res) => {
   try {
     const { id } = req.params;
     const updatedData = req.body;
@@ -74,7 +74,7 @@ export const updateBerita = async (req, res) => {
 };
 
 // Hapus berita berdasarkan ID
-export const deleteBerita = async (req, res) => {
+exports.deleteBerita = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -86,7 +86,7 @@ export const deleteBerita = async (req, res) => {
     }
 
     await beritaRef.delete();
-    res.status(200).json({ message: "Berita berhasil dihapus!" });
+    res.status(200).json({ message: "Berita berhasil dihapus" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

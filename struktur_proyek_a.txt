@@ -1,0 +1,224 @@
+.
+|____.env
+|____.git
+|____.gitignore
+|____.vercel
+| |____cache
+| |____project.json
+| |____README.txt
+|____.vscode
+| |____settings.json
+|____api
+| |____index.js
+|____config
+| |____database.js
+| |____firebase.js
+|____controllers
+| |____articleController.js
+| |____beritaController.js
+| |____postController.js
+| |____userController.js
+|____fileCU.txt
+|____firebase-service-account.json
+|____middleware
+| |____auth.js
+| |____logger.js
+|____models
+| |____articleModel.js
+| |____beritaModel.js
+| |____postModel.js
+| |____userModel.js
+|____node_modules
+|____package-lock.json
+|____package.json
+|____public
+| |____api
+| | |____api-artikel.js
+| | |____api-berita.js
+| | |____api-footer.js
+| | |____api-slide.js
+| | |____cek-api.js
+| | |____cek-login.js
+| | |____data-pertandingan.js
+| | |____dokumentasi.js
+| | |____firebase-init.js
+| | |____firebase.js
+| | |____hapus-cookie.js
+| | |____inventaris.js
+| | |____jadwal-pertandingan.js
+| | |____kas.js
+| | |____kunci-layar.js
+| | |____login.js
+| | |____main-content.js
+| | |____messaging.js
+| | |____nootifikasi.js
+| | |____pencarian.js
+| | |____pengecekan-user.js
+| | |____play-audio.js
+| | |____profil-user.js
+| | |____rangkuman-artikel.js
+| | |____rangkuman-berita.js
+| | |____share-link.js
+| | |____signup.js
+| | |____splas-screen-start.js
+| | |____waktu-mundur.js
+| |____cms
+| | |____admin-style.css
+| | |____css
+| | | |____cms.css
+| | |____js
+| | | |____article-selection.js
+| | | |____berita-selection.js
+| | | |____footer-selection.js
+| | | |____jadwal-pertandingan-selection.js
+| | | |____login-admin.js
+| | | |____profil-selection.js
+| | | |____slide-selection.js
+| | | |____toggle-sidebar.js
+| | |____profil-user.html
+| |____css
+| | |____berita.css
+| | |____cms.css
+| | |____dokumentasi.css
+| | |____inventaris.css
+| | |____jadwal-pertandingan.css
+| | |____kas.css
+| | |____loading.css
+| | |____play-audio.css
+| | |____profil-user.css
+| | |____profil.css
+| | |____rangkuman-berita.css
+| | |____sheed-berita.css
+| |____firebase-config.js
+| |____icon
+| | |____android-icon-144x144.png
+| | |____android-icon-192x192.png
+| | |____android-icon-36x36.png
+| | |____android-icon-48x48.png
+| | |____android-icon-72x72.png
+| | |____android-icon-96x96.png
+| | |____apple-icon-114x114.png
+| | |____apple-icon-120x120.png
+| | |____apple-icon-144x144.png
+| | |____apple-icon-152x152.png
+| | |____apple-icon-180x180.png
+| | |____apple-icon-57x57.png
+| | |____apple-icon-60x60.png
+| | |____apple-icon-72x72.png
+| | |____apple-icon-76x76.png
+| | |____apple-icon-precomposed.png
+| | |____apple-icon.png
+| | |____browserconfig.xml
+| | |____favicon-16x16.png
+| | |____favicon-32x32.png
+| | |____favicon-96x96.png
+| | |____favicon.ico
+| | |____manifest.json
+| | |____ms-icon-144x144.png
+| | |____ms-icon-150x150.png
+| | |____ms-icon-310x310.png
+| | |____ms-icon-70x70.png
+| | |____SekawanFC.jpg
+| |____img
+| | |____agenda.png
+| | |____bersih-bersih1.jpg
+| | |____btb-stadium-pamflet.jpg
+| | |____contoih.jpg
+| | |____dokumentasi.png
+| | |____fb.png
+| | |____icon-32x32.png
+| | |____icon-512x512.png
+| | |____icon-link.png
+| | |____inventaris.png
+| | |____jadwal-pertandingan.webp
+| | |____kalender.png
+| | |____kas-sekawan-fc.jpg
+| | |____kas.png
+| | |____kesepakatan.png
+| | |____loading.gif
+| | |____loading1.gif
+| | |____loading3.gif
+| | |____loading4.gif
+| | |____pemain1.jpg
+| | |____pemain2.jpg
+| | |____pemanasan.png
+| | |____pemanasan1.png
+| | |____sekawanfc-united.jpg
+| | |____sekawanfc-vs-ukhwafc.jpg
+| | |____SekawanFC.jpg
+| | |____trofeo-betrasia-cup-1.jpg
+| | |____trofeo-betrasia-cup-2.jpg
+| | |____trofeo-betrasia-cup.jpg
+| |____js
+| | |____api-artikel copy.js
+| | |____api-artikel.js
+| | |____api-berita.js
+| | |____api-footer.js
+| | |____api-slide.js
+| | |____article-selection.js
+| | |____berita-selection.js
+| | |____cek-api.js
+| | |____cek-login.js
+| | |____data-pertandingan.js
+| | |____dokumentasi.js
+| | |____firebase-init.js
+| | |____firebase.js
+| | |____footer-selection.js
+| | |____hapus-cookie.js
+| | |____inventaris.js
+| | |____jadwal-pertandingan-selection.js
+| | |____jadwal-pertandingan.js
+| | |____kas.js
+| | |____kunci-layar.js
+| | |____login-admin.js
+| | |____login.js
+| | |____main-content.js
+| | |____messaging.js
+| | |____news.js
+| | |____nootifikasi.js
+| | |____pencarian.js
+| | |____pengecekan-user.js
+| | |____play-audio.js
+| | |____profil-selection.js
+| | |____profil-user.js
+| | |____rangkuman-artikel.js
+| | |____rangkuman-berita.js
+| | |____share-link.js
+| | |____signup.js
+| | |____slide-selection.js
+| | |____splas-screen-start.js
+| | |____toggle-sidebar.js
+| | |____waktu-mundur.js
+| |____manifest.json
+| |____SekawanFC.jpg
+| |____service-worker.js
+| |____style.css
+|____README.md
+|____routes
+| |____api.js
+| |____articles.js
+| |____berita.js
+| |____href.js
+| |____index.js
+|____server.js
+|____struktur_proyek.txt
+|____struktur_proyek_a.txt
+|____tests
+| |____post.test.js
+| |____user.test.js
+|____vercel.json
+|____views
+| |____article.ejs
+| |____berita.ejs
+| |____cms.ejs
+| |____dokumentasi.ejs
+| |____error.ejs
+| |____index.ejs
+| |____inventaris.ejs
+| |____jadwal.ejs
+| |____kas.ejs
+| |____layout.ejs
+| |____login-cms.ejs
+| |____profil.ejs
+| |____rangkuman-artikel.ejs
+| |____rangkuman-berita.ejs

@@ -1,4 +1,4 @@
-import db from '../config/firebase.js';
+const db = require("../config/firebase");
 
 const addArticle = async (req, res) => {
     try {
@@ -89,4 +89,4 @@ const deleteArticle = async (req, res) => {
     }
 };
 
-export default { addArticle, getAllArticles, getArticleBySlug, updateArticle, deleteArticle };
+module.exports = { addArticle, getAllArticles, getArticleBySlug, updateArticle, deleteArticle };

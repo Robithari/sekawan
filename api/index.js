@@ -1,10 +1,9 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const morgan = require('morgan');
-const path = require('path');
-const mongoose = require('mongoose'); // Jika menggunakan MongoDB
-const db = require('../config/firebase'); // Pastikan file ini ada dan sesuai
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const morgan = require("morgan");
+const path = require("path");
+const { db } = require("../config/firebase"); // Sesuaikan path ke Firebase config
 
 dotenv.config();
 
@@ -12,35 +11,38 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '../public'))); // Menyajikan file statis dari folder public
-app.set('view engine', 'ejs'); // Menggunakan EJS untuk view
-
-// Koneksi ke MongoDB
-const DB_URI = process.env.DB_URI; // Pastikan DB_URI ada di file .env
-mongoose.connect(DB_URI)
-  .then(() => {
-    console.log('🚀 Successfully connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('❌ Error connecting to MongoDB:', err.message);
-  });
+app.use(express.static(path.join(__dirname, "../public"))); // Akses folder public dengan benar
+app.set("view engine", "ejs");
 
 // Import Routes
-const indexRoutes = require('../routes/index');
-const apiRoutes = require('../routes/api');
-const articleRoutes = require('../routes/articles');
-const beritaRoutes = require('../routes/berita');
+const indexRoutes = require("../routes/index");
+const apiRoutes = require("../routes/api");
+const articleRoutes = require("../routes/articles");
+const beritaRoutes = require("../routes/berita");
 
 // Gunakan Routes
-app.use('/', indexRoutes);
-app.use('/api', apiRoutes);
-app.use('/articles', articleRoutes);
-app.use('/berita', beritaRoutes);
+app.use("/", indexRoutes);
+app.use("/api", apiRoutes);
+app.use("/articles", articleRoutes);
+app.use("/berita", beritaRoutes);
 
-// Express serverless function handler untuk Vercel
-module.exports = (req, res) => {
-  return app(req, res); // Menjalankan Express sebagai serverless function
+// Contoh koneksi ke Firestore
+const getUsersFromFirestore = async () => {
+  try {
+    const snapshot = await db.collection("users").get();
+    const users = snapshot.docs.map((doc) => doc.data());
+    console.log("Users: ", users);
+  } catch (error) {
+    console.error("Error getting users:", error);
+  }
 };
+
+getUsersFromFirestore(); // Jalankan sekali saat API dipanggil
+
+// ❌ Hapus app.listen(), karena tidak didukung di Vercel
+
+// ✅ Ekspor handler untuk Vercel
+module.exports = app;

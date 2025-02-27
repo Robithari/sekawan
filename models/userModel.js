@@ -1,11 +1,24 @@
-import mongoose from 'mongoose';
+const db = require('../config/firebase'); // Menggunakan Firestore yang sudah dikonfigurasi
 
-const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String
-});
+// Fungsi untuk mendapatkan semua pengguna
+const getUsers = async () => {
+  try {
+    const snapshot = await db.collection('users').get();
+    const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return users;
+  } catch (error) {
+    throw new Error('Error getting users: ' + error.message);
+  }
+};
 
-const User = mongoose.model('User', userSchema);
+// Fungsi untuk membuat pengguna baru
+const createUser = async (userData) => {
+  try {
+    const docRef = await db.collection('users').add(userData);
+    return { id: docRef.id, ...userData };
+  } catch (error) {
+    throw new Error('Error creating user: ' + error.message);
+  }
+};
 
-export default User;
+module.exports = { getUsers, createUser };

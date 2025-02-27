@@ -206,14 +206,46 @@ h6 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #4c4cfd;
-  justify-content: flex-start;
-  color: #fff;
-  padding: 5px;
-  border-radius: 20px;
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  justify-content: center;
+  color: #333;
+  padding: 12px;
+  border-radius: 12px;
   text-decoration: none;
   height: 100%;
-  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: none;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-icon {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.custom-btn:hover .menu-icon {
+  transform: scale(1.1);
+}
+
+.btn-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  transition: color 0.3s ease;
 }
 
 /* Efek Klik (Active State) */
@@ -250,13 +282,17 @@ h6 {
 
 /* Responsivitas untuk Perangkat Besar */
 @media (min-width: 768px) {
-  .custom-btn .menu-icon {
-    width: 50px;
-    height: 50px;
+  .custom-btn {
+    padding: 8px;
   }
-
-  .custom-btn span {
-    font-size: 10px;
+  
+  .menu-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .btn-text {
+    font-size: 12px;
   }
 }
 

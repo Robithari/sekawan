@@ -1,8 +1,7 @@
-import express from 'express';
-import db from '../config/firebase.js';
-import articleController from '../controllers/articleController.js';
-
+const express = require("express");
 const router = express.Router();
+const db = require("../config/firebase");
+const articleController = require("../controllers/articleController");
 
 // Rute API
 router.post("/", articleController.addArticle);
@@ -11,7 +10,7 @@ router.get("/:slug", articleController.getArticleBySlug); // Menggunakan route i
 router.put("/:id", articleController.updateArticle);
 router.delete("/:id", articleController.deleteArticle);
 
-// Rute untuk tampilan artikel berdasarkan slug
+// Rute untuk tampilan artikel berdasarkan slug (Dihapus, karena sudah digabung ke route utama)
 router.get("/view/:slug", async (req, res) => {
   try {
     const q = db.collection("articles").where("slug", "==", req.params.slug);
@@ -28,4 +27,4 @@ router.get("/view/:slug", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
