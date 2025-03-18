@@ -91,6 +91,11 @@
   font-size: 12px;
 }
 
+.profil-content {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
 /* Media Queries untuk Responsif */
 @media (max-width: 600px) {
   .container-artikel h6 {

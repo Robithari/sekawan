@@ -1,9 +1,11 @@
+// === api/index.js ===
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
-const { db } = require("../config/firebase"); // Sesuaikan path ke Firebase config
+const cache = require("memory-cache"); // Cache untuk mempercepat loading
+const { db } = require("../config/firebase");
 
 dotenv.config();
 
@@ -14,7 +16,7 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "../public"))); // Akses folder public dengan benar
+app.use(express.static(path.join(__dirname, "../public")));
 app.set("view engine", "ejs");
 
 // Import Routes
@@ -23,26 +25,41 @@ const apiRoutes = require("../routes/api");
 const articleRoutes = require("../routes/articles");
 const beritaRoutes = require("../routes/berita");
 
-// Gunakan Routes
 app.use("/", indexRoutes);
 app.use("/api", apiRoutes);
 app.use("/articles", articleRoutes);
 app.use("/berita", beritaRoutes);
 
-// Contoh koneksi ke Firestore
-const getUsersFromFirestore = async () => {
-  try {
-    const snapshot = await db.collection("users").get();
-    const users = snapshot.docs.map((doc) => doc.data());
-    console.log("Users: ", users);
-  } catch (error) {
-    console.error("Error getting users:", error);
-  }
+// Fungsi untuk mengambil data dengan cache
+const getCachedData = async (key, fetchFunction, duration = 60000) => {
+  let cachedData = cache.get(key);
+  if (cachedData) return cachedData;
+  let data = await fetchFunction();
+  cache.put(key, data, duration);
+  return data;
 };
 
-getUsersFromFirestore(); // Jalankan sekali saat API dipanggil
+const getHomepageData = async () => {
+  const [articles, news, carousel] = await Promise.all([
+    db.collection("articles").limit(5).get(),
+    db.collection("berita").limit(5).get(),
+    db.collection("carousel").get()
+  ]);
 
-// ❌ Hapus app.listen(), karena tidak didukung di Vercel
+  return {
+    articles: articles.docs.map(doc => ({ id: doc.id, ...doc.data() })),
+    news: news.docs.map(doc => ({ id: doc.id, ...doc.data() })),
+    carousel: carousel.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  };
+};
 
-// ✅ Ekspor handler untuk Vercel
+app.get("/", async (req, res) => {
+  try {
+    const homepageData = await getCachedData("homepageData", getHomepageData);
+    res.render("index", homepageData);
+  } catch (error) {
+    res.status(500).send("Error loading homepage");
+  }
+});
+
 module.exports = app;

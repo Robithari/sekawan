@@ -1,4 +1,5 @@
 .
+|____.blackboxrules
 |____.env
 |____.git
 |____.gitignore
@@ -13,13 +14,23 @@
 |____config
 | |____database.js
 | |____firebase.js
+| |____serviceAccountKey.json
 |____controllers
 | |____articleController.js
 | |____beritaController.js
+| |____cmsController.js
+| |____dokumentasiController.js
+| |____indexController.js
+| |____jadwalController.js
+| |____kasController.js
 | |____postController.js
+| |____profilController.js
+| |____rangkumanBeritaController.js
 | |____userController.js
+|____dokumentasi-sekawan-fc.md
 |____fileCU.txt
 |____firebase-service-account.json
+|____isi_proyek.txt
 |____middleware
 | |____auth.js
 | |____logger.js
@@ -33,8 +44,6 @@
 |____package.json
 |____public
 | |____api
-| | |____api-artikel.js
-| | |____api-berita.js
 | | |____api-footer.js
 | | |____api-slide.js
 | | |____cek-api.js
@@ -62,6 +71,7 @@
 | | |____signup.js
 | | |____splas-screen-start.js
 | | |____waktu-mundur.js
+| |____bundle.js.LICENSE.txt
 | |____cms
 | | |____admin-style.css
 | | |____css
@@ -150,7 +160,6 @@
 | | |____trofeo-betrasia-cup-2.jpg
 | | |____trofeo-betrasia-cup.jpg
 | |____js
-| | |____api-artikel copy.js
 | | |____api-artikel.js
 | | |____api-berita.js
 | | |____api-footer.js
@@ -178,9 +187,11 @@
 | | |____nootifikasi.js
 | | |____pencarian.js
 | | |____pengecekan-user.js
+| | |____pertandingan-terdekat.js
 | | |____play-audio.js
 | | |____profil-selection.js
 | | |____profil-user.js
+| | |____profil.js
 | | |____rangkuman-artikel.js
 | | |____rangkuman-berita.js
 | | |____share-link.js
@@ -190,18 +201,22 @@
 | | |____toggle-sidebar.js
 | | |____waktu-mundur.js
 | |____manifest.json
+| |____robots.txt
 | |____SekawanFC.jpg
 | |____service-worker.js
+| |____sitemap.xml
 | |____style.css
 |____README.md
+|____robots.txt
 |____routes
 | |____api.js
+| |____app.js
 | |____articles.js
 | |____berita.js
 | |____href.js
 | |____index.js
 |____server.js
-|____struktur_proyek.txt
+|____sitemap.js
 |____struktur_proyek_a.txt
 |____tests
 | |____post.test.js

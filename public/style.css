@@ -206,22 +206,22 @@ h6 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  background: linear-gradient(145deg, #e35959, #e6e6e6);
   justify-content: center;
   color: #333;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 5px;
+  border-radius: 10px;
   text-decoration: none;
   height: 100%;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   border: none;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.3sease;
 }
 
 .custom-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-content {
@@ -285,12 +285,12 @@ h6 {
   .custom-btn {
     padding: 8px;
   }
-  
+
   .menu-icon {
     width: 32px;
     height: 32px;
   }
-  
+
   .btn-text {
     font-size: 12px;
   }
@@ -402,7 +402,7 @@ h6 {
   color: black;
   font-size: 14px;
   text-align: center;
-  padding: 10px;
+  padding-bottom: 5px;
   margin-top: auto;
 }
 
@@ -496,38 +496,36 @@ h6 {
   color: #f5f5dc;
   text-decoration: none;
   font-weight: bold;
-
-
 }
 
 .tautan-notification {
   display: none;
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #28a745;
   color: white;
-  padding: 10px 20px;
+  padding: 5px 5px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+
 .container-tautan {
-  display: flex;
+  display: inline-block;
   padding: 2px 10px;
-  border-radius: 5px;
-  background: linear-gradient(135deg, #2d9802, #4cf279);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 6px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 5px; /* Rounded corners */
+  background: linear-gradient(135deg, #2d9802, #4cf279); /* Gradien gelap dari abu-abu tua ke biru tua */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 6px 6px rgba(0, 0, 0, 0.2); /* Deep shadow for elegance */
   text-align: center;
-  width: 100px;
+  width: auto; /* Lebar tetap */
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
   margin-bottom: 30px;
-  font-family: 'Arial', sans-serif;
-  justify-content: center;
+  font-family: 'Arial', sans-serif; /* Font yang modern dan umum */
 }
-
 
 .container-tautan h5 {
   margin-bottom: 10px;
@@ -549,6 +547,41 @@ h6 {
   margin-top: -6px;
 }
 
+
+/* Loading Spinner */
+.loading-spinner {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-spinner.active {
+  display: flex;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #000;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+      transform: rotate(360deg);
+  }
+}
+
+
 /*======================================================= Media Queries untuk Desktop =======================================================*/
 @media (min-width: 1024px) {
 
@@ -567,10 +600,6 @@ h6 {
   }
 
   .content-wrapper {
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 0;
-    padding-bottom: 60px;
     background-color: white;
     box-sizing: border-box;
   }
@@ -736,15 +765,11 @@ h6 {
   }
 
   .custom-navbar {
-    width: 818px;
+    width: 795px;
     height: 40px;
-    margin: 0 auto;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: -45px;
+    margin-left: -40px;
   }
-
 
   .navbar-nav .nav-item {
     margin-right: 10px;
@@ -783,7 +808,6 @@ h6 {
 
   .custom-footer {
     background-color: #252bc2;
-    padding: 20px;
     text-align: center;
   }
 
@@ -797,5 +821,19 @@ h6 {
     width: 40px;
     height: 40px;
     border-radius: 9px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  body {
+    background-color: #333333;
+    /* Dark gray background for PC/laptop */
+  }
+
+  .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    /* Keep content area white */
   }
 }

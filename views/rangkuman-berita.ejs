@@ -63,118 +63,128 @@
 </head>
 
 <body>
-    <!-- LOADING SCREEN -->
-    <div id="loading-screen" class="background">
-        <img class="loading-logo" src="img/SekawanFC.jpg" alt="Loading Logo">
-        <img class="loading-wait" src="img/loading4.gif" alt="Loading Animation">
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
     </div>
-    <!-- END LOADING SCREEN -->
-
-    <div id="main-content" style="display: none;">
-        <div class="mobile-only">
-            <div class="content-wrapper">
-                <div class="wrapper">
-                    <!-- Navbar -->
-                    <nav class="navbar navbar-expand-lg custom-navbar">
-                        <div class="container-fluid">
-                            <a class="navbar-brand text-white fw-bold" href="index.html">
-                                <div class="d-flex align-items-center">
-                                    <img src="img/SekawanFC.jpg" alt="Sekawan FC Logo" class="icon-img" width="40"
-                                        height="40">
-                                    <span class="ms-2">SEKAWAN FC</span>
-                                </div>
-                            </a>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                                    <li class="nav-item">
-                                        <a class="nav-link text-white" aria-current="page" href="/">Home</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-white" href="/profil">Profil</a>
-                                    </li>
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            Informasi
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item disabled text-black"
-                                                    href="/rangkuman-berita">Berita</a></li>
-                                            <li><a class="dropdown-item disabled text-black"
-                                                    href="proses.html">Artikel</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-white" id="login-logout-link" href="login.html">Masuk /
-                                            Daftar</a>
-                                    </li>
-                                </ul>
+    <div class="mobile-only">
+        <div class="content-wrapper">
+            <div class="wrapper">
+                <!-- Navbar -->
+                <nav class="navbar navbar-expand-lg custom-navbar">
+                    <div class="container-fluid">
+                        <a class="navbar-brand text-white fw-bold" href="/">
+                            <div class="d-flex align-items-center">
+                                <img src="/img/SekawanFC.jpg" alt="Sekawan FC Logo" class="icon-img" width="40"
+                                    height="40">
+                                <span class="ms-2">SEKAWAN FC</span>
                             </div>
-                        </div>
-                    </nav>
-                    <!-- End Navbar -->
-
-                    <!-- Berita Section -->
-                    <div class="container-rangkuman-berita">
-                        <p class="berita">Berita</p>
-                        <div class="informasi" id="berita-container">
-                            <!-- Berita akan dimuat di sini -->
-                        </div>
-                        <!-- <div class="container-readmore" tabindex="0">Selengkapnya</div> -->
-                    </div>
-                    <!-- END Berita Section -->
-
-                    <hr>
-
-                    <!-- Share Link Button -->
-                    <div class="container-tautan">
-                        <span id="copyLink" class="link-icon">
-                            <img src="img/icon-link.png" alt="Ikon Share Link" class="icon-link">
-                            Share Link
-                        </span>
-                        <div id="tautan-notification" class="tautan-notification">
-                            Tautan sudah dicopy dan siap di-paste, silahkan share
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" aria-current="page" href="/">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="/profil">Profil</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Informasi
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item text-blue" href="/rangkuman-berita">Berita</a>
+                                        </li>
+                                        <li><a class="dropdown-item text-blue" href="/rangkuman-artikel">Artikel</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" id="login-logout-link" href="login.html">Masuk /
+                                        Daftar</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <!-- END Share Link Button -->
+                </nav>
+                <!-- End Navbar -->
 
-                    <!-- Footer -->
-                    <footer class="custom-footer">
-                        <div class="footer-content">
-                            <div class="footer-section">
-                                <h6>Ikuti Kami</h6>
-                                <div class="social-icons">
-                                    <a href="#" class="social-icon" target="_blank" id="facebook-link"
-                                        aria-label="Facebook">
-                                        <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
-                                            alt="Ikon Facebook" class="icon-image">
-                                    </a>
-                                    <a href="#" class="social-icon" target="_blank" id="instagram-link"
-                                        aria-label="Instagram">
-                                        <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
-                                            alt="Ikon Instagram" class="icon-image">
-                                    </a>
+                <!-- Berita Section -->
+                <div class="container-rangkuman-berita">
+                    <p class="berita">Berita</p>
+                    <div class="informasi">
+                        <% if (beritaData.length> 0) { %>
+                            <% beritaData.forEach(function(berita) { %>
+                                <div class="card no-border">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
+                                            <img src="<%= berita.photoUrl %>" class="custom-image"
+                                                alt="<%= berita.title %>">
+                                        </div>
+                                        <div class="col-md-8 col-sm-8 col-8">
+                                            <div class="card-body">
+                                                <a href="/berita/<%= berita.slug %>">
+                                    <p class="card-title custom-title text-start mb-0">
+                                                    <%= berita.title %>
+                                    </p>
+                                </a>
+                                                <p class="card-text">
+                                                    <%= berita.tanggalPembuatan %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="footer-section">
-                                <h6>Hubungi Kami</h6>
-                                <p class="footer-email">Email: <a class="footer-email-link" href="mailto:"
-                                        id="email-link">info@sekawanfc.fun</a></p>
-                                <p class="footer-telephone">Telepon: <span id="telephone">+62 812-3456-7890</span></p>
-                            </div>
-                        </div>
-                        <div class="footer-bottom">
-                            <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
-                            <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
-                        </div>
-                    </footer>
-                    <!-- END Footer -->
+                                <% }); %>
+                                    <% } else { %>
+                                        <p>Tidak ada berita yang tersedia.</p>
+                                        <% } %>
+                    </div>
                 </div>
+                <!-- END Berita Section -->
+
+                <!-- Footer -->
+                <footer class="custom-footer">
+                    <div class="footer-content">
+                        <div class="footer-section">
+                            <h6>Ikuti Kami</h6>
+                            <div class="social-icons">
+                                <a href="#" class="social-icon" target="_blank" id="facebook-link"
+                                    aria-label="Facebook">
+                                    <img src="https://w7.pngwing.com/pngs/670/159/png-transparent-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-internet-facebook-icon.png"
+                                        alt="Ikon Facebook" class="icon-image">
+                                </a>
+                                <a href="#" class="social-icon" target="_blank" id="instagram-link"
+                                    aria-label="Instagram">
+                                    <img src="https://cdn.pixabay.com/photo/2016/08/09/17/52/instagram-1581266_1280.jpg"
+                                        alt="Ikon Instagram" class="icon-image">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="footer-section">
+                            <h6>Hubungi Kami</h6>
+                            <p class="footer-email">Email: <a class="footer-email-link"
+                                    href="mailto:<%= footerData.email %>" id="email-link">
+                                    <%= footerData.email %>
+                                </a></p>
+                            <p class="footer-telephone">Telepon: <span id="telephone">
+                                    <%= footerData.telephone %>
+                                </span></p>
+                        </div>
+
+                    </div>
+                    <div class="footer-bottom">
+                        <p class="footer-bottom-copyright">Copyright &copy; 2024 SekawanFC, All rights reserved</p>
+                        <p class="footer-bottom-dibuat">Dibuat oleh BithDev</p>
+                    </div>
+                </footer>
+                <!-- END Footer -->
             </div>
         </div>
     </div>
@@ -188,21 +198,14 @@
 
         <!-- Custom JS Files -->
         <script src="js/pencarian.js"></script>
-        <script src="js/splas-screen-start.js"></script>
         <script src="js/kunci-layar.js"></script>
-        <script type="module" src="js/data-pertandingan.js"></script>
         <script type="module" src="firebase-config.js"></script>
         <script src="js/cek-login.js"></script>
         <script src="js/share-link.js"></script>
-        <script type="module" src="js/api-slide.js"></script>
-        <script type="module" src="js/api-footer.js"></script>
-        <script type="module" src="js/rangkuman-artikel.js"></script>
-        <script type="module" src="js/rangkuman-berita.js"></script>
+        <script src="js/loading.js"></script>
 
         <!-- Splash Screen API URL -->
-        <script>
-            window.splashScreenApiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=Ug4_RY3Q1GjQImtwch8hiiU37tiqDCIMi8bTKHj97_WxEAvt8cdY5oa_0Y6dp_E2w5y237mVYqBpQaI3A6pP_BXAylj9M2Ilm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFnDUwtuW5IHw5CPwpfhqpJZUQvB1wU_QDcMWPm2k5WgJ9OtqX5w07gpJuDy0PbvOMRplWdFUiYiu_oV8kxVeaRFvnZ3JX3SHg&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV';
-        </script>
+
     </div>
     <!-- END Scripts -->
 

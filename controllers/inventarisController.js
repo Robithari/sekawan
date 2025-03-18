@@ -36,8 +36,14 @@ async function getInventarisData() {
     }
 
     // Menyesuaikan data agar sesuai dengan format yang diharapkan oleh EJS
-    inventarisData.forEach(item => {
-      item.NAMA_BARANG = item["JENIS BARANG"] || '-'; // Menyesuaikan dengan nama kolom yang diharapkan di EJS
+    // Filter data untuk menghapus item dengan nilai kosong
+    const filteredData = inventarisData.filter(item => {
+      return item["JENIS BARANG"] && item["MERK BARANG"] && item["JUMLAH BARANG"] && item["KODE BARANG"];
+    });
+
+    // Menyesuaikan nama kolom agar sesuai dengan format yang digunakan di EJS
+    filteredData.forEach(item => {
+      item.NAMA_BARANG = item["JENIS BARANG"] || '-';
       item.MERK_BARANG = item["MERK BARANG"] || '-';
       item.JUMLAH = item["JUMLAH BARANG"] || '-';
       item.KODE = item["KODE BARANG"] || '-';
@@ -45,13 +51,13 @@ async function getInventarisData() {
       item.KONDISI_BURUK = item["JUMLAH KONDISI BARANG BURUK"] || '-';
       item.KETERANGAN = item["KETERANGAN"] || '-';
 
-      // Jika ada tanggal, format tanggal
+      // Pastikan data tanggal ada dan diformat
       if (item.TANGGAL) {
         item.TANGGAL = formatTanggal(item.TANGGAL); // Format tanggal menjadi DD-MM-YYYY
       }
     });
 
-    return inventarisData;
+    return filteredData;
   } catch (error) {
     console.error('Error mengambil data inventaris:', error);
     throw new Error('Error mengambil data inventaris');

@@ -54,6 +54,17 @@ td:nth-child(5)
     /* Tambahkan ... di akhir teks panjang */
 }
 
+/* Menata teks agar rata kanan */
+.text-end {
+    text-align: right;
+  }
+  
+  /* Gaya untuk baris ganjil dengan latar belakang abu-abu */
+.gray-background {
+    background-color: rgb(198, 198, 198);
+  }
+  
+
 /* Media Queries untuk responsif */
 @media (max-width: 600px) {
     table,

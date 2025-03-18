@@ -1,7 +1,7 @@
 .container-kas {
     padding-right: 5px;
     padding-left: 5px;
-    margin-top: auto;
+    margin-top: 5px;
 }
 
 
@@ -19,7 +19,8 @@ h5 {
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: auto; /* Biarkan browser mengatur lebar kolom secara otomatis */
+    table-layout: auto;
+    /* Biarkan browser mengatur lebar kolom secara otomatis */
 }
 
 
@@ -35,12 +36,14 @@ td {
 }
 
 th {
-    background-color: #f4f4f4;
-    text-align: center; /* Rata tengah untuk header */
+    background-color: #9195ff;
+    text-align: center;
+    /* Rata tengah untuk header */
 }
 
 td {
-    text-align: left; /* Rata kiri untuk data */
+    text-align: left;
+    /* Rata kiri untuk data */
 }
 
 /* Atur lebar kolom Pemasukan, Pengeluaran, dan Saldo dengan penyesuaian otomatis */
@@ -52,6 +55,7 @@ td:nth-child(4),
 /* Kolom PENGELUARAN */
 th:nth-child(5),
 td:nth-child(5)
+
 /* Kolom SALDO */
     {
     white-space: nowrap;
@@ -60,8 +64,20 @@ td:nth-child(5)
     /* Tambahkan ... di akhir teks panjang */
 }
 
+/* CSS untuk memberikan warna latar belakang pada baris genap dan ganjil */
+#data-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+    /* Warna latar belakang standar (putih) untuk baris ganjil */
+}
+
+#data-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+    /* Warna latar belakang abu-abu muda untuk baris genap */
+}
+
 /* Media Queries untuk responsif */
 @media (max-width: 600px) {
+
     table,
     th,
     td {
@@ -75,6 +91,7 @@ td:nth-child(5)
 }
 
 @media (max-width: 400px) {
+
     table,
     th,
     td {
@@ -88,6 +105,7 @@ td:nth-child(5)
 }
 
 @media (orientation: portrait) {
+
     table,
     th,
     td {
@@ -101,6 +119,7 @@ td:nth-child(5)
 }
 
 @media (orientation: landscape) {
+
     table,
     th,
     td {
@@ -112,4 +131,3 @@ td:nth-child(5)
         padding: 4px 6px;
     }
 }
-

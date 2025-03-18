@@ -1,5 +1,16 @@
 const db = require("../config/firebase");
 
+// Fungsi untuk mengambil data footer
+const getFooterData = async () => {
+  try {
+    const snapshotFooter = await db.collection("footer").get();
+    return snapshotFooter.docs.map(doc => doc.data())[0] || {}; // Ambil data footer pertama
+  } catch (error) {
+    console.error("Kesalahan saat mengambil footer:", error);
+    return {};
+  }
+};
+
 // Tambah berita baru
 exports.addBerita = async (req, res) => {
   try {
@@ -45,9 +56,12 @@ exports.getBeritaBySlug = async (req, res) => {
     }
 
     const berita = snapshot.docs[0].data();
-    
-    // Menggunakan EJS untuk menampilkan berita
-    res.render("berita", { berita });
+
+    // Ambil data footer
+    const footerData = await getFooterData();
+
+    // Menggunakan EJS untuk menampilkan berita beserta footer
+    res.render("berita", { berita, footerData });
   } catch (error) {
     res.status(500).render("error", { error });
   }

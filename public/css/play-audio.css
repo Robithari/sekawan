@@ -1,73 +1,77 @@
-/* Container utama */
 .audio-player-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #2c3e50;
+  background-color: #ed6c6c;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 5px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  
-  width: 200px; /* Lebar tetap */
-  max-width: 90%; /* Bisa diubah agar lebih responsif */
-  
+  max-width: 270px;
+  margin: 10px auto;
   text-align: center;
-  margin: auto; /* Memusatkan elemen */
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 
-/* Teks header */
 .audio-player-title {
-  font-size: 10px;
-  color: #f5f5dc;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 1em; /* Ukuran font judul */
+  margin-bottom: 5px; /* Jarak bawah */
+  color: #000000; /* Warna teks */
 }
 
-/* Kontainer tombol */
+.audio-player {
+  display: flex; /* Flexbox untuk tata letak */
+  justify-content: center; /* Pusatkan kontrol */
+  align-items: center; /* Pusatkan secara vertikal */
+}
+
 .controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  display: flex; /* Flexbox untuk kontrol */
+  gap: 10px; /* Jarak antar tombol */
 }
 
-/* Tombol */
-.controls button {
-  background-color: #4CAF50;
+button {
+  background-color: #f8f9fa;
+  color: #000;
   border: none;
-  color: white;
+  border-radius: 5px;
   padding: 5px 7.5px;
-  font-size: 12px;
-  border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
-/* Hover efek tombol */
-.controls button:hover {
-  background-color: #45a049;
+button:hover {
+  background-color: #0056b3; /* Warna latar belakang saat hover */
 }
 
-/* Tombol play khusus */
-.btn-play {
-  background-color: #2196F3;
+.btn-play, .btn-pause, .btn-stop {
+  font-size: 1em; /* Ukuran font untuk simbol */
 }
 
-/* Tombol pause khusus */
-.btn-pause {
-  background-color: #f0ad4e;
+/* Menambahkan gaya untuk indikator status suara */
+.audio-status {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #888;
 }
 
-/* Tombol stop khusus */
-.btn-stop {
-  background-color: #d9534f;
+.audio-status.playing {
+  color: green;
 }
 
-/* Sembunyikan tombol pause pada perangkat seluler */
-@media only screen and (max-width: 768px) {
-  .desktop-only #pause-btn {
-    display: none;
+.audio-status.paused {
+  color: orange;
+}
+
+.audio-status.stopped {
+  color: red;
+}
+
+/* Menyembunyikan tombol Pause pada perangkat mobile */
+@media (max-width: 768px) {
+  #pause-btn {
+      display: none;
+  }
+}
+
+/* Menampilkan tombol Pause pada perangkat desktop */
+@media (min-width: 769px) {
+  #pause-btn {
+      display: inline-block;
   }
 }

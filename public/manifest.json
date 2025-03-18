@@ -1,7 +1,7 @@
 {
   "name": "Sekawan FC",
   "short_name": "SekawanFC",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",
