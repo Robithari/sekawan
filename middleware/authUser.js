@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
         }
 
         if (!idToken) {
-            return res.redirect('/login-cms');
+            return res.redirect('/login');
         }
 
         const decodedToken = await admin.auth().verifyIdToken(idToken);
@@ -19,6 +19,6 @@ module.exports = async (req, res, next) => {
         next();
     } catch (error) {
         console.error('Error verifying Firebase ID token:', error);
-        return res.redirect('/login-cms');
+        return res.redirect('/login');
     }
 };

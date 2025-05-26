@@ -24,7 +24,7 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         }).then(() => {
           console.log("Nomor telepon berhasil disimpan:", phoneNumber); // Verifikasi apakah nomor telepon berhasil disimpan
           alert('Sign-up berhasil! Redirecting to login...');
-          window.location.href = 'login.html';
+          window.location.href = '/login';
         }).catch((error) => {
           console.error('Error updating profile:', error.message);
         });

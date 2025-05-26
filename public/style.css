@@ -7,6 +7,7 @@ html {
 }
 
 body {
+  background-color: #e3dac9;
   background-size: cover;
   height: 100vh;
   margin: 0;
@@ -18,6 +19,17 @@ a {
   color: black;
 }
 
+.row {
+  --bs-gutter-y: 0;
+  display: flex
+;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-.5 * var(--bs-gutter-x));
+  margin-left: calc(-.5 * var(--bs-gutter-x));
+  background-color: #e3dac9;
+}
+
 h6 {
   color: white;
 }
@@ -27,11 +39,34 @@ h6 {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: #e3dac9;
 }
 
 /* Konten utama yang fleksibel */
 .content {
   flex: 1;
+}
+
+/* Menghapus latar belakang pada tombol */
+.custom-btn {
+  border: none;
+  /* Menghapus border jika ada */
+}
+
+
+
+/* Responsivitas untuk Perangkat Kecil */
+@media (max-width: 576px) {
+
+  .custom-btn .menu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .custom-btn span {
+    font-size: 10px;
+    margin-top: -5px;
+  }
 }
 
 /*======================================================= LOADING SCREEN =======================================================*/
@@ -140,10 +175,13 @@ h6 {
 /*======================================================= BOX =======================================================*/
 .container-box {
   line-height: 1.3;
-  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 35px;
+  margin-right: 35px;
+  border-radius: 10px;
+  color: rgb(3, 198, 3)
 }
 
 .underline-text {
@@ -161,7 +199,9 @@ h6 {
   padding: 0;
   font-size: 12px;
   width: 165px;
-  background-color: #b1ffbe;
+  background-color: rgba(177, 255, 190, 0.5);
+  /* Warna dengan transparansi */
+  ;
   border-radius: 10px;
   box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
   text-align: center;
@@ -197,8 +237,16 @@ h6 {
 /*======================================================= BUTTON =======================================================*/
 /* Styling untuk Container Button */
 .container-button {
-  margin-top: 25px;
-  padding: 0 15px;
+  padding: 0 10px;
+  margin-top: 5%;
+  margin-bottom: -20px;
+}
+
+.button-judul {
+  margin-bottom: -3px;
+  font-size: 14px;
+  margin-left: 10px;
+  color: #06713f;
 }
 
 /* Styling untuk Tombol */
@@ -206,23 +254,17 @@ h6 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(145deg, #e35959, #e6e6e6);
   justify-content: center;
   color: #333;
   padding: 5px;
+  font-weight: bold;
   border-radius: 10px;
   text-decoration: none;
   height: 100%;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   border: none;
-  overflow: hidden;
-  transition: all 0.3sease;
 }
 
-.custom-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
+
 
 .btn-content {
   display: flex;
@@ -237,10 +279,6 @@ h6 {
   transition: transform 0.3s ease;
 }
 
-.custom-btn:hover .menu-icon {
-  transform: scale(1.1);
-}
-
 .btn-text {
   font-size: 14px;
   font-weight: 500;
@@ -248,36 +286,93 @@ h6 {
   transition: color 0.3s ease;
 }
 
-/* Efek Klik (Active State) */
-.custom-btn:active {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 /* Styling untuk Ikon */
 .custom-btn .menu-icon {
-  width: 70px;
-  /* Ukuran ikon */
-  height: 70px;
+  width: 55px;
+  height: 55px;
   margin-bottom: 10px;
-  /* Spasi antara ikon dan teks */
   object-fit: contain;
-  /* Memastikan gambar tidak terdistorsi */
 }
 
 /* Styling untuk Teks */
 .custom-btn span {
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 /* Gutter Kustom untuk Row dengan Kelas .custom-gutter */
 .custom-gutter {
-  --bs-gutter-x: 2.5rem;
+  --bs-gutter-x: 1rem;
   /* Sesuaikan nilai gutter sesuai kebutuhan */
   margin-right: calc(-.1* var(--bs-gutter-x));
   margin-left: calc(-.1* var(--bs-gutter-x));
 }
+
+
+
+/* Menghapus border saat tombol custom-btn diklik */
+.custom-btn:active {
+  background-color: transparent;
+  /* Menghilangkan perubahan latar belakang */
+  outline: none;
+  /* Menghilangkan outline */
+  box-shadow: none;
+  /* Menghilangkan bayangan yang muncul saat klik */
+}
+
+/* Menghapus perubahan pada tombol custom-btn saat fokus */
+.custom-btn:focus {
+  outline: none;
+  /* Menghilangkan outline */
+  box-shadow: none;
+  /* Menghilangkan bayangan yang muncul saat fokus */
+}
+
+/* Menghapus efek hover pada tombol custom-btn */
+.custom-btn:hover {
+  background-color: transparent;
+  /* Menghilangkan perubahan latar belakang */
+  color: inherit;
+  /* Warna tetap sama */
+}
+
+/* Menghapus border saat custom-col diklik */
+.custom-col:active {
+  outline: none;
+  /* Menghilangkan outline */
+  background-color: transparent;
+  /* Menghilangkan perubahan latar belakang */
+  box-shadow: none;
+  /* Menghilangkan bayangan */
+}
+
+/* Menghapus perubahan pada custom-col saat fokus */
+.custom-col:focus {
+  outline: none;
+  /* Menghilangkan outline */
+  box-shadow: none;
+  /* Menghilangkan bayangan */
+}
+
+/* Menghapus efek hover pada custom-col */
+.custom-col:hover {
+  background-color: transparent;
+  /* Menghilangkan perubahan latar belakang */
+  color: inherit;
+  /* Warna tetap sama */
+}
+
+/* Menghapus outline pada semua elemen setelah klik atau fokus */
+* {
+  outline: none !important;
+  /* Menghilangkan outline pada semua elemen */
+  box-shadow: none !important;
+  /* Menghilangkan bayangan yang ditambahkan browser */
+}
+
+
+
 
 
 /* Responsivitas untuk Perangkat Besar */
@@ -296,41 +391,53 @@ h6 {
   }
 }
 
-/* Responsivitas untuk Perangkat Kecil */
-@media (max-width: 576px) {
 
-  .custom-btn .menu-icon {
-    width: 50px;
-    height: 50px;
-  }
 
-  .custom-btn span {
-    font-size: 10px;
-    margin-top: -5px;
-  }
+.container-pembayaran {
+  font-size: 20px;
+    color: #06713f;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
+    margin-top: 50px;
+    min-height: 60vh;
 }
+
+
 
 
 
 /*======================================================= BERITA DAN ARTIKEL =======================================================*/
 .berita {
   margin-bottom: -3px;
+  font-size: 14px;
 }
 
 .container-berita {
-  font-size: 20px;
   color: #06713f;
   font-weight: bold;
   padding-left: 20px;
   padding-right: 20px;
   text-align: left;
-  margin-top: -15px;
+  margin-top: -5px;
   margin-bottom: -5px;
 }
 
+/* Menghapus efek fokus dan klik pada container-berita di halaman pembayaran */
+.pembayaran-page .container-berita *:focus,
+.pembayaran-page .container-berita *:active,
+.pembayaran-page .container-berita *:hover {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  cursor: default !important;
+}
+
 .custom-image {
-  width: 85px;
-  height: 85px;
+  width: 65px;
+  height: 65px;
   object-fit: cover;
   border-radius: 5px;
 }
@@ -341,9 +448,9 @@ h6 {
 }
 
 .card-title {
-  font-size: 14px;
+  font-size: 11px;
   position: absolute;
-  top: 20px;
+  top: 15px;
   line-height: 1.3;
   font-weight: bold;
   font-family: Arial, Helvetica, sans-serif;
@@ -355,12 +462,12 @@ h6 {
   font-family: Arial, Helvetica, sans-serif;
   color: #6c757d;
   /* Warna sekunder yang digunakan oleh Bootstrap */
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .card-body {
   padding-right: 10px;
-  width: 110%;
+  width: 100%;
   border: none;
 }
 
@@ -394,6 +501,41 @@ h6 {
 }
 
 
+/*======================================================= LOKASI =======================================================*/
+/* Membuat peta responsif dan memperhalus tampilan */
+#map {
+  width: 100%;
+  height: 400px;
+  /* Sesuaikan tinggi peta */
+  border-radius: 10px;
+  /* Menghaluskan sudut peta */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* Memberikan bayangan lembut di bawah peta */
+  margin-bottom: 40px;
+  /* Memberikan jarak di bawah peta */
+}
+
+/* Menambahkan padding dan margin agar peta tidak terlalu dekat dengan footer atau elemen lainnya */
+.map-container {
+  padding: 0px 20px 15px 20px;
+  background-color: #e3dac9;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.map-judul {
+  font-size: 14px;
+  text-align: left;
+  color: #06713f;
+}
+
+/* Responsif: Menyesuaikan ukuran peta di perangkat mobile */
+@media (max-width: 768px) {
+  #map {
+    height: 300px;
+    /* Lebih pendek di perangkat kecil */
+  }
+}
 
 /*======================================================= FOOTER =======================================================*/
 .custom-footer {
@@ -515,16 +657,21 @@ h6 {
 .container-tautan {
   display: inline-block;
   padding: 2px 10px;
-  border-radius: 5px; /* Rounded corners */
-  background: linear-gradient(135deg, #2d9802, #4cf279); /* Gradien gelap dari abu-abu tua ke biru tua */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 6px 6px rgba(0, 0, 0, 0.2); /* Deep shadow for elegance */
+  border-radius: 5px;
+  /* Rounded corners */
+  background: linear-gradient(135deg, #2d9802, #4cf279);
+  /* Gradien gelap dari abu-abu tua ke biru tua */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 6px 6px rgba(0, 0, 0, 0.2);
+  /* Deep shadow for elegance */
   text-align: center;
-  width: auto; /* Lebar tetap */
+  width: auto;
+  /* Lebar tetap */
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
-  margin-bottom: 30px;
-  font-family: 'Arial', sans-serif; /* Font yang modern dan umum */
+  margin-bottom: 15px;
+  font-family: 'Arial', sans-serif;
+  /* Font yang modern dan umum */
 }
 
 .container-tautan h5 {
@@ -577,7 +724,7 @@ h6 {
 
 @keyframes spin {
   to {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -586,7 +733,7 @@ h6 {
 @media (min-width: 1024px) {
 
   body {
-    background-color: white;
+    background-color: #e3dac9;
   }
 
   .wrapper {
@@ -761,7 +908,7 @@ h6 {
     padding-left: 5%;
     padding-right: 5%;
     box-sizing: border-box;
-    background-color: white;
+    background-color: #e3dac9;
   }
 
   .custom-navbar {
@@ -790,7 +937,7 @@ h6 {
   }
 
   .container-box {
-    margin: 20px 0;
+    margin: 20px 35px;
   }
 
   .countdown-box {
@@ -798,7 +945,7 @@ h6 {
     padding-bottom: 5px;
     font-size: 14px;
     width: 250px;
-    background-color: #b1ffbe;
+    background-color: rgba(177, 255, 190, 0.5);
     border-radius: 10px;
     box-shadow: 0px 1px 5px 4px rgba(229, 40, 235, 0.73);
     text-align: center;
@@ -826,7 +973,7 @@ h6 {
 
 @media screen and (min-width: 992px) {
   body {
-    background-color: #333333;
+    background-color: #424242;
     /* Dark gray background for PC/laptop */
   }
 

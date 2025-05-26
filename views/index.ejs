@@ -59,6 +59,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
 </head>
 
 <body>
@@ -76,7 +77,9 @@
                             <div class="d-flex align-items-center">
                                 <img src="/img/SekawanFC.jpg" alt="Sekawan FC Logo" class="icon-img" width="40"
                                     height="40">
-                                <span class="ms-2">SEKAWAN FC</span>
+                                <h1 class="ms-2"
+                                    style="display: inline; font-size: inherit; font-weight: inherit; margin: 0; vertical-align: middle;">
+                                    SEKAWAN FC</h1>
                             </div>
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -105,7 +108,7 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" id="login-logout-link" href="login.html">Masuk /
+                                    <a class="nav-link text-white" id="login-logout-link" href="/login">Masuk /
                                         Daftar</a>
                                 </li>
                             </ul>
@@ -135,44 +138,132 @@
                 </div>
                 <!-- END Carousel -->
 
+                <!-- Countdown Box -->
+                <div class="container-box"
+                    style="background-image: url('https://png.pngtree.com/background/20230526/original/pngtree-green-field-inside-football-stadium-in-silhouette-under-sky-picture-image_2745416.jpg'); background-size: cover; background-position: center; background-attachment: scroll;">
+                    <div class="countdown-box">
+                        <p class="underline-text"><u>PERTANDINGAN TERDEKAT</u></p>
+                        <% if (!matchData) { %>
+                            <p id="loading-message">Mohon tunggu...</p>
+                            <% } else { %>
+                                <p id="teams" style="color: rgb(3, 198, 3); margin-bottom: 2px;">
+                                <div style="text-align: center;">
+                                    <div id="ourTeam" style="font-size: 12px; margin-bottom: -3px; color: purple;">
+                                        <%= matchData.timKita %>
+                                    </div>
+                                    <div id="vs" style="font-size: 9px; font-weight: bold; color: red;">vs</div>
+                                    <div id="opponentTeam" style="font-size: 12px; margin-top: -2px; color: purple;">
+                                        <%= matchData.timLawan %>
+                                    </div>
+                                </div>
+                                </p>
+                                <!-- Menampilkan tanggal dan waktu pertandingan -->
+                                <p id="event-data">
+                                <p style="color: green;">
+                                    <%= matchData.hari %>, <%= matchData.formattedTanggal %>, <%= matchData.waktu %> WIB
+                                </p>
+                                </p>
+                                <!-- Countdown timer yang sudah dihitung di backend -->
+                                <div id="countdown" class="waktu-mundur" style="color: red;">
+                                    <%= countdown %>
+                                </div>
+                                <script>
+                                    (function () {
+                                        // Parse match date and time from server-rendered data
+                                        const matchDateStr = "<%= matchData ? matchData.tanggal : '' %>";
+                                        const matchTimeStr = "<%= matchData ? matchData.waktu.replace('.', ':') : '' %>";
+
+                                        if (matchDateStr && matchTimeStr) {
+                                            const matchDateTime = new Date(matchDateStr);
+                                            const [hours, minutes] = matchTimeStr.split(':').map(Number);
+                                            matchDateTime.setHours(hours, minutes, 0, 0);
+
+                                            const matchEndTime = new Date(matchDateTime.getTime() + 90 * 60 * 1000);
+
+                                            function updateCountdown() {
+                                                const now = new Date();
+
+                                                if (now >= matchEndTime) {
+                                                    document.getElementById('countdown').textContent = 'Pertandingan Sudah Selesai';
+                                                    clearInterval(timerInterval);
+                                                    return;
+                                                }
+
+                                                if (now >= matchDateTime) {
+                                                    document.getElementById('countdown').textContent = 'Pertandingan Sedang Dimulai';
+                                                    return;
+                                                }
+
+                                                let diff = matchDateTime - now;
+
+                                                const hoursLeft = Math.floor(diff / (1000 * 60 * 60));
+                                                diff -= hoursLeft * 1000 * 60 * 60;
+                                                const minutesLeft = Math.floor(diff / (1000 * 60));
+                                                diff -= minutesLeft * 1000 * 60;
+                                                const secondsLeft = Math.floor(diff / 1000);
+
+                                                document.getElementById('countdown').textContent = `${hoursLeft} jam ${minutesLeft} menit ${secondsLeft} detik`;
+                                            }
+
+                                            updateCountdown();
+                                            const timerInterval = setInterval(updateCountdown, 1000);
+                                        }
+                                    })();
+                                </script>
+                                <% } %>
+                    </div>
+                </div>
+                <!-- END Countdown Box -->
                 <!-- Buttons -->
                 <div class="container-button">
                     <!-- Baris Pertama -->
                     <div class="row justify-content-center custom-gutter">
-                        <div class="col-4 col-md-3 mb-3 custom-col">
-                            <a href="/jadwal" class="custom-btn primary-btn" role="button">
-                                <img src="img/kalender.png" alt="Ikon Jadwal Pertandingan" class="menu-icon">
-                                <span class="btn-text">JADWAL</span>
+                        <div class="col-3 mb-3 custom-col">
+                            <a href="/pembayaran" class="custom-btn primary-btn" role="button">
+                                <img src="img/pembayaran.png" alt="Ikon Musyawarah Mufakat" class="menu-icon">
+                                <span>PEMBAYARAN</span>
                             </a>
                         </div>
-                        <div class="col-4 col-md-3 mb-3 custom-col">
+                        <div class="col-3 mb-3 custom-col">
+                            <a href="/rangkuman-berita" class="custom-btn primary-btn" role="button">
+                                <img src="img/agenda.png" alt="Ikon Berita" class="menu-icon">
+                                <span>BERITA</span>
+                            </a>
+                        </div>
+                        <div class="col-3 mb-3 custom-col">
                             <a href="/kas" class="custom-btn primary-btn" role="button">
                                 <img src="img/kas.png" alt="Ikon Laporan Kas" class="menu-icon">
                                 <span>KAS</span>
                             </a>
                         </div>
-                        <div class="col-4 col-md-3 mb-3 custom-col">
+                        <div class="col-3 mb-3 custom-col">
                             <a href="/dokumentasi" class="custom-btn primary-btn" role="button">
                                 <img src="img/dokumentasi.png" alt="Ikon Dokumentasi" class="menu-icon">
-                                <span>DOKUMENTASI</span>
+                                <span>ARSIP</span>
                             </a>
                         </div>
                     </div>
                     <!-- Baris Kedua -->
                     <div class="row justify-content-center custom-gutter">
-                        <div class="col-4 col-md-3 mb-3 custom-col">
+                        <div class="col-3 mb-3 custom-col">
                             <a href="/inventaris" class="custom-btn primary-btn" role="button">
                                 <img src="img/inventaris.png" alt="Ikon Barang Inventaris" class="menu-icon">
                                 <span>INVENTARIS</span>
                             </a>
                         </div>
-                        <div class="col-4 col-md-3 mb-3 custom-col">
-                            <a href="proses.html" class="custom-btn primary-btn" role="button">
-                                <img src="img/kesepakatan.png" alt="Ikon Musyawarah Mufakat" class="menu-icon">
-                                <span>KESEPAKATAN</span>
+                        <div class="col-3 mb-3 custom-col">
+                            <a href="/rangkuman-artikel" class="custom-btn primary-btn" role="button">
+                                <img src="img/agenda.png" alt="Ikon Artikel" class="menu-icon">
+                                <span>ARTIKEL</span>
                             </a>
                         </div>
-                        <div class="col-4 col-md-3 mb-3 custom-col">
+                        <div class="col-3 mb-3 custom-col">
+                            <a href="/jadwal" class="custom-btn primary-btn" role="button">
+                                <img src="img/kalender.png" alt="Ikon Jadwal Pertandingan" class="menu-icon">
+                                <span>JADWAL</span>
+                            </a>
+                        </div>
+                        <div class="col-3 mb-3 custom-col">
                             <a href="proses.html" class="custom-btn primary-btn" role="button">
                                 <img src="img/agenda.png" alt="Ikon Agenda Kegiatan" class="menu-icon">
                                 <span>AGENDA</span>
@@ -184,7 +275,7 @@
                 <hr>
                 <!-- Berita Section -->
                 <div class="container-berita">
-                    <p class="berita">Berita Terbaru</p>
+                    <h2 class="berita">BERITA</h2>
                     <div class="informasi" id="berita-container">
                         <% berita.forEach((newsItem)=> { %>
                             <div class="news-item">
@@ -221,7 +312,7 @@
                 <hr>
                 <!-- Artikel Section -->
                 <div class="container-berita">
-                    <p class="berita">Artikel Terbaru</p>
+                    <h2 class="berita">ARTIKEL</h2>
                     <div class="informasi" id="articles-container">
                         <% articles.forEach((article)=> { %>
                             <div class="article-item">
@@ -256,6 +347,16 @@
                 </div>
                 <!-- END Artikel Section -->
                 <hr>
+                <!-- Google Map -->
+                <div class="map-container">
+                    <h2 class="map-judul">LOKASI LAPANGAN</h2>
+                    <!-- Menambahkan judul untuk memberikan konteks pada peta -->
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d786.7210264861203!2d113.69272527697062!3d-8.199627883014381!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6979783fba339%3A0xbbce91b581d37529!2sLapangan%20SEKAWAN%20FC%20Mini%20soccer%20BTB!5e1!3m2!1sid!2sid!4v1742276046103!5m2!1sid!2sid"
+                        width="100%" height="250" style="border:0; border-radius: 10px;" allowfullscreen=""
+                        loading="lazy"></iframe>
+                </div>
+                <!-- END Google Map -->
                 <!-- Share Link Button -->
                 <div class="container-tautan">
                     <span id="copyLink" class="link-icon">
@@ -322,15 +423,17 @@
         <!-- Custom JS Files -->
         <script src="js/pencarian.js" defer></script>
         <script src="js/kunci-layar.js" defer></script>
-        <script type="module" src="js/data-pertandingan.js" defer></script>
         <script type="module" src="firebase-config.js" defer></script>
-        <script src="js/cek-login.js" defer></script>
         <script src="js/share-link.js" defer></script>
         <script src="js/loading.js" defer></script>
+        <script src="js/cek-login.js"></script>
+        <script src="js/no-focus.js" defer></script>
 
 
     </div>
     <!-- END Scripts -->
+
+
 
     <!-- Service Worker Registration -->
     <script>

@@ -1,39 +1,49 @@
-const admin = require('firebase-admin');
-require('dotenv').config();  // Memuat variabel lingkungan dari file .env
+const axios = require('axios'); // Untuk mengambil data dari Google Apps Script API
+const db = require("../config/firebase"); // Untuk mengambil data dari Firestore
 
-// Ambil Firebase Service Account credentials dari environment variables
-const serviceAccount = {
-  type: "service_account",
-  project_id: process.env.FIREBASE_PROJECT_ID,
-  private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),  // Pastikan private key diubah dengan benar
-  client_email: process.env.FIREBASE_CLIENT_EMAIL,
-  client_id: process.env.FIREBASE_CLIENT_ID,
-  auth_uri: process.env.FIREBASE_AUTH_URI,
-  token_uri: process.env.FIREBASE_TOKEN_URI,
-  auth_provider_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
-  client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL
-};
+// Fungsi untuk mengambil data dokumentasi dari Google Apps Script API
+async function getDokumentasiData() {
+  try {
+    const response = await axios.get('https://script.googleusercontent.com/macros/echo?user_content_key=CZfT4ukELTEw74U8y4_OVSdJA0MoRPTnbfrM_pEJnBf_yj0iY0f6c9xlI4u9RgHKuk3zOPedAt89EJiJW5Ng1pQVVtY5QfDsm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFp8IpH6vIoxlz6z1vHvBGveIMkwE5hxhRZgrX7pPlQO98dtL__CtYPa3KdNnIXbUm9WnqK1sm1dRh5mrQJuQ_bE78tZtLS8jw&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV');
+    const dokumentasiData = response.data.DOKUMENTASI || [];
 
-// Inisialisasi Firebase Admin SDK dengan menggunakan kredensial dari secret
-if (!admin.apps.length) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: process.env.FIREBASE_DATABASE_URL // Ganti dengan URL database Firebase Anda
+    // Format data jika diperlukan
+    dokumentasiData.forEach(doc => {
+      if (doc.TANGGAL) {
+        doc.TANGGAL = new Date(doc.TANGGAL).toLocaleDateString(); // Format tanggal menjadi DD-MM-YYYY
+      }
     });
+
+    return dokumentasiData;
+  } catch (error) {
+    console.error('Error mengambil data dokumentasi:', error);
+    throw new Error('Error mengambil data dokumentasi');
+  }
 }
 
-const db = admin.firestore(); // Inisialisasi Firestore
-
-exports.renderDokumentasiPage = async (req, res) => {
+// Fungsi untuk mengambil data footer dari Firestore
+async function getFooterData() {
   try {
-    // Logika untuk mengambil data jika diperlukan
-    // Misalnya, ambil data dari Firestore jika ada koleksi yang relevan
-
-    // Render halaman dokumentasi
-    res.render("dokumentasi");
+    const snapshotFooter = await db.collection("footer").get();
+    const footerData = snapshotFooter.docs.map(doc => doc.data())[0] || {}; // Ambil data footer pertama
+    return footerData;
   } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).send("Terjadi kesalahan server.");
+    console.error("Error mengambil data footer:", error);
+    throw new Error('Error mengambil data footer');
   }
+}
+
+// Endpoint untuk mengirimkan data dokumentasi dan footer ke view
+async function renderDokumentasiPage(req, res) {
+  try {
+    const dokumentasiData = await getDokumentasiData(); // Ambil data dokumentasi dari API
+    const footerData = await getFooterData(); // Ambil data footer dari Firestore
+    res.render("dokumentasi", { dokumentasiData, footerData }); // Kirimkan data ke template EJS
+  } catch (error) {
+    res.status(500).send("Terjadi kesalahan pada server");
+  }
+}
+
+module.exports = {
+  renderDokumentasiPage
 };

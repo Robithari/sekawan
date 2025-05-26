@@ -1,17 +1,18 @@
 .audio-player-container {
-  background-color: #ed6c6c;
+  background-color: #c9c9c9;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 5px;
-  max-width: 270px;
+  box-shadow: 0 5px 10px rgb(229 16 16 / 10%);
+  max-width: 190px;
   margin: 10px auto;
   text-align: center;
 }
 
 .audio-player-title {
-  font-size: 1em; /* Ukuran font judul */
-  margin-bottom: 5px; /* Jarak bawah */
-  color: #000000; /* Warna teks */
+  font-size: 11px;
+  margin-bottom: 2px;
+  color: #000000;
+  text-decoration: underline;
+  font-weight: bold;
 }
 
 .audio-player {
@@ -30,7 +31,7 @@ button {
   color: #000;
   border: none;
   border-radius: 5px;
-  padding: 5px 7.5px;
+  padding: 2px 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -45,9 +46,9 @@ button:hover {
 
 /* Menambahkan gaya untuk indikator status suara */
 .audio-status {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #888;
+  font-size: 12px;
+  color:rgb(0, 0, 0);
+  font-weight: bold;
 }
 
 .audio-status.playing {
@@ -55,11 +56,11 @@ button:hover {
 }
 
 .audio-status.paused {
-  color: orange;
+  color: rgb(137, 90, 2);
 }
 
 .audio-status.stopped {
-  color: red;
+  color: rgb(97, 0, 0);
 }
 
 /* Menyembunyikan tombol Pause pada perangkat mobile */

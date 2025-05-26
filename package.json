@@ -10,13 +10,18 @@
   },
   "dependencies": {
     "axios": "^1.8.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "firebase": "^11.5.0",
     "firebase-admin": "^13.1.0",
     "morgan": "^1.10.0",
     "node-fetch": "^3.3.2",
+    "vercel": "^42.1.1",
+    "winston": "^3.17.0",
     "xml": "^1.0.1"
   },
   "devDependencies": {

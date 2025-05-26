@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 // Jika belum login, ubah teks menjadi Login / Signup
                 loginLogoutLink.textContent = 'Login / Signup';
-                loginLogoutLink.href = 'login.html'; // Arahkan ke halaman login
+                loginLogoutLink.href = '/login'; // Arahkan ke halaman login
             }
         } else {
             console.error('Element with id "login-logout-link" not found.');

@@ -60,7 +60,7 @@
   <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
-  <title id="page-title">dokumentasi-sekawanfc</title>
+  <title id="page-title">arsip</title>
 
 </head>
 
@@ -119,19 +119,40 @@
 
         <!-- Dokumentasi -->
         <div class="container-kas">
-          <h5>DOKUMENTASI</h5>
-          <div class="table-container" style="min-height: 100vh;">
+          <h5>ARSIP</h5>
+          <div class="table-container">
             <table id="data-table">
               <thead>
                 <tr>
-                  <th>TANGGAL</th>
-                  <th>PERTANDINGAN</th>
-                  <th>LINK FOTO</th>
-                  <th>KETERANGAN</th>
+                  <th>Tanggal</th>
+                  <th>Pertandingan</th>
+                  <th>Link Foto</th>
+                  <th>Keterangan</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- Data akan ditampilkan di sini -->
+                <% dokumentasiData.forEach((record, index)=> { %>
+                  <tr class="<%= index % 2 === 0 ? 'gray-background' : '' %>">
+                    <td>
+                      <%= record.TANGGAL %>
+                    </td>
+                    <td>
+                      <%= record.PERTANDINGAN %>
+                    </td>
+                    <td>
+                      <% if (record["LINK FOTO"] && record["SUMBER LINK"]) { %>
+                        <a href="<%= record["SUMBER LINK"] %>" rel="noopener noreferrer">
+                          <%= record["LINK FOTO"] %>
+                        </a>
+                      <% } else { %>
+                        <%= record["LINK FOTO"] || '-' %>
+                      <% } %>
+                    </td>                    
+                    <td>
+                      <%= record.KETERANGAN || '-' %>
+                    </td>
+                  </tr>
+                  <% }) %>
               </tbody>
             </table>
           </div>
@@ -195,7 +216,6 @@
     <script src="js/kunci-layar.js"></script>
     <script type="module" src="firebase-config.js"></script>
     <script src="js/cek-login.js"></script>
-    <script src="js/dokumentasi.js"></script>
     <script src="js/share-link.js"></script>
     <script src="js/loading.js"></script>
 

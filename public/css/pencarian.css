@@ -1,0 +1,84 @@
+/* Styling untuk search container */
+.search-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* Styling untuk input field */
+.search-input {
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect pada input */
+.search-input:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Styling untuk tombol */
+.button-group .btn {
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    min-width: 100px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Efek saat hover pada tombol */
+.button-group .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Styling untuk tombol Cari (Primary) */
+.btn-primary {
+    background-color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Styling untuk tombol Batal (Secondary) */
+.btn-secondary {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 576px) {
+    .search-container {
+        padding: 10px;
+    }
+    
+    .button-group .btn {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+
+    .search-input {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* Responsif untuk layar besar */
+@media (min-width: 576px) {
+    .search-container {
+        max-width: 700px;
+    }
+}

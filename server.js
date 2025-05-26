@@ -1,163 +1,232 @@
 // Mengimpor modul-modul yang diperlukan
-const express = require("express"); // Untuk membuat server web menggunakan Express
+const express = require("express"); // Framework web untuk Node.js
 const dotenv = require("dotenv"); // Untuk memuat variabel lingkungan dari file .env
 const cors = require("cors"); // Middleware untuk mengatur akses lintas domain (CORS)
 const morgan = require("morgan"); // Middleware untuk logging HTTP request
-const path = require("path"); // Modul untuk mengelola path file
+const path = require("path"); // Modul untuk mengelola path file dan direktori
 const xml = require("xml"); // Modul untuk menghasilkan XML (digunakan untuk sitemap)
-const db = require("./config/firebase"); // Mengimpor konfigurasi Firebase untuk mengakses Firestore
-const kasController = require("./controllers/kasController"); // Mengimpor controller untuk halaman Kas
-const inventarisController = require("./controllers/inventarisController"); // Mengimpor controller untuk halaman Inventaris
+const cookieParser = require("cookie-parser"); // Middleware untuk parsing cookie
 
-const jadwalController = require("./controllers/jadwalController"); // Mengimpor controller untuk halaman Jadwal
-const cmsController = require("./controllers/cmsController"); // Mengimpor controller untuk halaman CMS
-const dokumentasiController = require("./controllers/dokumentasiController"); // Mengimpor controller untuk halaman Dokumentasi
-const indexController = require("./controllers/indexController"); // Mengimpor controller untuk halaman index (SSR)
-const profilController = require("./controllers/profilController"); // Mengimpor controller untuk halaman Profil
-const rangkumanBeritaController = require("./controllers/rangkumanBeritaController"); // Mengimpor controller untuk halaman Rangkuman Berita
-const rangkumanArtikelController = require("./controllers/rangkumanArtikelController"); // Mengimpor controller untuk halaman Rangkuman Artikel
+// Mengimpor konfigurasi Firebase untuk mengakses Firestore
+const db = require("./config/firebase");
 
-dotenv.config(); // Memuat file .env untuk konfigurasi variabel lingkungan
+// Mengimpor controller untuk berbagai halaman
+const kasController = require("./controllers/kasController");
+const inventarisController = require("./controllers/inventarisController");
+const jadwalController = require("./controllers/jadwalController");
+const cmsController = require("./controllers/cmsController");
+const dokumentasiController = require("./controllers/dokumentasiController");
+const indexController = require("./controllers/indexController");
+const profilController = require("./controllers/profilController");
+const rangkumanBeritaController = require("./controllers/rangkumanBeritaController");
+const rangkumanArtikelController = require("./controllers/rangkumanArtikelController");
+// const loginCmsController = require("./controllers/loginCmsController");
+// const dataIuranController = require("./controllers/dataIuranController");
+const loginCmsController = require("./controllers/loginCmsController");
 
-const app = express(); // Membuat instance aplikasi Express
+// Middleware autentikasi untuk proteksi route CMS
+const authMiddleware = require('./middleware/auth');
 
-// Middleware untuk menangani request
-app.use(cors()); // Menggunakan middleware CORS
-app.use(morgan("dev")); // Menggunakan morgan untuk mencatat log request dalam format 'dev'
-app.use(express.json()); // Middleware untuk meng-handle request body dalam format JSON
-app.use(express.urlencoded({ extended: false })); // Middleware untuk meng-handle request body dalam format URL-encoded
+// Memuat variabel lingkungan dari file .env
+dotenv.config();
+
+// Membuat instance aplikasi Express
+const app = express();
+
+// Mengatur trust proxy agar express-rate-limit dapat membaca header X-Forwarded-For dengan benar
+app.set('trust proxy', 1);
+
+// Middleware global untuk menangani request
+const rateLimiter = require('./middleware/rateLimiter');
+const errorHandler = require('./middleware/errorHandler');
+const logger = require('./utils/logger');
+
+app.use(cors()); // Mengizinkan akses lintas domain
+app.use(morgan("dev")); // Logging request HTTP dengan format 'dev'
+app.use(express.json()); // Parsing body request dengan format JSON
+app.use(express.urlencoded({ extended: false })); // Parsing body request dengan format URL-encoded
+app.use(cookieParser()); // Parsing cookie dari request
+
+// Gunakan rate limiter untuk membatasi request
+app.use(rateLimiter);
+
+const cacheControl = require('./middleware/cacheControl');
+app.use(cacheControl);
 
 // Menetapkan EJS sebagai view engine untuk rendering halaman HTML
-app.set("view engine", "ejs"); 
-// Menetapkan folder 'views' sebagai lokasi file view EJS
-app.set("views", path.join(__dirname, "views")); 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-// Menentukan direktori public yang akan digunakan untuk file statis (seperti CSS, JS, gambar)
-app.use(express.static(path.join(__dirname, "public"))); 
+// Menentukan direktori public untuk file statis (CSS, JS, gambar, dll)
+app.use(express.static(path.join(__dirname, "public")));
 
-// Rute untuk halaman Kas menggunakan Server-Side Rendering (SSR)
-app.get("/kas", kasController.renderKasPage);
+// Definisi route dengan Server-Side Rendering (SSR)
 
-// Rute untuk halaman Jadwal Pertandingan menggunakan SSR
+// Middleware autentikasi untuk user biasa
+const authUserMiddleware = require('./middleware/authUser');
+
+// Halaman Kas dengan proteksi autentikasi user biasa
+app.get("/kas", authUserMiddleware, kasController.renderKasPage);
+
+// Halaman Jadwal Pertandingan
 app.get("/jadwal", jadwalController.renderJadwalPage);
 
-// Rute untuk halaman Profil menggunakan SSR
+// Halaman Profil
 app.get("/profil", profilController.renderProfilPage);
 
-// Rute untuk halaman CMS menggunakan SSR
-app.get("/cms", cmsController.renderCmsPage);
+// Halaman Login CMS
+app.get("/login-cms", loginCmsController.renderLoginPage);
 
-// Rute untuk halaman Dokumentasi menggunakan SSR
-app.get("/dokumentasi", dokumentasiController.renderDokumentasiPage); 
+// Halaman Login Pengunjung
+app.get("/login", (req, res) => {
+    const footerData = {
+        email: "admin@sekawanfc.com",
+        telephone: "+62 813 363 06253"
+    };
+    res.render("login", { footerData });
+});
 
-app.get("/inventaris", inventarisController.renderInventarisPage); // Rute untuk halaman Inventaris menggunakan SSR
-// Rute untuk halaman utama (index) menggunakan SSR
+// Halaman CMS dengan proteksi autentikasi
+app.get("/cms", authMiddleware, cmsController.renderCmsPage);
+
+// Halaman Dokumentasi
+app.get("/dokumentasi", dokumentasiController.renderDokumentasiPage);
+
+// Halaman Inventaris
+app.get("/inventaris", inventarisController.renderInventarisPage);
+
+// Halaman Utama (Homepage)
 app.get("/", indexController.renderHomePage);
 
-
-// Rute untuk halaman Rangkum Berita menggunakan SSR
+// Halaman Rangkuman Berita
 app.get("/rangkuman-berita", rangkumanBeritaController.renderRangkumanBeritaPage);
 
-// Rute untuk halaman Rangkum Artikel menggunakan SSR
-app.get("/rangkuman-artikel", rangkumanArtikelController.renderRangkumanArtikelPage); // Menambahkan rute rangkuman-artikel
 
-// Rute untuk menghasilkan sitemap.xml secara dinamis
+
+// Halaman Rangkuman Artikel
+app.get("/rangkuman-artikel", rangkumanArtikelController.renderRangkumanArtikelPage);
+
+const dataIuranController = require("./controllers/dataIuranController");
+
+// Halaman Data Iuran
+app.get("/data-iuran", dataIuranController.renderDataIuranPage);
+
+app.get("/pembayaran", (req, res) => {
+    const footerData = {
+        email: "admin@sekawanfc.com",
+        telephone: "+62 813 363 06253"
+    };
+    res.render("pembayaran", { footerData });
+});
+
+// Route untuk menghasilkan sitemap.xml secara dinamis
 app.get("/sitemap.xml", async (req, res) => {
   try {
-    // Mengambil semua artikel yang ada di koleksi 'articles' di Firestore
+    // Mengambil semua artikel dari Firestore
     const articlesSnapshot = await db.collection("articles").orderBy("createdAt", "desc").get();
-    console.log(`Total articles: ${articlesSnapshot.size}`); // Mencetak jumlah artikel yang ditemukan
+    console.log(`Total articles: ${articlesSnapshot.size}`);
 
-    // Mengambil semua berita dari koleksi 'berita' di Firestore
+    // Mengambil semua berita dari Firestore
     const beritaSnapshot = await db.collection("berita").orderBy("createdAt", "desc").get();
-    console.log(`Total berita: ${beritaSnapshot.size}`); // Mencetak jumlah berita yang ditemukan
+    console.log(`Total berita: ${beritaSnapshot.size}`);
 
     const berita = [];
-    // Mengolah setiap berita untuk dimasukkan ke dalam array berita
     beritaSnapshot.forEach((doc) => {
       const data = doc.data();
-      const lastmod = (data.updatedAt || data.createdAt).split("T")[0]; // Mendapatkan tanggal modifikasi terakhir
+      const lastmod = (data.updatedAt || data.createdAt).split("T")[0];
       berita.push({
         url: [
-          { loc: `https://sekawanfc.fun/berita/${data.slug}` }, // URL berita
-          { lastmod }, // Tanggal modifikasi berita
-          { changefreq: "weekly" }, // Frekuensi perubahan sitemap (setiap minggu)
-          { priority: "0.8" }, // Prioritas URL dalam sitemap
+          { loc: `https://sekawanfc.fun/berita/${data.slug}` },
+          { lastmod },
+          { changefreq: "weekly" },
+          { priority: "0.8" },
         ],
       });
     });
 
-    // Menyusun semua URL untuk dimasukkan dalam sitemap
+    // Menyusun URL sitemap
     const urls = [
       {
         url: [
-          { loc: "https://sekawanfc.fun/" }, // URL untuk homepage
-          { lastmod: new Date().toISOString().split("T")[0] }, // Tanggal modifikasi homepage
-          { changefreq: "daily" }, // Frekuensi perubahan homepage (setiap hari)
-          { priority: "1.0" }, // Prioritas homepage
+          { loc: "https://sekawanfc.fun/" },
+          { lastmod: new Date().toISOString().split("T")[0] },
+          { changefreq: "daily" },
+          { priority: "1.0" },
         ],
       },
       {
         url: [
-          { loc: "https://sekawanfc.fun/profil" }, // URL untuk halaman profil
-          { lastmod: new Date().toISOString().split("T")[0] }, // Tanggal modifikasi halaman profil
-          { changefreq: "weekly" }, // Frekuensi perubahan halaman profil (setiap minggu)
-          { priority: "0.8" }, // Prioritas halaman profil
+          { loc: "https://sekawanfc.fun/profil" },
+          { lastmod: new Date().toISOString().split("T")[0] },
+          { changefreq: "weekly" },
+          { priority: "0.8" },
         ],
       },
       {
         url: [
-          { loc: "https://sekawanfc.fun/berita" }, // URL untuk halaman berita
-          { lastmod: new Date().toISOString().split("T")[0] }, // Tanggal modifikasi halaman berita
-          { changefreq: "daily" }, // Frekuensi perubahan halaman berita (setiap hari)
-          { priority: "0.9" }, // Prioritas halaman berita
+          { loc: "https://sekawanfc.fun/berita" },
+          { lastmod: new Date().toISOString().split("T")[0] },
+          { changefreq: "daily" },
+          { priority: "0.9" },
         ],
       },
-      // Menambahkan URL artikel dan berita lainnya
-      ...articles,
+      ...articlesSnapshot.docs.map(doc => ({
+        url: [
+          { loc: `https://sekawanfc.fun/articles/${doc.data().slug}` },
+          { lastmod: doc.data().createdAt.split("T")[0] },
+          { changefreq: "weekly" },
+          { priority: "0.8" },
+        ],
+      })),
       ...berita,
     ];
 
     // Menghasilkan sitemap XML
     const sitemap = xml({
       urlset: [
-        { _attr: { xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9" } }, // XML namespace untuk sitemap
-        ...urls, // Menambahkan URL yang sudah disusun
+        { _attr: { xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9" } },
+        ...urls,
       ],
     });
 
-    res.header("Content-Type", "application/xml"); // Menetapkan header Content-Type untuk XML
-    res.send(sitemap); // Mengirimkan sitemap XML ke klien
+    res.header("Content-Type", "application/xml");
+    res.send(sitemap);
   } catch (error) {
-    console.error("Error generating sitemap:", error); // Menangani error dalam pembuatan sitemap
-    res.status(500).send("Error generating sitemap"); // Mengirimkan response error jika terjadi kesalahan
+    console.error("Error generating sitemap:", error);
+    res.status(500).send("Error generating sitemap");
   }
 });
 
-// Import dan menggunakan berbagai rute aplikasi
+// Menggunakan route API
 const apiRoutes = require("./routes/api");
 const articleRoutes = require("./routes/articles");
 const beritaRoutes = require("./routes/berita");
 
-// Gunakan berbagai rute untuk menangani berbagai URL
-app.use("/api", apiRoutes); // Rute untuk API
-app.use("/articles", articleRoutes); // Rute untuk artikel
-app.use("/berita", beritaRoutes); // Rute untuk berita
+app.use("/api", apiRoutes);
+app.use("/articles", articleRoutes);
+app.use("/berita", beritaRoutes);
 
 // Mengecek koneksi ke Firestore
 if (db) {
-  console.log("Koneksi ke Firestore berhasil."); // Jika berhasil terhubung ke Firestore
+  console.log("Koneksi ke Firestore berhasil.");
 } else {
-  console.error("Koneksi ke Firestore gagal."); // Jika gagal terhubung ke Firestore
+  console.error("Koneksi ke Firestore gagal.");
 }
 
 // Menjalankan server pada mode pengembangan
 if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 3000; // Menentukan port yang digunakan (default 3000)
+  const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`); // Menampilkan pesan jika server berjalan
+    console.log(`🚀 Server running on port ${PORT}`);
   });
 }
+
+// Menangani error global (middleware error handler)
+app.use(errorHandler);
+
+// Menangani route yang tidak ditemukan (404)
+const { renderNotFoundPage } = require('./controllers/errorController');
+app.use(renderNotFoundPage);
 
 // Mengekspor aplikasi untuk digunakan pada platform lain (misalnya Vercel)
 module.exports = app;

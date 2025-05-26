@@ -32,7 +32,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="icon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="icon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -45,8 +45,6 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/loading.css">
-    <link rel="stylesheet" href="css/rangkuman-berita.css">
-
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
@@ -61,13 +59,14 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
 </head>
 
 <body>
     <!-- Loading Spinner -->
-    <div class="loading-spinner" id="loadingSpinner">
+    <!-- <div class="loading-spinner" id="loadingSpinner">
         <div class="spinner"></div>
-    </div>
+    </div> -->
     <div class="mobile-only">
         <div class="content-wrapper">
             <div class="wrapper">
@@ -78,7 +77,9 @@
                             <div class="d-flex align-items-center">
                                 <img src="/img/SekawanFC.jpg" alt="Sekawan FC Logo" class="icon-img" width="40"
                                     height="40">
-                                <span class="ms-2">SEKAWAN FC</span>
+                                <h1 class="ms-2"
+                                    style="display: inline; font-size: inherit; font-weight: inherit; margin: 0; vertical-align: middle;">
+                                    SEKAWAN FC</h1>
                             </div>
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -107,7 +108,7 @@
                                     </ul>
                                 </li>
                                 <li class="nav-item">
-<a class="nav-link text-white" id="login-logout-link" href="/login">Masuk /
+                                    <a class="nav-link text-white" id="login-logout-link" href="/login">Masuk /
                                         Daftar</a>
                                 </li>
                             </ul>
@@ -115,56 +116,85 @@
                     </div>
                 </nav>
                 <!-- End Navbar -->
+                    <!-- Form Section -->
+                    <div class="container mt-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 id="form-title" class="text-center">Login</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Notifikasi Sukses -->
+                                        <div id="success-message" class="alert alert-success" style="display: none;">
+                                            Anda berhasil mendaftar, silakan login
+                                        </div>
 
-                <!-- Artikel Section -->
-                <div class="container-rangkuman-berita">
-                    <p class="berita">Artikel</p>
-                    <div class="informasi">
-                        <% if (artikelData.length> 0) { %>
-                            <% artikelData.forEach(function(article) { %>
-                                <div class="card no-border">
-                                    <div class="row g-0 align-items-center">
-                                        <div class="col-md-4 col-sm-4 col-4" style="width: auto; border-radius: 10px;">
-                                            <img src="<%= article.photoUrl %>" class="custom-image"
-                                                alt="<%= article.title %>">
+                                        <!-- Notifikasi Sukses Login -->
+                                        <div id="login-success-message" class="alert alert-success"
+                                            style="display: none;">
+                                            Login berhasil! Anda akan diarahkan ke halaman beranda.
                                         </div>
-                                        <div class="col-md-8 col-sm-8 col-8">
-                                            <div class="card-body">
-                                                <a href="/articles/<%= article.slug %>">
-                                                    <p class="card-title custom-title text-start mb-0">
-                                                    <%= article.title %>
-                                                    </p>
-                                                </a>
-                                                <p class="card-text">
-                                                    <%= article.tanggalPembuatan %>
-                                                </p>
+
+                                        <!-- Formulir Login -->
+                                        <form id="loginForm">
+                                            <div class="mb-3">
+                                                <label for="loginEmail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="loginEmail" required>
                                             </div>
-                                        </div>
+                                            <div class="mb-3">
+                                                <label for="loginPassword" class="form-label">Password</label>
+                                                <input type="password" class="form-control" id="loginPassword" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                                            <div class="mt-3 text-center">
+                                                <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                                            </div>
+                                            <div class="mt-2 text-center">
+                                                <p>Don't have an account? <a href="#" id="goToSignup">Sign Up</a></p>
+                                            </div>
+                                        </form>
+
+                                        <!-- Formulir Sign Up -->
+                                        <form id="signupForm" style="display: none;">
+                                            <div class="mb-3">
+                                                <label for="signupName" class="form-label">Name</label>
+                                                <input type="text" class="form-control" id="signupName" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="signupPhone" class="form-label">Phone Number</label>
+                                                <input type="text" class="form-control" id="signupPhone" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="signupEmail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="signupEmail" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="signupPassword" class="form-label">Password</label>
+                                                <input type="password" class="form-control" id="signupPassword"
+                                                    required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="signupMembershipCode" class="form-label">Kode
+                                                    Keanggotaan</label>
+                                                <input type="text" class="form-control" id="signupMembershipCode"
+                                                    placeholder="Masukkan Kode Keanggotaan Anda" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                                            <div class="mt-2 text-center">
+                                                <a href="#" id="goToLogin">Back to Login</a>
+                                            </div>
+                                            <button id="goToLoginBtn" class="btn btn-secondary w-100 mt-3"
+                                                style="display: none;">Go
+                                                to Login</button>
+                                        </form>
                                     </div>
                                 </div>
-                                <% }); %>
-                                    <% } else { %>
-                                        <p>Tidak ada artikel yang tersedia.</p>
-                                        <% } %>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- END Artikel Section -->
-
-                <hr>
-
-                <!-- Share Link Button -->
-                <div class="container-tautan">
-                    <span id="copyLink" class="link-icon">
-                        <img src="img/icon-link.png" alt="Ikon Share Link" class="icon-link">
-                        Share Link
-                    </span>
-                    <div id="tautan-notification" class="tautan-notification">
-                        Tautan sudah dicopy dan siap di-paste, silahkan share
-                    </div>
-                </div>
-                <!-- END Share Link Button -->
-
-                <!-- Footer -->
+                    <!-- End Form Section -->
+                    <!-- Footer -->
                 <footer class="custom-footer">
                     <div class="footer-content">
                         <div class="footer-section">
@@ -203,26 +233,31 @@
             </div>
         </div>
     </div>
+    </div>
 
     <!-- Scripts -->
     <div class="container-js">
+        <!-- Lazysizes library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+
         <!-- Bootstrap JS Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"
+            defer></script>
 
         <!-- Custom JS Files -->
-        <script src="js/pencarian.js"></script>
-        <script src="js/kunci-layar.js"></script>
-        <script type="module" src="firebase-config.js"></script>
-        <script src="js/cek-login.js"></script>
-        <script src="js/share-link.js"></script>
-        <script src="js/loading.js"></script>
-
-        <!-- Splash Screen API URL -->
+        <script src="js/pencarian.js" defer></script>
+        <script src="js/kunci-layar.js" defer></script>
+        <script type="module" src="firebase-config.js" defer></script>
+        <script src="js/cek-login.js" defer></script>
+        <script src="js/loading.js" defer></script>
+        <script src="js/no-focus.js" defer></script>
+        <script src="js/login-user.js" defer></script>
 
     </div>
     <!-- END Scripts -->
+
+
 
     <!-- Service Worker Registration -->
     <script>
