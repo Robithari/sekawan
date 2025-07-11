@@ -625,15 +625,21 @@
             
             try {
                 log(`🎯 Menggunakan token: ${window.currentFCMToken.substring(0, 50)}...`);
+                log(`🚨 FRONTEND DEBUG: Preparing request body with directToken`);
+                
+                const requestBody = {
+                    title: '🎯 Test Direct Token',
+                    body: 'Test langsung ke token browser ini saja',
+                    directToken: window.currentFCMToken
+                };
+                
+                log(`🚨 FRONTEND DEBUG: Request body = ${JSON.stringify(requestBody, null, 2)}`);
+                log(`🚨 FRONTEND DEBUG: directToken length = ${window.currentFCMToken.length}`);
                 
                 const response = await fetch('/api/test-send-notification', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        title: '🎯 Test Direct Token',
-                        body: 'Test langsung ke token browser ini saja',
-                        directToken: window.currentFCMToken
-                    })
+                    body: JSON.stringify(requestBody)
                 });
 
                 const result = await response.json();
@@ -719,12 +725,18 @@
             }
         }
 
-        // SUPER STRONG DEBOUNCING WRAPPERS
+        // SUPER STRONG DEBOUNCING WRAPPERS + GLOBAL PROTECTION
         let lastClickTime = 0;
+        let globalTestLock = false;
         const DEBOUNCE_TIME = 5000; // 5 seconds between clicks
         
         function testSendNotificationWithDebounce() {
             const now = Date.now();
+            if (globalTestLock) {
+                log('🔒 Test sedang berjalan, tunggu sampai selesai...', 'warning');
+                return false;
+            }
+            
             if (now - lastClickTime < DEBOUNCE_TIME) {
                 const remaining = Math.ceil((DEBOUNCE_TIME - (now - lastClickTime)) / 1000);
                 log(`⚠️ Tunggu ${remaining} detik lagi sebelum test ulang...`, 'warning');
@@ -732,6 +744,7 @@
             }
             
             lastClickTime = now;
+            globalTestLock = true;
             
             // Disable button temporarily
             const btn = document.getElementById('send-btn');
@@ -741,13 +754,19 @@
             setTimeout(() => {
                 btn.disabled = false;
                 btn.innerHTML = '<span class="icon">📤</span>Kirim Test (Semua Token)';
-            }, 3000);
+                globalTestLock = false;
+            }, 5000);
             
             return testSendNotification();
         }
         
         function testSendNotificationDirectWithDebounce() {
             const now = Date.now();
+            if (globalTestLock) {
+                log('🔒 Test sedang berjalan, tunggu sampai selesai...', 'warning');
+                return false;
+            }
+            
             if (now - lastClickTime < DEBOUNCE_TIME) {
                 const remaining = Math.ceil((DEBOUNCE_TIME - (now - lastClickTime)) / 1000);
                 log(`⚠️ Tunggu ${remaining} detik lagi sebelum test ulang...`, 'warning');
@@ -755,6 +774,7 @@
             }
             
             lastClickTime = now;
+            globalTestLock = true;
             
             // Disable button temporarily  
             const btn = document.getElementById('send-direct-btn');
@@ -764,13 +784,19 @@
             setTimeout(() => {
                 btn.disabled = false;
                 btn.innerHTML = '<span class="icon">🎯</span>Test Token Ini Saja';
-            }, 3000);
+                globalTestLock = false;
+            }, 5000);
             
             return testSendNotificationDirect();
         }
         
         function testSendNotificationCMSWithDebounce() {
             const now = Date.now();
+            if (globalTestLock) {
+                log('🔒 Test sedang berjalan, tunggu sampai selesai...', 'warning');
+                return false;
+            }
+            
             if (now - lastClickTime < DEBOUNCE_TIME) {
                 const remaining = Math.ceil((DEBOUNCE_TIME - (now - lastClickTime)) / 1000);
                 log(`⚠️ Tunggu ${remaining} detik lagi sebelum test ulang...`, 'warning');
@@ -778,6 +804,7 @@
             }
             
             lastClickTime = now;
+            globalTestLock = true;
             
             // Disable button temporarily
             const btn = document.getElementById('send-cms-btn');
@@ -787,7 +814,8 @@
             setTimeout(() => {
                 btn.disabled = false;
                 btn.innerHTML = '<span class="icon">🏢</span>Test CMS Style';
-            }, 3000);
+                globalTestLock = false;
+            }, 5000);
             
             return testSendNotificationCMSStyle();
         }

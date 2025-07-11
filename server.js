@@ -77,7 +77,8 @@ const csurfMiddleware = csurf({ cookie: true });
 app.use(function(req, res, next) {
   if (req.path === '/api/save-fcm-token' || 
       req.path === '/api/test-fcm-status' || 
-      req.path === '/api/test-send-notification') {
+      req.path === '/api/test-send-notification' ||
+      req.path === '/api/test-cms-notification') {
     return next();
   } else {
     return csurfMiddleware(req, res, next);
@@ -295,6 +296,15 @@ app.post('/api/test-send-notification', express.json(), async (req, res) => {
   try {
     const { title, body, useCurrentToken, directToken } = req.body;
     
+    // ULTRA DEBUGGING - LOG EVERY PARAMETER
+    console.log('[VERCEL-LOG] 🔍 ULTRA DEBUG - Parameter Analysis:');
+    console.log('[VERCEL-LOG] title:', title);
+    console.log('[VERCEL-LOG] body:', body);
+    console.log('[VERCEL-LOG] useCurrentToken:', useCurrentToken);
+    console.log('[VERCEL-LOG] directToken:', directToken ? `${directToken.substring(0, 50)}...` : 'UNDEFINED/NULL');
+    console.log('[VERCEL-LOG] directToken type:', typeof directToken);
+    console.log('[VERCEL-LOG] directToken truthy?:', !!directToken);
+    
     if (!title || !body) {
       console.log('[VERCEL-LOG] ❌ Missing title or body');
       return res.status(400).json({ 
@@ -308,8 +318,10 @@ app.post('/api/test-send-notification', express.json(), async (req, res) => {
     // PATCH: Mode test dengan token langsung (tanpa database)
     if (directToken) {
       console.log('[VERCEL-LOG] 🎯 Using direct token mode');
+      console.log('[VERCEL-LOG] 🚨 CONFIRMED: directToken EXISTS, switching to single token mode');
       console.log('[VERCEL-LOG] Direct token preview:', directToken.substring(0, 50) + '...');
       allTokens = [directToken];
+      console.log('[VERCEL-LOG] 🎯 allTokens after directToken assignment:', allTokens.length);
     } else if (useCurrentToken) {
       // Gunakan hanya token yang baru dibuat (debugging purpose)
       console.log('[VERCEL-LOG] Using only recently created tokens...');
@@ -324,21 +336,33 @@ app.post('/api/test-send-notification', express.json(), async (req, res) => {
         }
       });
     } else {
-      // Ambil semua FCM tokens dari database
-      console.log('[VERCEL-LOG] Fetching all tokens from database...');
+      // Ambil hanya TOKEN TERBARU dari setiap user (PREVENT DUPLICATES)
+      console.log('[VERCEL-LOG] 🚨 directToken NOT provided, fetching from database');
+      console.log('[VERCEL-LOG] Fetching LATEST tokens from database (no duplicates)...');
       const usersSnapshot = await db.collection('users').get();
+      const uniqueTokens = new Set(); // Use Set to prevent duplicates
       
       usersSnapshot.forEach(doc => {
         const userData = doc.data();
-        if (Array.isArray(userData.fcmTokens)) {
-          allTokens.push(...userData.fcmTokens);
+        if (Array.isArray(userData.fcmTokens) && userData.fcmTokens.length > 0) {
+          // Ambil hanya token terakhir (paling baru)
+          const latestToken = userData.fcmTokens[userData.fcmTokens.length - 1];
+          if (latestToken) uniqueTokens.add(latestToken);
         } else if (userData.fcmToken) {
-          allTokens.push(userData.fcmToken);
+          // Legacy single token
+          uniqueTokens.add(userData.fcmToken);
         }
       });
+      
+      allTokens = Array.from(uniqueTokens);
+      console.log('[VERCEL-LOG] 🎯 Unique tokens collected:', allTokens.length);
     }
 
     console.log(`[VERCEL-LOG] Found ${allTokens.length} FCM tokens total`);
+    console.log('[VERCEL-LOG] 🚨 FINAL CHECK: allTokens contents preview:');
+    allTokens.forEach((token, index) => {
+      console.log(`[VERCEL-LOG] Token ${index + 1}: ${token.substring(0, 50)}...`);
+    });
 
     if (allTokens.length === 0) {
       console.log('[VERCEL-LOG] ❌ No tokens found');
@@ -379,6 +403,49 @@ app.post('/api/test-send-notification', express.json(), async (req, res) => {
 
   } catch (error) {
     console.error('[VERCEL-LOG] ❌ Error in test-send-notification:', error);
+    console.error('[VERCEL-LOG] Error stack:', error.stack);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      stack: error.stack
+    });
+  }
+});
+
+// Test endpoint that mimics CMS notification (no auth for testing)
+app.post('/api/test-cms-notification', express.json(), async (req, res) => {
+  console.log('🔥🔥🔥 [VERCEL-LOG] TEST-CMS-NOTIFICATION ENDPOINT HIT 🔥🔥🔥');
+  console.log('[VERCEL-LOG] Request body:', req.body);
+  console.log('[VERCEL-LOG] Timestamp:', new Date().toISOString());
+  
+  try {
+    const { judul, isi, keSemua, keTertentu, nik } = req.body;
+    
+    if (!judul || !isi || (!keSemua && !keTertentu)) {
+      console.log('[VERCEL-LOG] ❌ Missing required fields');
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Data tidak lengkap.' 
+      });
+    }
+
+    console.log('[VERCEL-LOG] 🏢 Using SAME LOGIC as CMS notifikasi controller...');
+    
+    // Use same logic as notifikasi controller
+    const notifikasiController = require('./controllers/notifikasiController');
+    
+    // Mock req/res object for controller
+    const mockReq = { body: { judul, isi, keSemua, keTertentu, nik } };
+    const mockRes = {
+      status: (code) => ({ json: (data) => res.status(code).json(data) }),
+      json: (data) => res.json(data)
+    };
+    
+    console.log('[VERCEL-LOG] 🚀 Calling notifikasiController.kirimNotifikasi...');
+    await notifikasiController.kirimNotifikasi(mockReq, mockRes);
+    
+  } catch (error) {
+    console.error('[VERCEL-LOG] ❌ Error in test-cms-notification:', error);
     console.error('[VERCEL-LOG] Error stack:', error.stack);
     res.status(500).json({
       success: false,
