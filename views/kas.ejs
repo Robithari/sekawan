@@ -124,11 +124,38 @@
                 <!-- Data Kas -->
                 <div class="container-kas">
                     <h5>DATA KAS</h5>
+                    <form class="row g-2 mb-3 align-items-end" id="formCariKas" method="get" action="/kas" autocomplete="off">
+                        <div class="col-md-3 col-7">
+                            <input type="text" class="form-control" name="kode" id="inputKodeKas" placeholder="Cari kode/invoice kas..."
+                                value="<%= kodeCari && kodeCari.length > 0 ? kodeCari : '' %>">
+                        </div>
+                        <div class="col-md-2 col-5 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary w-100" id="btnCariKas">Cari</button>
+                            <% if (kodeCari && kodeCari.length > 0) { %>
+                                <button type="button" class="btn btn-success w-100" id="btnSelesaiKas">Selesai</button>
+                            <% } %>
+                        </div>
+                    </form>
+                    <% 
+                        let saldo = 0;
+                        let filtered = kasData;
+                        if (typeof kodeCari !== 'undefined' && kodeCari) {
+                            filtered = kasData.filter(kas => kas.kode && kas.kode.toLowerCase().includes(kodeCari.toLowerCase()));
+                        }
+                        filtered.sort((a, b) => {
+                            const ta = a.tanggal && a.tanggal._seconds ? a.tanggal._seconds : 0;
+                            const tb = b.tanggal && b.tanggal._seconds ? b.tanggal._seconds : 0;
+                            return tb - ta;
+                        });
+                    %>
+                    <div id="notifEditKas" class="mb-2"></div>
+                    <!-- Tidak ada form edit kas di halaman /kas, hanya tombol selesai pencarian yang aktif -->
                     <div class="table-container">
                         <table id="data-table">
                             <thead>
                                 <tr>
                                     <th>TANGGAL</th>
+                                    <th>KODE</th>
                                     <th>KETERANGAN</th>
                                     <th>PEMASUKAN</th>
                                     <th>PENGELUARAN</th>
@@ -136,34 +163,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% kasData.forEach((kas, index)=> { %>
+                                <% saldo = 0; // reset saldo untuk tabel, jangan deklarasi ulang let saldo %>
+                                <% if (filtered.length === 0 && kodeCari && kodeCari.length > 0) { %>
+                                    <tr>
+                                        <td colspan="6" class="text-center text-danger">Kode yang anda input tidak tersedia</td>
+                                    </tr>
+                                <% } else { 
+                                    filtered.forEach((kas, index) => {
+                                        let pemasukan = (kas.jenis === 'masuk') ? kas.nominal : 0;
+                                        let pengeluaran = (kas.jenis === 'keluar') ? kas.nominal : 0;
+                                        saldo += pemasukan - pengeluaran;
+                                %>
                                     <tr class="<%= index % 2 === 0 ? 'gray-background' : '' %>">
                                         <td>
-                                            <%= kas.TANGGAL %>
-                                        </td> <!-- Menampilkan tanggal yang sudah diformat -->
-                                        <td>
-                                            <%= kas.KETERANGAN %>
+                                            <% if (kas.tanggal && kas.tanggal._seconds) { %>
+                                                <%= new Date(kas.tanggal._seconds * 1000).toLocaleDateString('id-ID') %>
+                                            <% } else { %>
+                                                <%= kas.tanggal || '-' %>
+                                            <% } %>
                                         </td>
-
-                                        <!-- Pemasukan -->
-                                        <td class="text-end">
-                                            <%= kas.PEMASUKAN || '-' %>
-                                                <!-- Menampilkan Rp. atau '-' jika tidak ada nilai -->
+                                        <td><%= kas.kode || '-' %></td>
+                                        <td><%= kas.keterangan %></td>
+                                        <td class="text-end"><%= pemasukan ? 'Rp. ' + pemasukan.toLocaleString('id-ID') : '-' %>
                                         </td>
-
-                                        <!-- Pengeluaran -->
-                                        <td class="text-end">
-                                            <%= kas.PENGELUARAN || '-' %>
-                                                <!-- Menampilkan Rp. atau '-' jika tidak ada nilai -->
+                                        <td class="text-end"><%= pengeluaran ? 'Rp. ' + pengeluaran.toLocaleString('id-ID') : '-' %>
                                         </td>
-
-                                        <!-- Saldo -->
-                                        <td class="text-end">
-                                            <%= kas.SALDO || '-' %>
-                                                <!-- Menampilkan Rp. atau '-' jika tidak ada nilai -->
-                                        </td>
+                                        <td class="text-end"><%= 'Rp. ' + saldo.toLocaleString('id-ID') %></td>
                                     </tr>
-                                    <% }); %>
+                                <% }); 
+                                    } %>
                             </tbody>
                         </table>
                     </div>
@@ -218,7 +246,8 @@
                 <script src="js/kunci-layar.js"></script>
                 <script type="module" src="firebase-config.js"></script>
                 <script src="js/loading.js"></script>
-                <script src="js/cek-auth.js" defer></script>
+                <script src="js/edit-kas.js"></script>
+                <!-- <script src="js/cek-auth.js" defer></script> -->
             </div>
             <!-- END SCRIPTS -->
 
@@ -237,6 +266,16 @@
             <!-- END Service Worker -->
         </div>
     </div>
+    <script>
+        // Interaktif: tombol Selesai mengembalikan data penuh tanpa reload
+        const btnSelesai = document.getElementById('btnSelesaiKas');
+        if (btnSelesai) {
+            btnSelesai.addEventListener('click', function() {
+                document.getElementById('inputKodeKas').value = '';
+                document.getElementById('formCariKas').submit();
+            });
+        }
+    </script>
 </body>
 
 </html>

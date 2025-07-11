@@ -1,24 +1,24 @@
-import { 
-    getFirestore, doc, getDoc 
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { db } from "../firebase-config.js"; // Path diperbaiki
-  
-  async function fetchProfileData() {
-    console.log("Memulai pengambilan data profil...");
-    const profilContentElement = document.getElementById('profil-content');
-  
-    // Jika elemen tidak ditemukan, hentikan eksekusi
-    if (!profilContentElement) {
-      console.error("Elemen dengan ID 'profil-content' tidak ditemukan di halaman.");
-      return;
-    }
-  
-    // Buat pesan loading
-    const loadingMessage = document.createElement('div');
-    loadingMessage.textContent = 'Memuat profil...';
-    loadingMessage.style.color = 'gray';
-    loadingMessage.style.textAlign = 'center';
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js, dan firebase-config.js sudah di-load di index.ejs
+
+// Referensi Firestore v8
+const db = firebase.firestore();
+
+async function fetchProfileData() {
+  console.log("Memulai pengambilan data profil...");
+  const profilContentElement = document.getElementById('profil-content');
+
+  // Jika elemen tidak ditemukan, hentikan eksekusi
+  if (!profilContentElement) {
+    console.error("Elemen dengan ID 'profil-content' tidak ditemukan di halaman.");
+    return;
+  }
+
+  // Buat pesan loading
+  const loadingMessage = document.createElement('div');
+  loadingMessage.textContent = 'Memuat profil...';
+  loadingMessage.style.color = 'gray';
+  loadingMessage.style.textAlign = 'center';
     loadingMessage.style.marginTop = '20px';
   
     // Tampilkan pesan loading

@@ -1,167 +1,89 @@
+
+// Firebase v8 assumed loaded in <head>
+// Show/hide login/signup form logic
 document.addEventListener('DOMContentLoaded', function () {
+  // Firebase config is loaded from firebase-config.js if needed, but here we use global firebase
+  // Show/hide form logic
   const loginForm = document.getElementById('loginForm');
   const signupForm = document.getElementById('signupForm');
-  const goToSignupLink = document.getElementById('goToSignup');
-  const goToLoginLink = document.getElementById('goToLogin');
+  const goToSignup = document.getElementById('goToSignup');
+  const goToLogin = document.getElementById('goToLogin');
+  const goToLoginBtn = document.getElementById('goToLoginBtn');
   const successMessage = document.getElementById('success-message');
   const loginSuccessMessage = document.getElementById('login-success-message');
-  const loadingSpinner = document.getElementById('loadingSpinner');
+  const formTitle = document.getElementById('form-title');
 
-  // Inisialisasi Firebase Auth
-  let firebaseApp;
-  let firebaseAuth;
-
-  // Memuat konfigurasi Firebase dan modul auth secara dinamis
-  import('/firebase-config.js')
-    .then(module => {
-      firebaseApp = module.app;
-      return import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
-    })
-    .then(authModule => {
-      firebaseAuth = authModule.getAuth(firebaseApp);
-    })
-    .catch(error => {
-      console.error("Error loading Firebase modules: ", error);
-    });
-
-  // Fungsi untuk menampilkan form signup dan menyembunyikan form login
   function showSignupForm() {
-    signupForm.style.display = 'block';
-    loginForm.style.display = 'none';
-    successMessage.style.display = 'none';
-    loginSuccessMessage.style.display = 'none';
+    if (signupForm) signupForm.style.display = 'block';
+    if (loginForm) loginForm.style.display = 'none';
+    if (formTitle) formTitle.textContent = 'Sign Up';
+    if (successMessage) successMessage.style.display = 'none';
+    if (loginSuccessMessage) loginSuccessMessage.style.display = 'none';
   }
-
-  // Fungsi untuk menampilkan form login dan menyembunyikan form signup
   function showLoginForm() {
-    signupForm.style.display = 'none';
-    loginForm.style.display = 'block';
-    successMessage.style.display = 'none';
-    loginSuccessMessage.style.display = 'none';
+    if (signupForm) signupForm.style.display = 'none';
+    if (loginForm) loginForm.style.display = 'block';
+    if (formTitle) formTitle.textContent = 'Login';
+    if (successMessage) successMessage.style.display = 'none';
+    if (loginSuccessMessage) loginSuccessMessage.style.display = 'none';
+  }
+  if (goToSignup) goToSignup.addEventListener('click', function (e) { e.preventDefault(); showSignupForm(); });
+  if (goToLogin) goToLogin.addEventListener('click', function (e) { e.preventDefault(); showLoginForm(); });
+  if (goToLoginBtn) goToLoginBtn.addEventListener('click', function (e) { e.preventDefault(); showLoginForm(); });
+
+  // Login
+  if (loginForm) {
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = document.getElementById('loginEmail').value;
+      var password = document.getElementById('loginPassword').value;
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function (userCredential) {
+          userCredential.user.getIdToken().then(function (idToken) {
+            document.cookie = `__session=${idToken}; path=/; max-age=3600; secure; samesite=strict`;
+            if (loginSuccessMessage) loginSuccessMessage.style.display = 'block';
+            setTimeout(function () { window.location.href = '/'; }, 1200);
+          });
+        })
+        .catch(function (error) {
+          alert('Login gagal: ' + error.message);
+        });
+    });
   }
 
-  // Fungsi untuk menampilkan loading spinner (saat ini dinonaktifkan)
-  function showLoading() {
-    // Untuk mengaktifkan spinner, hilangkan komentar baris di bawah:
-    // loadingSpinner.style.display = 'block';
-  }
-
-  // Fungsi untuk menyembunyikan loading spinner (saat ini dinonaktifkan)
-  function hideLoading() {
-    // Untuk mengaktifkan spinner, hilangkan komentar baris di bawah:
-    // loadingSpinner.style.display = 'none';
-  }
-
-  // Event listener untuk link Sign Up
-  goToSignupLink.addEventListener('click', function (e) {
-    e.preventDefault();
-    showSignupForm();
-  });
-
-  // Event listener untuk link Back to Login
-  goToLoginLink.addEventListener('click', function (e) {
-    e.preventDefault();
-    showLoginForm();
-  });
-
-  // Event listener untuk submit form signup
-  signupForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById('signupName').value;
-    const phone = document.getElementById('signupPhone').value;
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
-    const membershipCode = document.getElementById('signupMembershipCode').value;
-
-    if (!name || !phone || !email || !password || !membershipCode) {
-      alert('Semua field harus diisi!');
-      hideLoading();
-      return;
-    }
-
-    try {
-      showLoading();
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+  // Signup
+  if (signupForm) {
+    signupForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('signupName').value;
+      var phone = document.getElementById('signupPhone').value;
+      var email = document.getElementById('signupEmail').value;
+      var password = document.getElementById('signupPassword').value;
+      var membershipCode = document.getElementById('signupMembershipCode').value;
+      // No confirmPassword field in form, so skip that check
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function (userCredential) {
+          var user = userCredential.user;
+      // Simpan data user ke Firestore collection 'users' sesuai field yang benar
+      if (firebase.firestore) {
+        firebase.firestore().collection('users').doc(user.uid).set({
           name: name,
           phoneNumber: phone,
           email: email,
-          password: password,
           membershipCode: membershipCode,
-        }),
-      });
-
-      const result = await response.json();
-      hideLoading();
-
-      if (response.ok) {
-        successMessage.style.display = 'block';
-        showLoginForm();
-      } else {
-        alert('Signup gagal: ' + result.message);
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          fcmToken: '' // default kosong, bisa diupdate setelah login jika ada FCM
+        });
       }
-    } catch (error) {
-      hideLoading();
-      alert('Terjadi kesalahan saat signup: ' + error.message);
-    }
-  });
-
-  // Event listener untuk submit form login
-  loginForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-
-    if (!email || !password) {
-      alert('Email dan password harus diisi!');
-      hideLoading();
-      return;
-    }
-
-    try {
-      showLoading();
-
-      if (!firebaseAuth) {
-        alert('Firebase Auth belum siap, coba lagi sebentar.');
-        hideLoading();
-        return;
-      }
-
-      const { signInWithEmailAndPassword } = await import(
-        'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'
-      );
-      const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
-
-      const idToken = await userCredential.user.getIdToken();
-
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ idToken }),
-      });
-
-      const result = await response.json();
-      hideLoading();
-
-      if (response.ok) {
-        loginSuccessMessage.style.display = 'block';
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1500);
-      } else {
-        alert('Login gagal: ' + result.message);
-      }
-    } catch (error) {
-      hideLoading();
-      alert('Login gagal: ' + error.message);
-    }
-  });
+          user.getIdToken().then(function (idToken) {
+            document.cookie = `__session=${idToken}; path=/; max-age=3600; secure; samesite=strict`;
+            if (successMessage) successMessage.style.display = 'block';
+            showLoginForm();
+          });
+        })
+        .catch(function (error) {
+          alert('Sign up gagal: ' + error.message);
+        });
+    });
+  }
 });

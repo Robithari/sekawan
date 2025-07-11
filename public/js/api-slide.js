@@ -1,8 +1,5 @@
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db } from '../firebase-config.js';
-
 // Fungsi untuk memuat gambar carousel dari Firestore
-export async function loadCarouselImages() {
+window.loadCarouselImages = async function() {
   const carouselInner = document.querySelector('.carousel-inner');
   const carouselIndicators = document.querySelector('.carousel-indicators');
   carouselInner.innerHTML = '';  // Kosongkan konten carousel sebelumnya

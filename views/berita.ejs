@@ -25,7 +25,7 @@
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="article" />
     <meta name="description" content="<%= berita.titleKeterangan %>">
-    <link rel="canonical" href="https://sekawanfc.fun/berita/<%= berita.slug %>" />
+    <link rel="canonical" href="https://sekawan.vercel.app/berita/<%= berita.slug %>" />
 
     <!-- Cache Control -->
 
@@ -43,6 +43,8 @@
     <link rel="stylesheet" href="/css/loading.css">
     <link rel="stylesheet" href="/css/berita.css">
     <link rel="stylesheet" href="/css/play-audio.css">
+
+    <link rel="stylesheet" href="/cms/css/quill-toolbar-fix.css">
 
     <!-- Icons -->
     <link rel="apple-touch-icon" sizes="57x57" href="/icon/apple-icon-57x57.png">
@@ -98,12 +100,12 @@
         "name": "Sekawan FC",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://sekawanfc.fun/icon/SekawanFC.jpg"
+          "url": "https://sekawan.vercel.app/icon/SekawanFC.jpg"
         }
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://sekawanfc.fun/berita/<%= berita.slug %>"
+        "@id": "https://sekawan.vercel.app/berita/<%= berita.slug %>"
       }
     }
     </script>

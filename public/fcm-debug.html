@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FCM Debug Test</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>FCM Debug Test</h1>
+    <div id="status"></div>
+    <button onclick="testFCM()">Test FCM System</button>
+    <button onclick="requestPermission()">Request Permission</button>
+    <button onclick="checkServiceWorker()">Check Service Worker</button>
+    <div id="logs" style="background: #f0f0f0; padding: 10px; margin-top: 20px; white-space: pre-wrap; font-family: monospace;"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        firebase.initializeApp({
+            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+            authDomain: "sekawan-fc-427414.firebaseapp.com",
+            projectId: "sekawan-fc-427414",
+            storageBucket: "sekawan-fc-427414.appspot.com",
+            messagingSenderId: "399174955835",
+            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+            measurementId: "G-CD0MHD1RBP",
+            databaseURL: "https://sekawan-fc-427414-default-rtdb.firebaseio.com/"
+        });
+
+        const messaging = firebase.messaging();
+        const VAPID_KEY = 'BLX08CbmRL0w_pWLoUhw3wRxMqgzzfpKY5JE5Tphw3cgNjPnQDW2gANdGaqT_VDLmt4NPF2NrwnSvstS8kHywcc';
+        
+        function log(message) {
+            const logs = document.getElementById('logs');
+            logs.textContent += new Date().toISOString() + ' - ' + message + '\n';
+            console.log(message);
+        }
+
+        function updateStatus(status) {
+            document.getElementById('status').textContent = status;
+        }
+
+        async function requestPermission() {
+            log('Requesting notification permission...');
+            updateStatus('Requesting permission...');
+            
+            try {
+                const permission = await Notification.requestPermission();
+                log('Permission result: ' + permission);
+                updateStatus('Permission: ' + permission);
+                return permission === 'granted';
+            } catch (error) {
+                log('Error requesting permission: ' + error.message);
+                updateStatus('Permission error');
+                return false;
+            }
+        }
+
+        async function checkServiceWorker() {
+            log('Checking service worker...');
+            updateStatus('Checking service worker...');
+            
+            try {
+                if ('serviceWorker' in navigator) {
+                    // Register service worker
+                    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+                    log('Service worker registered: ' + registration.scope);
+                    
+                    // Wait for it to be ready
+                    const ready = await navigator.serviceWorker.ready;
+                    log('Service worker ready: ' + ready.scope);
+                    
+                    updateStatus('Service worker ready');
+                    return registration;
+                } else {
+                    log('Service workers not supported');
+                    updateStatus('Service workers not supported');
+                    return null;
+                }
+            } catch (error) {
+                log('Service worker error: ' + error.message);
+                updateStatus('Service worker error');
+                return null;
+            }
+        }
+
+        async function testFCM() {
+            log('Starting FCM test...');
+            updateStatus('Testing FCM...');
+            
+            try {
+                // Check permission
+                log('Current permission: ' + Notification.permission);
+                
+                if (Notification.permission !== 'granted') {
+                    const granted = await requestPermission();
+                    if (!granted) {
+                        log('Permission not granted, stopping test');
+                        updateStatus('Permission denied');
+                        return;
+                    }
+                }
+                
+                // Check service worker
+                const registration = await checkServiceWorker();
+                if (!registration) {
+                    log('Service worker not available, stopping test');
+                    updateStatus('Service worker error');
+                    return;
+                }
+                
+                // Get FCM token
+                log('Getting FCM token...');
+                const token = await messaging.getToken({ 
+                    vapidKey: VAPID_KEY,
+                    serviceWorkerRegistration: registration 
+                });
+                
+                if (token) {
+                    log('FCM token obtained: ' + token.substring(0, 20) + '...');
+                    updateStatus('FCM token obtained');
+                    
+                    // Test save token to backend
+                    log('Saving token to backend...');
+                    const response = await fetch('/api/save-fcm-token', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            userId: 'test_user_' + Date.now(), 
+                            fcmToken: token,
+                            nik: 'test_nik'
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    log('Backend response: ' + JSON.stringify(result));
+                    
+                    if (result.success) {
+                        updateStatus('FCM setup complete');
+                        log('✅ FCM test completed successfully!');
+                    } else {
+                        updateStatus('Backend error');
+                        log('❌ Backend error: ' + result.message);
+                    }
+                } else {
+                    log('❌ Failed to get FCM token');
+                    updateStatus('Token error');
+                }
+                
+            } catch (error) {
+                log('❌ FCM test error: ' + error.message);
+                log('Error stack: ' + error.stack);
+                updateStatus('FCM test failed');
+            }
+        }
+
+        // Auto-start basic checks when page loads
+        window.addEventListener('load', () => {
+            log('Page loaded, starting basic checks...');
+            log('Firebase available: ' + (typeof firebase !== 'undefined'));
+            log('Messaging available: ' + (firebase && firebase.messaging ? 'yes' : 'no'));
+            log('Service worker supported: ' + ('serviceWorker' in navigator));
+            log('Notification permission: ' + Notification.permission);
+            updateStatus('Ready for testing');
+        });
+
+        // Listen for foreground messages
+        messaging.onMessage((payload) => {
+            log('🔥 Foreground message received!');
+            log('Payload: ' + JSON.stringify(payload, null, 2));
+            
+            if (payload.notification) {
+                log('Showing browser notification...');
+                new Notification(payload.notification.title, {
+                    body: payload.notification.body,
+                    icon: '/SekawanFC.jpg'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

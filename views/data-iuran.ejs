@@ -106,6 +106,11 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="nav-item"><a class="nav-link text-white" href="/data-iuran">Data Iuran</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link text-white" href="/data-donasi">Data Donasi</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link text-white" href="/cms">CMS</a></li>
                                 <li class="nav-item">
                                     <a class="nav-link text-white" id="login-logout-link" href="/login">Masuk /
                                         Daftar</a>
@@ -156,54 +161,67 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% if (iuranData && iuranData.length> 0) { %>
-                                        <% iuranData.forEach((item, index)=> { %>
-                                            <tr class="<%= item.rowClass %>">
-                                                <!-- Kolom No. urut: Jika ini baris terakhir, biarkan kosong -->
-                                                <td>
-                                                    <%= item.isLastRow ? '' : index + 1 %>
-                                                </td> <!-- Jika baris terakhir, tidak ada nomor -->
-                                                <td class="text-start">
-                                                    <%= item.anggota || '' %>
-                                                </td> <!-- Kolom Anggota -->
-
-                                                <!-- Kolom bulan diratakan ke tengah -->
-                                                <td class="text-center">
-                                                    <%= item.mei || '' %>
-                                                </td>
-                                                <td class="text-center">
-                                                    <%= item.juni || '' %>
-                                                </td>
-                                                <td class="text-center">
-                                                    <%= item.juli || '' %>
-                                                </td>
-                                                <td class="text-center">
-                                                    <%= item.agustus || '' %>
-                                                </td>
-                                                <td class="text-center">
-                                                    <%= item.september || '' %>
-                                                </td>
-                                                <td class="text-center">
-                                                    <%= item.oktober || '' %>
-                                                </td>
-                                                <td class="text-center">
-                                                    <%= item.november || '' %>
-                                                </td>
-                                                <td class="text-center">
-                                                    <%= item.desember || '' %>
-                                                </td>
-
-                                                <td class="text-end">
-                                                    <%= item.jumlah || '' %>
-                                                </td> <!-- Jumlah -->
-                                            </tr>
-                                            <% }); %>
-                                                <% } else { %>
-                                                    <tr>
-                                                        <td colspan="11" class="text-center">Tidak ada data iuran</td>
-                                                    </tr>
-                                                    <% } %>
-                                </tbody>
+<% if (iuranData && iuranData.length> 0) { %>
+    <% let totalJumlah = 0;
+       iuranData.forEach((item, index)=> {
+           if (item.jumlah) totalJumlah += item.jumlah;
+    %>
+        <% let rowClass = '';
+           if (item.anggota === 'JUMLAH PERBULAN' || item.anggota === 'JUMLAH TOTAL' || item.isLastRow) {
+               rowClass = 'green-row';
+           } else if (index % 2 === 1) {
+               rowClass = 'yellow-background';
+           } else {
+               rowClass = '';
+           }
+        %>
+        <tr<% if(rowClass){ %> class="<%= rowClass %>"<% } %>>
+            <td>
+                <%= item.isLastRow ? '' : index + 1 %>
+            </td>
+            <td class="text-start">
+                <%= item.anggota || '' %>
+            </td>
+            <td class="text-center">
+                <%= item.mei %>
+            </td>
+            <td class="text-center">
+                <%= item.juni %>
+            </td>
+            <td class="text-center">
+                <%= item.juli %>
+            </td>
+            <td class="text-center">
+                <%= item.agustus %>
+            </td>
+            <td class="text-center">
+                <%= item.september %>
+            </td>
+            <td class="text-center">
+                <%= item.oktober %>
+            </td>
+            <td class="text-center">
+                <%= item.november %>
+            </td>
+            <td class="text-center">
+                <%= item.desember %>
+            </td>
+            <td class="text-end">
+                <%= item.jumlah ? 'Rp. ' + item.jumlah.toLocaleString('id-ID') : '' %>
+            </td>
+        </tr>
+    <% }); %>
+    <!-- Tambahkan baris total di bawah sendiri -->
+    <tr class="green-row">
+        <td colspan="10" class="text-end"><b>Jumlah Total</b></td>
+        <td class="text-end"><b>Rp. <%= totalJumlah.toLocaleString('id-ID') %></b></td>
+    </tr>
+<% } else { %>
+    <tr>
+        <td colspan="11" class="text-center">Tidak ada data iuran</td>
+    </tr>
+<% } %>
+</tbody>
                             </table>
                         </div>
                     </div>
@@ -263,7 +281,7 @@
         <script type="module" src="firebase-config.js"></script>
         <script src="js/cek-login.js"></script>
         <script src="js/loading.js"></script>
-        <!-- <script src="js/data-iuran.js"></script> -->
+        <script src="js/data-iuran.js"></script>
 
 
         <!-- Splash Screen API URL -->
@@ -285,6 +303,10 @@
         }
     </script>
     <!-- END Service Worker Registration -->
+
+    <% if (typeof csrfToken !== 'undefined') { %>
+      <script>window.CSRF_TOKEN = '<%= csrfToken %>';</script>
+    <% } %>
 </body>
 
 </html>

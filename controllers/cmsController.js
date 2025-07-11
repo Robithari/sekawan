@@ -57,6 +57,10 @@ exports.renderCmsPage = async (req, res) => {
     const carouselSnapshot = await db.collection("carousel").get();
     const carouselData = carouselSnapshot.docs.map(doc => doc.data());
 
+    // Ambil Data User
+    const usersSnapshot = await db.collection("users").get();
+    const users = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
     // Logging hanya jika dalam mode development
     if (isDevelopment) {
       console.log("✅ Data berhasil diambil untuk CMS:");
@@ -66,6 +70,7 @@ exports.renderCmsPage = async (req, res) => {
       console.log(`📌 Jadwal Pertandingan: ${pertandinganData.length} items`);
       console.log(`📌 Profil: ${profilData ? "Ada data" : "Tidak ada data"}`);
       console.log(`📌 Carousel: ${carouselData.length} items`);
+      console.log(`📌 Users: ${users.length} items`);
     }
 
     // Kirimkan Data ke Template EJS untuk SSR
@@ -75,7 +80,9 @@ exports.renderCmsPage = async (req, res) => {
       footerData,
       pertandinganData,
       profilData,
-      carouselData
+      carouselData,
+      users,
+      csrfToken: req.csrfToken() // <-- Tambahkan token CSRF agar EJS tidak error
     });
   } catch (error) {
     console.error("❌ Error fetching data:", error);

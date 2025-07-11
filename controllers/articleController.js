@@ -1,4 +1,9 @@
 const db = require("../config/firebase");
+const { generateSitemap } = require("../sitemap"); // Tambahkan import sitemap
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
 // Fungsi untuk mengambil data footer
 const getFooterData = async () => {
@@ -18,17 +23,18 @@ const addArticle = async (req, res) => {
     if (!title || !slug || !content) {
       return res.status(400).json({ error: "Semua field harus diisi!" });
     }
-
+    const sanitizedContent = DOMPurify.sanitize(content);
     await db.collection("articles").add({
       title,
       slug,
-      content,
+      content: sanitizedContent,
       photoUrl,
       caption,
       titleKeterangan,
       createdAt: new Date()
     });
-
+    // Update sitemap setelah tambah artikel
+    generateSitemap().catch(e => console.error("Gagal update sitemap:", e));
     res.status(201).json({ message: "Artikel berhasil ditambahkan!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -78,17 +84,18 @@ const updateArticle = async (req, res) => {
     if (!title || !slug || !content) {
       return res.status(400).json({ error: "Semua field harus diisi!" });
     }
-
+    const sanitizedContent = DOMPurify.sanitize(content);
     await db.collection("articles").doc(id).update({
       title,
       slug,
-      content,
+      content: sanitizedContent,
       photoUrl,
       caption,
       titleKeterangan,
       updatedAt: new Date()
     });
-
+    // Update sitemap setelah update artikel
+    generateSitemap().catch(e => console.error("Gagal update sitemap:", e));
     res.json({ message: "Artikel berhasil diperbarui!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -99,6 +106,8 @@ const deleteArticle = async (req, res) => {
   try {
     const { id } = req.params;
     await db.collection("articles").doc(id).delete();
+    // Update sitemap setelah hapus artikel
+    generateSitemap().catch(e => console.error("Gagal update sitemap:", e));
     res.json({ message: "Artikel berhasil dihapus!" });
   } catch (error) {
     res.status(500).json({ error: error.message });

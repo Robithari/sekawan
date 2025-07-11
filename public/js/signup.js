@@ -17,7 +17,7 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         }).then(() => {
           console.log("Nama berhasil disimpan:", user.displayName); // Verifikasi apakah nama berhasil disimpan
 
-          // Simpan nomor telepon di Firestore
+          // Simpan nomor telepon di Firestore saja (revert perubahan sebelumnya)
           return setDoc(doc(db, "users", user.uid), {
             phoneNumber: phoneNumber
           });

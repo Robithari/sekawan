@@ -6,10 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CMS Template Profesional</title>
 
+    <!-- Content Security Policy with Nonce -->
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="css/cms.css">
+
+    <!-- Quill Rich Text Editor CSS (v2.x) -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+
 
 
     <!-- Cache Control -->
@@ -26,87 +32,112 @@
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script to toggle sections -->
-    <script>
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll("section");
-            sections.forEach(section => section.classList.add("d-none"));
-            document.getElementById(sectionId).classList.remove("d-none");
-        }
+    <!-- Quill Rich Text Editor JS (v2.x) -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.min.js"></script>
 
-        document.addEventListener("DOMContentLoaded", function () {
-            showSection('berita-section');
-        });
-    </script>
+    <!-- <script src="js/section-toggle.js"></script> -->
 
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
-    <script>
+    <script nonce="abc123" async src="https://www.googletagmanager.com/gtag/js?id=G-CD0MHD1RBP"></script>
+    <script nonce="abc123">
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-CD0MHD1RBP');
     </script>
 
+    <!-- DOMPurify for sanitizing HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+
+    <% if (typeof csrfToken !== 'undefined') { %>
+      <script>window.CSRF_TOKEN = '<%= csrfToken %>';</script>
+    <% } %>
 </head>
 
 <body style="display: none;" id="body-content">
     <div class="d-flex" id="wrapper">
+        <!-- Pesan Selamat Datang Admin -->
+        <div id="welcome-admin-banner" class="alert alert-success shadow-sm rounded-0 text-center fw-bold mb-0" style="display:none; position:fixed; top:0; left:0; width:100%; z-index:2000; border-radius:0; font-size:1.15rem; letter-spacing:0.5px;">
+            Selamat datang, <span id="admin-nama"></span>!
+        </div>
         <!-- Sidebar -->
-        <nav id="sidebar" class="bg-dark">
+        <nav id="sidebar" class="bg-dark collapse show">
             <div class="sidebar-header text-center py-4">
                 <h3>Sekawan FC</h3>
                 <strong>ADMIN</strong>
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('profil-section')">
+                    <a id="menu-profil" class="nav-link" href="#">
                         <i class="bi bi-building me-2"></i> Profil
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" onclick="showSection('berita-section')">
+                    <a id="menu-data-user" class="nav-link" href="#">
+                        <i class="bi bi-people-fill me-2"></i> Data User
+                    </a>
+                    <a id="menu-berita" class="nav-link active" href="#">
                         <i class="bi bi-newspaper me-2"></i> Berita
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('artikel-section')">
+                    <a id="menu-artikel" class="nav-link" href="#">
                         <i class="bi bi-pencil-square me-2"></i> Artikel
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('jadwal-section')">
+                    <a id="menu-jadwal" class="nav-link" href="#">
                         <i class="bi bi-calendar-date me-2"></i> Jadwal Pertandingan
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('kas-section')">
+                    <a id="menu-kas" class="nav-link" href="#">
                         <i class="bi bi-cash-coin me-2"></i> Laporan Kas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('dokumentasi-section')">
-                        <i class="bi bi-images me-2"></i> Dokumentasi
+                    <a id="menu-dokumentasi" class="nav-link" href="#">
+                        <i class="bi bi-images me-2"></i> Laporan Dokumentasi
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('inventaris-section')">
-                        <i class="bi bi-box-seam me-2"></i> Barang Inventaris
-                    </a>
+                <a id="menu-inventaris" class="nav-link" href="#">
+                    <i class="bi bi-box-seam me-2"></i> Barang Inventaris
+                </a>
+            </li>
+            <li class="nav-item">
+                <a id="menu-notifikasi-user" class="nav-link" href="#">
+                    <i class="bi bi-bell-fill me-2"></i> Notifikasi User
+                </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('musyawarah-section')">
+                    <a id="menu-musyawarah" class="nav-link" href="#">
                         <i class="bi bi-people me-2"></i> Musyawarah & Agenda
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('carousel-section')">
+                    <a id="menu-carousel" class="nav-link" href="#">
                         <i class="bi bi-sliders me-2"></i> Carousel/Slide Show
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showSection('footer-section')">
+                    <a id="menu-footer" class="nav-link" href="#">
                         <i class="bi bi-layout-text-window-reverse me-2"></i> Footer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="menu-laporan-iuran" class="nav-link" href="/cms/laporan-iuran">
+                        <i class="bi bi-clipboard-data me-2"></i> Laporan Iuran
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="menu-laporan-donasi" class="nav-link" href="/cms/laporan-donasi">
+                        <i class="bi bi-cash-stack me-2"></i> Laporan Donasi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="menu-laporan-inventaris" class="nav-link" href="#">
+                        <i class="bi bi-boxes me-2"></i> Laporan Inventaris
                     </a>
                 </li>
             </ul>
@@ -144,6 +175,7 @@
                         </div>
                         <div class="modal-body">
                             <form id="loginForm">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <div class="mb-3">
                                     <label for="loginEmail" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="loginEmail" required>
@@ -170,6 +202,7 @@
                         </div>
                         <div class="modal-body">
                             <form id="signupForm">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <div class="mb-3">
                                     <label for="signupName" class="form-label">Nama</label>
                                     <input type="text" class="form-control" id="signupName" required>
@@ -204,61 +237,243 @@
 
 
 
-                <!-- Berita Formulir -->
-                <!-- Berita Formulir -->
-                <section id="berita-section" class="mb-5">
-                    <h2 id="form-title-berita">Kelola Berita</h2>
-                    <form id="addBeritaForm">
-                        <!-- Form Fields -->
-                        <div class="mb-3">
-                            <label for="beritaTitle" class="form-label">Judul</label>
-                            <input type="text" id="beritaTitle" class="form-control" placeholder="Masukkan judul"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="beritaTitleKeterangan" class="form-label">Title Keterangan</label>
-                            <input type="text" id="beritaTitleKeterangan" class="form-control"
-                                placeholder="Masukkan keterangan judul" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="beritaTanggalPembuatan" class="form-label">Tanggal Pembuatan</label>
-                            <input type="date" id="beritaTanggalPembuatan" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="beritaContent" class="form-label">Konten</label>
-                            <textarea id="beritaContent" class="form-control" placeholder="Masukkan konten" rows="5"
-                                required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="beritaPhotoUrl" class="form-label">URL Foto</label>
-                            <input type="url" id="beritaPhotoUrl" class="form-control" placeholder="Masukkan URL foto"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="beritaCaption" class="form-label">Keterangan Foto</label>
-                            <input type="text" id="beritaCaption" class="form-control"
-                                placeholder="Masukkan keterangan foto" required>
-                        </div>
+            <!-- Data User -->
+            <section id="data-user-section" class="mb-5 d-none">
+                <div class="card shadow-sm position-relative">
+                  <div class="card-header bg-primary text-white fw-bold">
+                    <h4 class="mb-0">Data User</h4>
+                  </div>
+                  <div class="card-body">
+                    <!-- Formulir Cari User (UI Donasi Style) -->
+                    <form id="user-search-form" class="row g-3 align-items-end mb-3">
+                      <div class="col-md-4">
+                        <label for="userSearchInput" class="form-label">Cari Nama/Email User</label>
+                        <input type="text" class="form-control" id="userSearchInput" name="userSearchInput" placeholder="Masukkan nama atau email user">
+                      </div>
+                      <div class="col-md-2 d-flex flex-column gap-2">
+                        <button type="submit" class="btn btn-primary w-100 mb-1"><i class="bi bi-search me-1"></i>Cari</button>
+                        <button type="button" id="userSearchResetBtn" class="btn btn-secondary w-100"><i class="bi bi-x-circle me-1"></i>Reset</button>
+                      </div>
+                    </form>
+                    <!-- Notifikasi/alert dinamis jika diperlukan -->
+                    <div id="user-section-message" class="alert d-none mb-3"></div>
+                    <!-- Loading Spinner Overlay (untuk aksi edit/hapus/kirim pesan) -->
+                    <div id="user-action-loading" class="d-none position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="background:rgba(255,255,255,0.7);z-index:1050;">
+                      <div class="spinner-border text-primary mb-2" style="width:3rem;height:3rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                      <div class="fw-bold text-primary">Data sedang diproses...</div>
+                    </div>
+                    <!-- Loading Spinner Overlay (khusus proses input data user) -->
+                    <div id="user-input-loading" class="d-none position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="background:rgba(255,255,255,0.7);z-index:1060;">
+                      <div class="spinner-border text-success mb-2" style="width:2.5rem;height:2.5rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                      <div class="fw-bold text-success">Data sedang disiapkan...</div>
+                    </div>
 
-                        <!-- Buttons -->
-                        <button type="submit" id="berita-add-btn" class="btn btn-primary">Tambah Berita</button>
-                        <button type="submit" id="berita-update-btn" class="btn btn-success d-none">Selesai</button>
-                        <button type="button" id="berita-cancel-btn" class="btn btn-secondary d-none">Batal</button>
+                    <!-- Formulir Input/Edit User (UI Donasi Style) -->
+                    <form id="userForm" class="mb-4">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <div class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                          <label for="userName" class="form-label fw-semibold">Nama Lengkap <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="userName" placeholder="Nama Lengkap" required autocomplete="off">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="userEmail" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                          <input type="email" class="form-control" id="userEmail" placeholder="Email" required autocomplete="off">
+                        </div>
+                        <div class="col-md-2">
+                          <label for="userMembershipCode" class="form-label fw-semibold">Membership Code</label>
+                          <input type="text" class="form-control" id="userMembershipCode" placeholder="Membership Code" autocomplete="off">
+                        </div>
+                        <div class="col-md-2">
+                          <label for="userPhoneNumber" class="form-label fw-semibold">No WhatsApp</label>
+                          <input type="text" class="form-control" id="userPhoneNumber" placeholder="No WhatsApp" autocomplete="off">
+                        </div>
+                        <div class="col-md-2">
+                          <label for="userFcmToken" class="form-label fw-semibold">No FCM/Tiket</label>
+                          <input type="text" class="form-control" id="userFcmToken" placeholder="No FCM/Tiket" autocomplete="off">
+                        </div>
+                        <div class="col-md-3 mt-2">
+                          <label for="userNik" class="form-label fw-semibold">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="userNik" placeholder="NIK (16 digit)" minlength="16" maxlength="16" pattern="\\d{16}" required autocomplete="off">
+                        </div>
+                        <div class="col-md-12 col-lg-2 mt-3 mt-lg-0">
+                          <button type="submit" id="user-add-btn" class="btn btn-primary w-100 fw-bold"><i class="bi bi-plus-circle me-1"></i>Tambah</button>
+                          <button type="button" id="user-update-btn" class="btn btn-success w-100 fw-bold d-none mt-2"><i class="bi bi-check-circle me-1"></i>Selesai</button>
+                          <button type="button" id="user-cancel-btn" class="btn btn-secondary w-100 fw-bold d-none mt-2"><i class="bi bi-x-circle me-1"></i>Batal</button>
+                        </div>
+                        <input type="hidden" id="userId">
+                      </div>
                     </form>
 
-                    <div id="berita-message" class="mt-3 d-none alert alert-info"></div>
+                    <div class="table-responsive">
+                      <table class="table table-striped table-bordered align-middle">
+                        <thead class="table-dark">
+                          <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Tanggal Daftar</th>
+                            <th>Membership Code</th>
+                            <th>No WA</th>
+                            <th>No FCM/Tiket</th>
+                            <th>NIK</th>
+                            <th>Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody id="user-tbody">
+                          <!-- Data user akan diisi oleh JS -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!-- Modal Edit User -->
+                <!-- Modal Edit User (UI Donasi Style) -->
+                <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="editUserModalLabel"><i class="bi bi-pencil-square me-2"></i>Edit Data User</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form id="editUserForm">
+                        <div class="modal-body">
+                          <input type="hidden" id="editUserId">
+                          <div class="row g-3">
+                            <div class="col-md-6">
+                              <label for="editUserName" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" id="editUserName" required autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                              <label for="editUserEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                              <input type="email" class="form-control" id="editUserEmail" required autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                              <label for="editUserMembershipCode" class="form-label">Membership Code</label>
+                              <input type="text" class="form-control" id="editUserMembershipCode" autocomplete="off">
+                            </div>
+                            <div class="col-md-6">
+                              <label for="editUserPhoneNumber" class="form-label">No WhatsApp</label>
+                              <input type="text" class="form-control" id="editUserPhoneNumber" autocomplete="off">
+                            </div>
+                            <div class="col-md-12">
+                              <label for="editUserFcmToken" class="form-label">No FCM/Tiket</label>
+                              <input type="text" class="form-control" id="editUserFcmToken" autocomplete="off">
+                            </div>
+                            <div class="col-md-12">
+                              <label for="editUserNik" class="form-label">NIK (Nomor Induk Kependudukan) <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" id="editUserNik" placeholder="NIK (16 digit)" minlength="16" maxlength="16" pattern="\d{16}" required autocomplete="off">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Batal</button>
+                          <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Simpan Perubahan</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
 
-                    <h2 class="mt-5">Daftar Berita</h2>
-                    <div id="berita-selection" class="row"></div>
-                </section>
-                <!-- End Berita Formulir -->
+                <!-- Modal Konfirmasi Hapus User (UI Donasi Style) -->
+                <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteUserModalLabel"><i class="bi bi-trash me-2"></i>Konfirmasi Hapus User</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="alert alert-warning mb-3"><i class="bi bi-exclamation-triangle me-2"></i>Anda yakin ingin menghapus user ini? Tindakan ini tidak dapat dibatalkan.</div>
+                        <div class="mb-2"><strong>Nama:</strong> <span id="deleteUserName"></span></div>
+                        <div class="mb-2"><strong>Email:</strong> <span id="deleteUserEmail"></span></div>
+                        <input type="hidden" id="deleteUserId">
+                      </div>
+                      <div class="modal-footer d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Batal</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteUserBtn"><i class="bi bi-trash me-1"></i>Hapus User</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </section>
+            <!-- End Data User -->
+            <!-- Profil -->
+            <section id="profil-section" class="mb-5 d-none">
+                <h2>Kelola Profil</h2>
+                <div id="profilDisplay" class="mb-3"></div>
+                <button id="editProfilBtn" class="btn btn-primary mb-3">Edit</button>
+                <form id="profilForm" class="d-none">
+                    <div class="mb-3">
+                        <label for="profilContent" class="form-label">Konten Profil</label>
+                        <div id="profilContentEditor" style="height: 200px;"></div>
+                        <textarea id="profilContent" name="profilContent" class="form-control d-none" placeholder="Masukkan konten profil" rows="10"></textarea>
+                    </div>
+                    <button type="submit" id="saveProfilBtn" class="btn btn-success me-2">Selesai</button>
+                    <button type="button" id="cancel-profil-btn" class="btn btn-danger">Batal</button>
+                </form>
+                <div id="profilMessage" class="mt-3"></div>
+            </section>
+            <!-- End Profil -->
+            <!-- Berita Formulir -->
+            <section id="berita-section" class="mb-5">
+                <h2 id="form-title-berita">Kelola Berita</h2>
+                <form id="addBeritaForm" enctype="multipart/form-data">
+                    <!-- Form Fields -->
+                    <div class="mb-3">
+                        <label for="beritaTitle" class="form-label">Judul</label>
+                        <input type="text" id="beritaTitle" class="form-control" placeholder="Masukkan judul"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="beritaTitleKeterangan" class="form-label">Title Keterangan</label>
+                        <input type="text" id="beritaTitleKeterangan" class="form-control"
+                            placeholder="Masukkan keterangan judul" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="beritaTanggalPembuatan" class="form-label">Tanggal Pembuatan</label>
+                        <input type="date" id="beritaTanggalPembuatan" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="beritaContent" class="form-label">Konten</label>
+                        <div id="beritaContentEditor" style="height: 200px;"></div>
+                        <textarea id="beritaContent" name="beritaContent" class="form-control d-none" placeholder="Masukkan konten" rows="5"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="beritaPhotoFile" class="form-label">Upload Foto</label>
+                        <input type="file" id="beritaPhotoFile" class="form-control" accept="image/*">
+                        <small id="beritaPhotoFileHelp" class="form-text text-muted">Foto lama: <span id="beritaPhotoFileName">Tidak ada file</span></small>
+                        <img id="beritaPhotoPreview" src="" alt="Preview Foto Berita" class="img-thumbnail mt-2" style="max-width: 200px; display: none;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="beritaCaption" class="form-label">Keterangan Foto</label>
+                        <input type="text" id="beritaCaption" class="form-control"
+                            placeholder="Masukkan keterangan foto" required>
+                    </div>
+
+                    <!-- Buttons -->
+                    <button type="submit" id="berita-add-btn" class="btn btn-primary">Tambah Berita</button>
+                    <button type="submit" id="berita-update-btn" class="btn btn-success d-none">Selesai</button>
+                    <button type="button" id="berita-cancel-btn" class="btn btn-secondary d-none">Batal</button>
+                </form>
+
+                <div id="berita-message" class="mt-3 d-none alert alert-info"></div>
+
+                <h2 class="mt-5">Daftar Berita</h2>
+                <div id="berita-selection" class="row"></div>
+            </section>
+            <!-- End Berita Formulir -->
 
                 <!-- end berita formulir -->
 
                 <!-- artikel formulir -->
                 <section id="artikel-section" class="mb-5 d-none">
                     <h2 id="form-title">Kelola Artikel</h2>
-                    <form id="addContentForm">
+                    <form id="addContentForm" enctype="multipart/form-data">
                         <!-- Form Fields -->
                         <div class="mb-3">
                             <label for="title" class="form-label">Judul</label>
@@ -271,28 +486,103 @@
                         </div>
                         <div class="mb-3">
                             <label for="tanggalPembuatan" class="form-label">Tanggal Pembuatan</label>
-                            <input type="date" id="tanggalPembuatan" class="form-control" required>
+                            <input type="date" id="artikel-tanggal" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="content" class="form-label">Konten</label>
-                            <textarea id="content" class="form-control" placeholder="Masukkan konten" rows="5"
-                                required></textarea>
+                    
+
+                        <style>
+                            /* Daftar font lengkap untuk Quill */
+                            .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
+                            .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="arial"]::before {
+                                content: "Arial";
+                                font-family: Arial, sans-serif;
+                            }
+                            .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="comic-sans"]::before,
+                            .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="comic-sans"]::before {
+                                content: "Comic Sans";
+                                font-family: "Comic Sans MS", cursive, sans-serif;
+                            }
+                            .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="courier-new"]::before,
+                            .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="courier-new"]::before {
+                                content: "Courier New";
+                                font-family: "Courier New", Courier, monospace;
+                            }
+                            .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="georgia"]::before,
+                            .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="georgia"]::before {
+                                content: "Georgia";
+                                font-family: Georgia, serif;
+                            }
+                            .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="helvetica"]::before,
+                            .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="helvetica"]::before {
+                                content: "Helvetica";
+                                font-family: Helvetica, Arial, sans-serif;
+                            }
+                            .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="lucida"]::before,
+                            .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="lucida"]::before {
+                                content: "Lucida";
+                                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+                            }
+                            .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="times-new-roman"]::before,
+                            .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="times-new-roman"]::before {
+                                content: "Times New Roman";
+                                font-family: "Times New Roman", Times, serif;
+                            }
+                            /* Tambahan style untuk font Times New Roman di editor */
+                            .ql-font-times-new-roman {
+                                font-family: "Times New Roman", Times, serif;
+                            }
+                            /* Tambahan style untuk font Arial di editor */
+                            .ql-font-arial {
+                                font-family: Arial, sans-serif;
+                            }
+                            /* Tambahan style untuk font Comic Sans di editor */
+                            .ql-font-comic-sans {
+                                font-family: "Comic Sans MS", cursive, sans-serif;
+                            }
+                            /* Tambahan style untuk font Courier New di editor */
+                            .ql-font-courier-new {
+                                font-family: "Courier New", Courier, monospace;
+                            }
+                            /* Tambahan style untuk font Georgia di editor */
+                            .ql-font-georgia {
+                                font-family: Georgia, serif;
+                            }
+                            /* Tambahan style untuk font Helvetica di editor */
+                            .ql-font-helvetica {
+                                font-family: Helvetica, Arial, sans-serif;
+                            }
+                            /* Tambahan style untuk font Lucida di editor */
+                            .ql-font-lucida {
+                                font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+                            }
+                        </style>
+                        <div id="contentEditor" style="height: 200px;"></div>
+                        <textarea id="content" name="content" class="form-control d-none" placeholder="Masukkan konten" rows="5"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="photoUrl" class="form-label">URL Foto</label>
-                            <input type="url" id="photoUrl" class="form-control" placeholder="Masukkan URL foto"
-                                required>
+                            <label for="photoFile" class="form-label">Upload Foto</label>
+                            <input type="file" id="photoFile" class="form-control" accept="image/*">
+                            <small id="articlePhotoFileHelp" class="form-text text-muted">Foto lama: <span id="articlePhotoFileName">Tidak ada file</span></small>
+                            <img id="articlePhotoPreview" src="" alt="Preview Foto Artikel" class="img-thumbnail mt-2" style="max-width: 200px; display: none;">
                         </div>
                         <div class="mb-3">
                             <label for="caption" class="form-label">Keterangan Foto</label>
-                            <input type="text" id="caption" class="form-control" placeholder="Masukkan keterangan foto"
-                                required>
+                            <input type="text" id="artikel-caption" class="form-control" placeholder="Masukkan keterangan foto"
+            required>
                         </div>
 
-                        <!-- Buttons -->
-                        <button type="submit" id="add-btn" class="btn btn-primary">Tambah Artikel</button>
-                        <button type="submit" id="update-btn" class="btn btn-success d-none">Selesai</button>
-                        <button type="button" id="cancel-profil-btn" class="btn btn-secondary d-none">Batal</button>
+                        <!-- Buttons: Mode Tambah -->
+                        <div id="add-article-btn-group">
+                            <button type="submit" id="add-finish-btn" class="btn btn-primary">Selesai</button>
+                            <button type="button" id="add-cancel-btn" class="btn btn-secondary">Batal</button>
+                        </div>
+                        <!-- Buttons: Mode Edit (tetap d-none saat tambah) -->
+                        <div id="edit-article-btn-group" class="d-none">
+                            <button type="submit" id="update-btn" class="btn btn-success">Selesai</button>
+                            <button type="button" id="cancel-artikel-btn" class="btn btn-secondary">Batal</button>
+                        </div>
                     </form>
 
                     <div id="message" class="mt-3 d-none alert alert-info"></div>
@@ -304,7 +594,7 @@
 
 
                 <!-- Jadwal Pertandingan -->
-                <section id="jadwal-section" class="mb-5">
+                <section id="jadwal-section" class="mb-5 d-none">
                     <h2 id="form-title-pertandingan">Kelola Jadwal Pertandingan</h2>
                     <form id="addPertandinganForm">
                         <!-- Form Fields -->
@@ -346,13 +636,193 @@
 
 
                 <section id="kas-section" class="mb-5 d-none">
-                    <h2>Laporan Kas</h2>
-                    <p>Belum ada konten yang tersedia di sini.</p>
+                    <!-- Konten akan diisi oleh kas-selection.js -->
                 </section>
 
+                <section id="laporan-iuran-section" class="mb-5 d-none">
+                  <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white fw-bold">
+                      <h4 class="mb-0" id="form-title-iuran">Daftar Iuran</h4>
+                    </div>
+                    <div class="card-body">
+                      <!-- Search Form -->
+                      <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                          <form id="formCariEditIuran" class="row g-2 align-items-end mb-2">
+                            <div class="col-md-4 col-12">
+                              <input type="text" class="form-control" id="inputNamaEditIuran" placeholder="Cari nama">
+                            </div>
+                            <div class="col-md-2 col-6">
+                              <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Cari</button>
+                            </div>
+                          </form>
+                          <div id="notifEditIuran" class="mb-2"></div>
+                          <div class="small text-muted mb-2">Masukkan nama anggota untuk mengedit data. Nama anggota dapat dilihat pada tabel di bawah.</div>
+                        </div>
+                      </div>
+                      
+                      <!-- Form Iuran -->
+                      <form id="iuranForm" class="row g-2 align-items-end mb-3" aria-label="Form Data Iuran">
+                        <input type="hidden" id="iuran-id" name="id">
+                        <div class="col-md-3">
+                          <label class="form-label" for="iuranAnggota">Nama Anggota</label>
+                          <input type="text" class="form-control" id="iuranAnggota" aria-label="Nama Anggota" required>
+                        </div>
+                        <div class="col-md-1">
+                          <label class="form-label" for="iuranMei">Mei</label>
+                          <div class="d-flex flex-column align-items-center">
+                            <input type="checkbox" id="iuranMei" aria-label="Iuran bulan Mei">
+                            <small class="text-muted" id="tglMei"></small>
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <label class="form-label" for="iuranJuni">Juni</label>
+                          <div class="d-flex flex-column align-items-center">
+                            <input type="checkbox" id="iuranJuni" aria-label="Iuran bulan Juni">
+                            <small class="text-muted" id="tglJuni"></small>
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <label class="form-label" for="iuranJuli">Juli</label>
+                          <div class="d-flex flex-column align-items-center">
+                            <input type="checkbox" id="iuranJuli" aria-label="Iuran bulan Juli">
+                            <small class="text-muted" id="tglJuli"></small>
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <label class="form-label" for="iuranAgustus">Agustus</label>
+                          <div class="d-flex flex-column align-items-center">
+                            <input type="checkbox" id="iuranAgustus" aria-label="Iuran bulan Agustus">
+                            <small class="text-muted" id="tglAgustus"></small>
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <label class="form-label" for="iuranSeptember">September</label>
+                          <div class="d-flex flex-column align-items-center">
+                            <input type="checkbox" id="iuranSeptember" aria-label="Iuran bulan September">
+                            <small class="text-muted" id="tglSeptember"></small>
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <label class="form-label" for="iuranOktober">Oktober</label>
+                          <div class="d-flex flex-column align-items-center">
+                            <input type="checkbox" id="iuranOktober" aria-label="Iuran bulan Oktober">
+                            <small class="text-muted" id="tglOktober"></small>
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <label class="form-label" for="iuranNovember">November</label>
+                          <div class="d-flex flex-column align-items-center">
+                            <input type="checkbox" id="iuranNovember" aria-label="Iuran bulan November">
+                            <small class="text-muted" id="tglNovember"></small>
+                          </div>
+                        </div>
+                        <div class="col-md-1">
+                          <label class="form-label" for="iuranDesember">Desember</label>
+                          <div class="d-flex flex-column align-items-center">
+                            <input type="checkbox" id="iuranDesember" aria-label="Iuran bulan Desember">
+                            <small class="text-muted" id="tglDesember"></small>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <label class="form-label" for="iuranJumlah">Jumlah</label>
+                          <input type="number" class="form-control" id="iuranJumlah" aria-label="Jumlah Iuran" min="0" required readonly>
+                        </div>
+                        <div class="col-md-1">
+                          <button type="submit" id="iuran-submit-btn" class="btn btn-primary w-100" aria-label="Tambah Data Iuran">Tambah</button>
+                          <button type="button" id="iuranCancelEdit" class="btn btn-secondary w-100 mt-1 d-none" aria-label="Batal Edit Iuran">Batal</button>
+                        </div>
+                      </form>
+                      
+                      <div id="iuranMessage" class="alert d-none"></div>
+                      
+                      <!-- Tabel Iuran -->
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle iuran-table">
+                          <thead class="table-light">
+                            <tr>
+                              <th rowspan="2">Anggota</th>
+                              <th colspan="2" class="iuran-bulan-group">Mei</th>
+                              <th colspan="2" class="iuran-bulan-group">Juni</th>
+                              <th colspan="2" class="iuran-bulan-group">Juli</th>
+                              <th colspan="2" class="iuran-bulan-group">Agustus</th>
+                              <th colspan="2" class="iuran-bulan-group">September</th>
+                              <th colspan="2" class="iuran-bulan-group">Oktober</th>
+                              <th colspan="2" class="iuran-bulan-group">November</th>
+                              <th colspan="2" class="iuran-bulan-group">Desember</th>
+                              <th rowspan="2">Jumlah</th>
+                              <th rowspan="2">Aksi</th>
+                            </tr>
+                            <tr>
+                              <th class="iuran-bulan">Tanda</th><th class="iuran-tgl">Tanggal</th>
+                              <th class="iuran-bulan">Tanda</th><th class="iuran-tgl">Tanggal</th>
+                              <th class="iuran-bulan">Tanda</th><th class="iuran-tgl">Tanggal</th>
+                              <th class="iuran-bulan">Tanda</th><th class="iuran-tgl">Tanggal</th>
+                              <th class="iuran-bulan">Tanda</th><th class="iuran-tgl">Tanggal</th>
+                              <th class="iuran-bulan">Tanda</th><th class="iuran-tgl">Tanggal</th>
+                              <th class="iuran-bulan">Tanda</th><th class="iuran-tgl">Tanggal</th>
+                              <th class="iuran-bulan">Tanda</th><th class="iuran-tgl">Tanggal</th>
+                            </tr>
+                          </thead>
+                          <tbody id="iuran-tbody">
+                            <!-- Data iuran akan diisi oleh JS -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section id="laporan-donasi-section" class="mb-5 d-none">
+                    <!-- Konten akan diisi oleh donasi-selection.js -->
+                </section>
+
+                <section id="laporan-inventaris-section" class="mb-5 d-none">
+                    <!-- Konten akan diisi oleh inventaris-selection.js -->
+                </section>
+
+                <!-- Section Notifikasi User (Baru) -- Sudah ada di bawah, tidak perlu duplikat di sini. -->
+                <!-- Section Laporan Dokumentasi (Baru) -->
                 <section id="dokumentasi-section" class="mb-5 d-none">
-                    <h2>Dokumentasi</h2>
-                    <p>Belum ada konten yang tersedia di sini.</p>
+                    <h2 id="form-title-dokumentasi">Laporan Dokumentasi</h2>
+                    <form id="formDokumentasi" enctype="multipart/form-data" class="mb-3">
+                        <input type="hidden" id="dokumentasi-id" name="id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="dokumentasi-keterangan" class="form-label">Keterangan</label>
+                                <input type="text" id="dokumentasi-keterangan" name="keterangan" class="form-control" placeholder="Keterangan dokumentasi" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="dokumentasi-link-foto" class="form-label">Link Foto (URL)</label>
+                                <input type="url" id="dokumentasi-link-foto" name="link_foto" class="form-control" placeholder="https://..." required>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <button type="submit" id="dokumentasi-submit-btn" class="btn btn-primary">Tambah Dokumentasi</button>
+                            <button type="button" id="dokumentasi-cancel-edit" class="btn btn-secondary d-none">Batal</button>
+                        </div>
+                        <div id="dokumentasi-error" class="alert alert-danger d-none"></div>
+                    </form>
+                    <div class="table-responsive">
+                        <div class="mb-2">
+                            <button id="dokumentasi-bulk-delete-btn" class="btn btn-danger btn-sm d-none"><i class="bi bi-trash"></i> Hapus Terpilih</button>
+                        </div>
+                        <input type="text" id="dokumentasi-search" class="form-control mb-2" placeholder="Cari dokumentasi...">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:40px;"><input type="checkbox" id="dokumentasi-check-all" aria-label="Centang Semua Dokumentasi"></th>
+                                    <th>No.</th>
+                                    <th>Keterangan</th>
+                                    <th>Link Foto</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dokumentasi-tbody">
+                                <!-- Data dokumentasi akan diisi oleh JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </section>
 
                 <section id="inventaris-section" class="mb-5 d-none">
@@ -373,13 +843,79 @@
                             <label for="fileInput" class="form-label">Upload Gambar</label>
                             <input type="file" id="fileInput" class="form-control" accept="image/*" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="carouselLink" class="form-label">Link Internal (misal: /profil)</label>
+                            <input type="text" id="carouselLink" class="form-control carousel-link-input" placeholder="Contoh: /profil" required>
+                            <div class="form-text">Gunakan link internal (awali dengan /), misal: <b>/profil</b> atau <b>/artikel</b>. Jangan gunakan domain penuh agar tetap aman saat domain berubah.</div>
+                        </div>
                         <button type="submit" class="btn btn-primary">Tambahkan Gambar</button>
                     </form>
-
                     <h3 class="mt-4">Daftar Gambar Carousel</h3>
                     <div id="carousel-selection" class="row"></div>
                 </section>
 
+                <!-- SECTION NOTIFIKASI USER (BARU) -->
+                <section id="notifikasi-user-section" class="mb-5 d-none">
+                  <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white fw-bold">
+                      <h4 class="mb-0">Notifikasi User</h4>
+                    </div>
+                    <div class="card-body">
+                      <form id="notifikasiUserForm" class="row g-3 align-items-end mb-3">
+                        <div class="col-md-1">
+                          <label class="form-label">No.</label>
+                          <input type="text" class="form-control" id="notifikasiNo" value="1" readonly>
+                        </div>
+                        <div class="col-md-3">
+                          <label for="judulNotifikasi" class="form-label fw-semibold">Judul <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="judulNotifikasi" placeholder="Tulis judul notifikasi..." required />
+                        </div>
+                        <div class="col-md-4">
+                          <label for="isiNotifikasi" class="form-label fw-semibold">Isi Notifikasi <span class="text-danger">*</span></label>
+                          <textarea class="form-control" id="isiNotifikasi" rows="2" placeholder="Tulis isi notifikasi..." required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label fw-semibold">Kirim Notifikasi</label>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="kirimSemua" id="kirimSemuaUser">
+                            <label class="form-check-label" for="kirimSemuaUser">Kirim ke semua user</label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="kirimTertentu" id="kirimUserTertentu">
+                            <label class="form-check-label" for="kirimUserTertentu">Kirim ke user tertentu</label>
+                          </div>
+                          <div id="inputNikWrapper" class="mb-2 d-none">
+                            <input type="text" class="form-control" id="inputNikUser" placeholder="Masukkan NIK user">
+                          </div>
+                        </div>
+                        <div class="col-12 d-flex gap-2 mt-2">
+                          <button type="submit" class="btn btn-primary fw-bold"><i class="bi bi-send me-1"></i>Kirim</button>
+                          <button type="button" id="notifikasiUserBatalBtn" class="btn btn-secondary fw-bold"><i class="bi bi-x-circle me-1"></i>Batal</button>
+                          <button type="button" id="testNotifikasiBtn" class="btn btn-info fw-bold"><i class="bi bi-bug me-1"></i>Test</button>
+                        </div>
+                      </form>
+                      <div id="notifikasiUserMessage" class="alert d-none mb-3"></div>
+                      <div class="table-responsive">
+                        <table class="table table-striped table-bordered align-middle">
+                          <thead class="table-dark">
+                            <tr>
+                              <th>No</th>
+                              <th>Judul</th>
+                              <th>Isi Notifikasi</th>
+                              <th>Waktu</th>
+                              <th>Dikirim ke</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody id="notifikasi-user-tbody">
+                            <!-- Data riwayat notifikasi akan diisi oleh JS -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <!-- END SECTION NOTIFIKASI USER -->
                 <!-- Footer -->
                 <section id="footer-section" class="mb-5 d-none">
                     <h2>Daftar Footer</h2>
@@ -425,105 +961,264 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- Custom JavaScript Modules -->
-    <script type="module" src="js/footer-selection.js"></script>
-    <script type="module" src="js/slide-selection.js"></script>
-    <script type="module" src="js/profil-selection.js"></script>
-    <script type="module" src="js/article-selection.js"></script>
-    <script type="module" src="js/toggle-sidebar.js"></script>
-    <script type="module" src="js/berita-selection.js"></script>
-    <script type="module" src="js/jadwal-pertandingan-selection.js"></script>
+    <!-- Firebase CDN v8 (harus sebelum semua script custom) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="/public/firebase-config.js"></script>
 
+    <!-- Custom JavaScript (tanpa module, semua akses window.firebase) -->
 
+    <script src="js/footer-selection.js"></script>
+    <script src="js/slide-selection.js"></script>
+    <script src="js/profil-selection.js"></script>
+    <script src="js/article-selection.js"></script>
+    <script src="js/toggle-sidebar.js"></script>
+    <script src="js/berita-selection.js"></script>
+    <script src="js/jadwal-pertandingan-selection.js"></script>
+    <script src="js/firebase-auth.js"></script>
+    <script src="js/kas-selection.js"></script>
+    <script src="/cms/js/iuran-selection.js"></script>
+    <script src="js/donasi-selection.js"></script>
+    <script src="js/inventaris-selection.js"></script>
+    <script src="/cms/js/dokumentasi-selection.js"></script>
+    <script src="/js/data-user-selection.js"></script>
+    <script src="js/notifikasi-user-selection.js"></script>
 
+    <!-- PENTING: Section toggle harus di-load PALING BAWAH agar DOM sudah siap -->
+    <script src="js/section-toggle.js"></script>
 
-    <!-- Firebase Auth State Handling Script -->
-    <script type="module">
-        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
-            authDomain: "sekawan-fc-427414.firebaseapp.com",
-            projectId: "sekawan-fc-427414",
-            storageBucket: "sekawan-fc-427414.appspot.com",
-            messagingSenderId: "399174955835",
-            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
-            measurementId: "G-CD0MHD1RBP"
-        };
-
-        // Initialize Firebase app
-        let app;
-        if (!getApps().length) {
-            app = initializeApp(firebaseConfig);
-        } else {
-            app = getApps()[0];
-        }
-
-        const auth = getAuth(app);
-
-        // Simpan token ID Firebase Auth untuk digunakan di header Authorization
-        let idToken = null;
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                idToken = await user.getIdToken();
-                document.getElementById('body-content').style.display = 'block';
+    <!-- Notifikasi User Section Logic -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Toggle input NIK jika "Kirim ke user tertentu" dicentang
+        const kirimUserTertentu = document.getElementById('kirimUserTertentu');
+        const inputNikWrapper = document.getElementById('inputNikWrapper');
+        const kirimSemuaUser = document.getElementById('kirimSemuaUser');
+        if (kirimUserTertentu && inputNikWrapper) {
+          kirimUserTertentu.addEventListener('change', function() {
+            if (this.checked) {
+              inputNikWrapper.classList.remove('d-none');
+              kirimSemuaUser.checked = false;
             } else {
-                window.location.href = "/login-cms";
+              inputNikWrapper.classList.add('d-none');
             }
-        });
-
-        // Fungsi pembungkus fetch untuk menambahkan header Authorization
-        async function authFetch(url, options = {}) {
-            if (!options.headers) {
-                options.headers = {};
+          });
+        }
+        if (kirimSemuaUser && kirimUserTertentu) {
+          kirimSemuaUser.addEventListener('change', function() {
+            if (this.checked) {
+              kirimUserTertentu.checked = false;
+              inputNikWrapper.classList.add('d-none');
             }
-            if (idToken) {
-                options.headers['Authorization'] = 'Bearer ' + idToken;
-            }
-            return fetch(url, options);
+          });
         }
 
-        // Contoh penggunaan authFetch untuk request AJAX
-        // authFetch('/api/some-protected-route')
-        //     .then(response => response.json())
-        //     .then(data => console.log(data))
-        //     .catch(error => console.error(error));
+        // --- Notifikasi User: Submit, Validasi, dan Render Histori ---
+        const notifikasiForm = document.getElementById('notifikasiUserForm');
+        const notifikasiMsg = document.getElementById('notifikasiUserMessage');
+        const inputIsi = document.getElementById('isiNotifikasi');
+        const inputNik = document.getElementById('inputNikUser');
+        const tbodyHistori = document.getElementById('notifikasi-user-tbody');
 
-        // Handle Logout
-        const logoutButton = document.querySelector("a[href='/login-cms']");
-        if (logoutButton) {
-            logoutButton.addEventListener("click", async (e) => {
-                e.preventDefault();
-                try {
-                    await signOut(auth);
+        // Helper tampilkan pesan
+        function showNotifMsg(type, msg) {
+          notifikasiMsg.className = 'alert mb-3 alert-' + (type === 'success' ? 'success' : 'danger');
+          notifikasiMsg.textContent = msg;
+          notifikasiMsg.classList.remove('d-none');
+        }
+        function hideNotifMsg() {
+          notifikasiMsg.classList.add('d-none');
+        }
 
-                    // Hapus session storage dan local storage              
-                    sessionStorage.clear();
-                    localStorage.clear();
+        // Submit form notifikasi
+        if (notifikasiForm) {
+          notifikasiForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideNotifMsg();
+            // Validasi frontend
+            const judul = document.getElementById('judulNotifikasi').value.trim();
+            const isi = inputIsi.value.trim();
+            const keSemua = kirimSemuaUser.checked;
+            const keTertentu = kirimUserTertentu.checked;
+            const nik = inputNik.value.trim();
+            if (!judul) {
+              showNotifMsg('error', 'Judul notifikasi wajib diisi.');
+              document.getElementById('judulNotifikasi').focus();
+              return;
+            }
+            if (!isi) {
+              showNotifMsg('error', 'Isi notifikasi wajib diisi.');
+              inputIsi.focus();
+              return;
+            }
+            if (!keSemua && !keTertentu) {
+              showNotifMsg('error', 'Pilih target notifikasi: semua user atau user tertentu.');
+              return;
+            }
+            if (keTertentu) {
+              if (!nik || !/^\d{16}$/.test(nik)) {
+                showNotifMsg('error', 'NIK harus 16 digit.');
+                inputNik.focus();
+                return;
+              }
+            }
+            // Ambil CSRF token dari hidden input userForm atau window.CSRF_TOKEN
+            let csrfToken = '';
+            const userFormToken = document.querySelector('#userForm input[name="_csrf"]');
+            if (userFormToken && userFormToken.value) csrfToken = userFormToken.value;
+            else if (window.CSRF_TOKEN) csrfToken = window.CSRF_TOKEN;
+            // Kirim ke backend
+            try {
+              const res = await fetch('/cms/notifikasi-user', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-Token': csrfToken
+                },
+                body: JSON.stringify({ judul, isi, keSemua, keTertentu, nik })
+              });
+              const data = await res.json();
+              if (res.ok && data.success) {
+                showNotifMsg('success', 'Notifikasi berhasil dikirim!');
+                notifikasiForm.reset();
+                inputNikWrapper.classList.add('d-none');
+                loadHistoriNotifikasi();
+              } else {
+                showNotifMsg('error', data.message || 'Gagal mengirim notifikasi.');
+              }
+            } catch (err) {
+              showNotifMsg('error', 'Terjadi error koneksi.');
+            }
+          });
+        }
 
-                    // Hapus cache browser untuk memastikan halaman CMS tidak di-cache
-                    if ('caches' in window) {
-                        caches.keys().then(function (names) {
-                            for (let name of names) caches.delete(name);
-                        });
-                    }
-
-                    alert("Logout berhasil!");
-                    window.location.href = "/login-cms"; // Redirect ke halaman login setelah logout
-                } catch (error) {
-                    console.error("Error logging out: ", error);
-                    alert(error.message);
+        // --- Notifikasi User: Polling histori otomatis tanpa flicker ---
+        let lastHistoriStr = '';
+        async function loadHistoriNotifikasi(isFirstLoad = false) {
+          if (!tbodyHistori) return;
+          if (isFirstLoad) {
+            tbodyHistori.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Memuat...</td></tr>';
+          }
+          const fetchStart = Date.now();
+          try {
+            const res = await fetch('/cms/notifikasi-user/histori?_t=' + fetchStart);
+            const contentType = res.headers.get('content-type');
+            let data = null;
+            let jsonError = null;
+            try {
+              data = await res.json();
+            } catch (jsonErr) {
+              jsonError = jsonErr;
+            }
+            // Logging detail response
+            console.log('[Polling Notifikasi] Waktu:', new Date(fetchStart).toLocaleString('id-ID'));
+            console.log('[Polling Notifikasi] Status:', res.status, res.statusText);
+            console.log('[Polling Notifikasi] Content-Type:', contentType);
+            if (jsonError) {
+              console.error('[Polling Notifikasi] Gagal parse JSON:', jsonError);
+              tbodyHistori.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Gagal parse data histori.</td></tr>';
+              return;
+            }
+            // Bandingkan histori baru dengan sebelumnya
+            const historiStr = JSON.stringify(data.histori || []);
+            if (historiStr !== lastHistoriStr) {
+              lastHistoriStr = historiStr;
+              if (res.ok && Array.isArray(data.histori)) {
+                if (data.histori.length === 0) {
+                  tbodyHistori.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Belum ada notifikasi.</td></tr>';
+                  console.log('[Polling Notifikasi] Tidak ada histori notifikasi.');
+                } else {
+                  tbodyHistori.innerHTML = data.histori.map((n, i) => `
+                    <tr>
+                      <td>${i+1}</td>
+                      <td><strong>${n.judul ? n.judul : '(Tanpa Judul)'}</strong></td>
+                      <td>${n.isi}</td>
+                      <td>${n.waktu ? new Date(n.waktu).toLocaleString('id-ID') : '-'}</td>
+                      <td>${n.keSemua ? 'Semua User' : (n.nik || '-')}</td>
+                      <td>${n.status || '-'}</td>
+                    </tr>
+                  `).join('');
+                  console.log('[Polling Notifikasi] Jumlah histori:', data.histori.length);
                 }
-            });
+              } else {
+                console.error('[Polling Notifikasi] Response tidak sesuai/format histori tidak array:', data);
+                tbodyHistori.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Gagal memuat histori.</td></tr>';
+              }
+            }
+            // Jika data sama, tidak update DOM dan tidak tampilkan pesan memuat
+          } catch (err) {
+            console.error('[Polling Notifikasi] Error fetch:', err);
+            tbodyHistori.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Gagal memuat histori.</td></tr>';
+          }
         }
+        // Load pertama kali dengan pesan "Memuat..."
+        loadHistoriNotifikasi(true);
+        // Polling tanpa pesan memuat, hanya update jika ada perubahan
+        setInterval(() => loadHistoriNotifikasi(false), 10000);
+        // Tombol batal reset form
+        const batalBtn = document.getElementById('notifikasiUserBatalBtn');
+        const form = document.getElementById('notifikasiUserForm');
+        if (batalBtn && form) {
+          batalBtn.addEventListener('click', function() {
+            form.reset();
+            inputNikWrapper.classList.add('d-none');
+            hideNotifMsg();
+          });
+        }
+      });
     </script>
+    <!-- END Notifikasi User Section Logic -->
+    <!-- Welcome Admin Banner Logic (window.firebase v8, no module) -->
+    <script>
+    // Pastikan window.firebase sudah ada
+    function showWelcomeBanner(nama) {
+        const banner = document.getElementById('welcome-admin-banner');
+        const namaSpan = document.getElementById('admin-nama');
+        if (banner && namaSpan) {
+            namaSpan.textContent = nama || 'Admin';
+            banner.style.display = 'block';
+            setTimeout(() => {
+                banner.style.display = 'none';
+            }, 5000);
+        }
+    }
 
-
-
-
-
+    // Tunggu firebase siap
+    (function() {
+      if (!window.firebase || !window.firebase.auth || !window.firebase.firestore) {
+        setTimeout(arguments.callee, 100);
+        return;
+      }
+      var auth = window.firebase.auth();
+      var db = window.firebase.firestore();
+      auth.onAuthStateChanged(function(user) {
+        if (user) {
+          // Cek DataAdmin di Firestore
+          db.collection('DataAdmin').doc(user.uid).get().then(function(adminSnap) {
+            var nama = '';
+            if (adminSnap.exists) {
+              nama = adminSnap.data().nama || user.displayName || user.email;
+            } else {
+              nama = user.displayName || user.email;
+            }
+            showWelcomeBanner(nama);
+          }).catch(function() {
+            showWelcomeBanner(user.displayName || user.email || 'Admin');
+          });
+        }
+      });
+    })();
+</script>
+<!-- Bersihkan overlay/modal-backdrop jika ada (antisipasi bug tampilan gelap/freeze) -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.remove('modal-open');
+    var backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(function(bd) { bd.parentNode.removeChild(bd); });
+  });
+</script>
 </body>
 
 </html>

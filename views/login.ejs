@@ -157,6 +157,10 @@
 
                                         <!-- Formulir Sign Up -->
                                         <form id="signupForm" style="display: none;">
+                                            <!-- CSRF Token hidden input -->
+                                            <% if (typeof csrfToken !== 'undefined') { %>
+                                              <input type="hidden" id="csrfToken" name="_csrf" value="<%= csrfToken %>">
+                                            <% } %>
                                             <div class="mb-3">
                                                 <label for="signupName" class="form-label">Name</label>
                                                 <input type="text" class="form-control" id="signupName" required>

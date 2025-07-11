@@ -144,9 +144,19 @@ h6 {
   padding: 0 5px 0 0;
 }
 
+/* ======================================================= DATA USER =======================================================*/
+.data-user {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: #222;
+  margin-top: 50px;
+}
 /* ======================================================= SLIDE =======================================================*/
 #carouselExampleDark {
-  margin-top: 40px;
   overflow: hidden;
   border-radius: 20px;
   padding: 10px;
@@ -157,14 +167,13 @@ h6 {
 }
 
 .custom-carousel-image {
-  padding: 0 25px;
-  object-fit: cover;
-  width: auto;
-  height: 200px;
-  border-radius: 20px;
-  padding-bottom: 10px;
-  padding-top: 10px;
-  filter: drop-shadow(0px 3px 5px rgb(255, 7, 7, 7));
+    padding: 0 25px;
+    object-fit: cover;
+    width: auto;
+    height: 200px;
+    border-radius: 20px;
+    padding-bottom: 10px;
+    filter: drop-shadow(0px 3px 5px rgb(255, 7, 7, 7));
 }
 
 .carousel-item:hover {
@@ -783,7 +792,6 @@ h6 {
   }
 
   #carouselExampleDark {
-    margin-top: 40px;
     overflow: hidden;
     border-radius: 20px;
   }

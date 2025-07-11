@@ -1,23 +1,8 @@
-// Import Firebase dan Firestore dependencies
-import { 
-    getFirestore, collection, query, getDocs, orderBy 
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-
-// Konfigurasi Firebase (update sesuai konfigurasi Anda)
-import * as firebaseConfig from "../../firebase-config.js";
-
-// Inisialisasi Firebase
-let app;
-if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-} else {
-    app = getApps()[0];
-}
-
-// Inisialisasi Firestore
-const db = getFirestore(app);
-const beritaCollectionRef = collection(db, "berita"); // Pastikan koleksi bernama 'berita'
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js sudah di-load di index.ejs
+// Contoh akses:
+// const db = firebase.firestore();
+// const beritaCollectionRef = db.collection('berita');
 
 // Fungsi untuk memuat dan menampilkan berita
 async function loadBerita() {

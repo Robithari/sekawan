@@ -16,10 +16,11 @@ const db = admin.firestore();
 
 exports.renderHomePage = async (req, res) => {
   try {
-    const carouselSnapshot = await db.collection("carousel").get();
+    // Optimasi: limit data untuk homepage agar lebih ringan
+    const carouselSnapshot = await db.collection("carousel").limit(5).get();
     const articlesSnapshot = await db.collection("articles").limit(5).get();
     const beritaSnapshot = await db.collection("berita").orderBy('tanggalPembuatan', 'desc').limit(5).get();
-    const footerSnapshot = await db.collection("footer").get();
+    const footerSnapshot = await db.collection("footer").limit(1).get();
     const jadwalSnapshot = await db.collection("jadwalPertandingan").orderBy("tanggal", "desc").limit(1).get();
 
     const carouselImages = carouselSnapshot.docs.map(doc => doc.data());

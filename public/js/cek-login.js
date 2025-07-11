@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loginLogoutLink.addEventListener('click', function (e) {
                     e.preventDefault();
                     auth.signOut().then(function () {
-                        window.location.href = 'index.html'; // Arahkan ke halaman utama setelah logout
+                        window.location.href = '/'; // Arahkan ke halaman utama setelah logout
                     }).catch(function (error) {
                         console.error('Error during logout:', error);
                     });

@@ -1,38 +1,38 @@
-import { collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js"; // Import Storage
-import { db } from '../../firebase-config.js'; // pastikan file ini sudah benar
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Import Firebase Auth
-
-const storage = getStorage(); // Inisialisasi Storage
-const auth = getAuth(); // Inisialisasi Auth
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-auth.js, firebase-firestore.js, firebase-storage.js sudah di-load di HTML
+var db = window.firebase.firestore();
+var storage = window.firebase.storage();
+var auth = window.firebase.auth();
 
 // Fungsi untuk memuat gambar carousel yang ada
-export async function loadCarouselContents() {
+window.loadCarouselContents = async function() {
     try {
-        const querySnapshot = await getDocs(collection(db, "carousel"));
+        const querySnapshot = await db.collection("carousel").get();
         const carouselSelection = document.getElementById('carousel-selection');
-        carouselSelection.innerHTML = ''; // Hapus konten lama
+        carouselSelection.innerHTML = '';
 
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(function(doc) {
             const data = doc.data();
             const imageUrl = data.imageUrl;
             const imageId = doc.id;
+            const link = data.link || '';
 
             // Tambahkan item carousel
             const carouselItem = `
                 <div class="carousel-item-admin" data-id="${imageId}">
                     <img src="${imageUrl}" alt="Carousel Image" class="img-thumbnail" style="max-width: 150px;">
-                    <button class="btn btn-danger btn-sm delete-btn">Hapus</button>
+                    ${link ? `<div class='mt-2'><span class='badge bg-info text-dark'>${link}</span></div>` : ''}
+                    <button class="btn btn-danger btn-sm delete-btn mt-2">Hapus</button>
                 </div>
             `;
             carouselSelection.innerHTML += carouselItem;
         });
 
         // Event listener untuk setiap tombol hapus
-        document.querySelectorAll('.delete-btn').forEach(button => {
+        document.querySelectorAll('.delete-btn').forEach(function(button) {
             button.addEventListener('click', async function (e) {
                 const itemId = e.target.closest('.carousel-item-admin').getAttribute('data-id');
-                await deleteCarouselImage(itemId);
+                await window.deleteCarouselImage(itemId);
             });
         });
 
@@ -41,14 +41,35 @@ export async function loadCarouselContents() {
     }
 }
 
-// Fungsi untuk menambahkan gambar baru
-export async function addCarouselImage(e) {
+// Fungsi untuk menambahkan gambar baru dengan link internal
+
+window.addCarouselImage = async function(e) {
     e.preventDefault(); // Mencegah reload halaman
     const fileInput = document.getElementById('fileInput'); // Ambil input file
     const file = fileInput.files[0]; // Ambil file dari input
+    const linkInput = document.getElementById('carouselLink'); // Ambil input link
+    const link = linkInput ? linkInput.value.trim() : ''; // Ambil nilai link
 
     if (!file) {
         alert('Mohon pilih gambar untuk diunggah.');
+        return;
+    }
+    if (!link || !link.startsWith('/')) {
+        alert('Mohon masukkan link internal yang valid, awali dengan /.');
+        return;
+    }
+
+    // Validasi tipe file (hanya gambar)
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        alert('Tipe file tidak valid. Harap unggah file gambar (jpeg, png, gif, webp).');
+        return;
+    }
+
+    // Validasi ukuran file maksimal 5MB
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+        alert('Ukuran file terlalu besar. Maksimal 5MB.');
         return;
     }
 
@@ -68,22 +89,24 @@ export async function addCarouselImage(e) {
         const downloadURL = await getDownloadURL(storageRef);
 
         // Menyimpan URL gambar ke Firestore
-        await addDoc(collection(db, "carousel"), { imageUrl: downloadURL });
+        await addDoc(collection(db, "carousel"), { imageUrl: downloadURL, link });
 
         document.getElementById('carouselForm').reset();
         loadCarouselContents(); // Reload carousel setelah menambahkan gambar baru
     } catch (error) {
         console.error("Error adding carousel image:", error);
+        alert("Terjadi kesalahan saat mengupload gambar. Silakan coba lagi.");
     }
 }
 
 // Fungsi untuk menghapus gambar dari carousel
-export async function deleteCarouselImage(id) {
+window.deleteCarouselImage = async function(id) {
     try {
         await deleteDoc(doc(db, "carousel", id));
         loadCarouselContents(); // Reload carousel setelah menghapus gambar
     } catch (error) {
         console.error("Error deleting carousel image:", error);
+        alert("Terjadi kesalahan saat menghapus gambar. Silakan coba lagi.");
     }
 }
 

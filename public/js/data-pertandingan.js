@@ -1,21 +1,8 @@
-// Import Firebase dependencies
-import { 
-  getFirestore, collection, getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js, dan firebase-config.js sudah di-load di index.ejs
 
-// Firebase Configuration
-import * as firebaseConfig from "../../firebase-config.js";
-
-// Initialize Firebase if not already initialized
-let app;
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApps()[0];
-}
-
-const db = getFirestore(app);
+// Referensi Firestore v8
+const db = firebase.firestore();
 
 // Function to fetch data from Firestore
 async function fetchData() {

@@ -1,0 +1,13 @@
+{
+  "name": "sekawanfc",
+  "version": "1.0.0",
+  "description": "Sekawan FC Web App",
+  "main": "server.js",
+  "scripts": {
+    "minify": "node scripts/minify-assets.js"
+  },
+  "dependencies": {
+    "clean-css": "^5.3.2",
+    "terser": "^5.30.3"
+  }
+}

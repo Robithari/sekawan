@@ -11,7 +11,7 @@ async function generateSitemap() {
       const lastmod = data.tanggalPembuatan || new Date().toISOString(); // Menggunakan tanggalPembuatan
       return {
         url: [
-          { loc: `https://sekawanfc.fun/articles/${data.slug}` },
+          { loc: `https://sekawan.vercel.app/articles/${data.slug}` },
           { lastmod: lastmod.split('T')[0] }, // Ambil hanya tanggal
           { changefreq: 'weekly' },
           { priority: '0.8' }
@@ -26,7 +26,7 @@ async function generateSitemap() {
       const lastmod = data.tanggalPembuatan || new Date().toISOString(); // Menggunakan tanggalPembuatan
       return {
         url: [
-          { loc: `https://sekawanfc.fun/berita/${data.slug}` },
+          { loc: `https://sekawan.vercel.app/berita/${data.slug}` },
           { lastmod: lastmod.split('T')[0] }, // Ambil hanya tanggal
           { changefreq: 'weekly' },
           { priority: '0.8' }
@@ -38,7 +38,7 @@ async function generateSitemap() {
     const urls = [
       {
         url: [
-          { loc: 'https://sekawanfc.fun/' },
+          { loc: 'https://sekawan.vercel.app/' },
           { lastmod: new Date().toISOString().split('T')[0] },
           { changefreq: 'daily' },
           { priority: '1.0' }
@@ -46,7 +46,7 @@ async function generateSitemap() {
       },
       {
         url: [
-          { loc: 'https://sekawanfc.fun/profil' },
+          { loc: 'https://sekawan.vercel.app/profil' },
           { lastmod: new Date().toISOString().split('T')[0] },
           { changefreq: 'weekly' },
           { priority: '0.8' }
@@ -54,7 +54,7 @@ async function generateSitemap() {
       },
       {
         url: [
-          { loc: 'https://sekawanfc.fun/berita' },
+          { loc: 'https://sekawan.vercel.app/berita' },
           { lastmod: new Date().toISOString().split('T')[0] },
           { changefreq: 'daily' },
           { priority: '0.9' }
@@ -62,7 +62,7 @@ async function generateSitemap() {
       },
       {
         url: [
-          { loc: 'https://sekawanfc.fun/artikel' },
+          { loc: 'https://sekawan.vercel.app/artikel' },
           { lastmod: new Date().toISOString().split('T')[0] },
           { changefreq: 'daily' },
           { priority: '0.9' }
@@ -70,7 +70,7 @@ async function generateSitemap() {
       },
       {
         url: [
-          { loc: 'https://sekawanfc.fun/jadwal' },
+          { loc: 'https://sekawan.vercel.app/jadwal' },
           { lastmod: new Date().toISOString().split('T')[0] },
           { changefreq: 'weekly' },
           { priority: '0.8' }
@@ -78,7 +78,7 @@ async function generateSitemap() {
       },
       {
         url: [
-          { loc: 'https://sekawanfc.fun/kas' },
+          { loc: 'https://sekawan.vercel.app/kas' },
           { lastmod: new Date().toISOString().split('T')[0] },
           { changefreq: 'monthly' },
           { priority: '0.7' }
@@ -86,7 +86,7 @@ async function generateSitemap() {
       },
       {
         url: [
-          { loc: 'https://sekawanfc.fun/dokumentasi' },
+          { loc: 'https://sekawan.vercel.app/dokumentasi' },
           { lastmod: new Date().toISOString().split('T')[0] },
           { changefreq: 'weekly' },
           { priority: '0.8' }
@@ -94,7 +94,7 @@ async function generateSitemap() {
       },
       {
         url: [
-          { loc: 'https://sekawanfc.fun/inventaris' },
+          { loc: 'https://sekawan.vercel.app/inventaris' },
           { lastmod: new Date().toISOString().split('T')[0] },
           { changefreq: 'monthly' },
           { priority: '0.7' }

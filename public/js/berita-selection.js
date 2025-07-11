@@ -1,31 +1,8 @@
-// Import Firebase dependencies
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    updateDoc,
-    doc,
-    query,
-    where,
-    orderBy, // Ditambahkan orderBy
-    getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js, dan firebase-config.js sudah di-load di index.ejs
 
-// Firebase Configuration
-import * as firebaseConfig from "../../firebase-config.js";
-
-// Initialize Firebase
-let app;
-if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-} else {
-    app = getApps()[0];
-}
-
-const db = getFirestore(app);
+// Referensi Firestore v8
+const db = firebase.firestore();
 
 // References to HTML elements
 const beritaCollectionRef = collection(db, "berita");
@@ -36,6 +13,23 @@ const beritaUpdateBtn = document.getElementById("berita-update-btn");
 const beritaCancelBtn = document.getElementById("berita-cancel-btn");
 const beritaMessage = document.getElementById("berita-message");
 let currentBeritaId = null;
+
+// Quill toolbarOptions hanya dideklarasikan sekali di seluruh file JS custom
+if (typeof window.toolbarOptionsBerita === 'undefined') {
+  window.toolbarOptionsBerita = [
+    [{ 'font': [] }],
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'indent': '-1'}, { 'indent': '+1' }],
+    [{ 'direction': 'rtl' }],
+    [{ 'align': [] }],
+    ['link', 'image', 'video'],
+    ['clean']
+  ];
+}
 
 // Function to create a unique slug from title
 function createSlug(title) {
@@ -57,9 +51,9 @@ async function isSlugUnique(slug, excludeId = null) {
 // Function to display messages
 function displayBeritaMessage(text, type = "info") {
     beritaMessage.textContent = text;
-    beritaMessage.className = `alert alert-${type}`;
+    beritaMessage.className = "alert alert-" + type;
     beritaMessage.classList.remove("d-none");
-    setTimeout(() => beritaMessage.classList.add("d-none"), 5000);
+    setTimeout(function() { beritaMessage.classList.add("d-none"); }, 5000);
 }
 
 // Handle form submission

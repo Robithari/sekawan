@@ -24,6 +24,7 @@
   "permissions": [
     "wake-lock"
   ],
+  "gcm_sender_id": "103953800507",
   "background": {
     "scripts": ["service-worker.js"]
   }

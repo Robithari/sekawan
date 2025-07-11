@@ -1,68 +1,12 @@
-const axios = require('axios');
-const db = require("../config/firebase"); // Pastikan Firestore terhubung dengan benar
-
-const apiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLga0neZxigd-Rg2j3auBYTYbRNZLTERGIgIYJxOHbCXneV2SfJ618R-kmae_fYjKjjeFCVbeXtdC5NohjsQ8IyhyuWLIbBAux_8rlUI8S6syJFc6owJpw3eEpGktAuqo9CqyPa0cupJNve0UECI2EKDVLIYBvTWZTete2mTTt0sSDEkmGyZCPpPnIlvKSc3NBqJCOeZaXubq7aLBJrdGc7i47rhEZHb64pKu13aTAaO8htgvMBXRagc-CkZvXzT75gdb04P8f4491PdR24xOg_yhxRpTA&lib=MAI_rgUitCMaNv_S3rIr3yFeS6DrsjUUV';
-
-// Fungsi untuk mengambil data iuran dari API eksternal dan memprosesnya
-async function getIuranData() {
-  try {
-    const response = await axios.get(apiUrl);
-    if (response.status !== 200) {
-      throw new Error('Gagal mengambil data dari API eksternal');
-    }
-    const data = response.data; // Data yang diterima dari API
-    const anggotaData = data.IURAN.slice(1); // Lewati header API
-
-    // Proses data agar sesuai dengan struktur yang digunakan di view
-    const iuranData = anggotaData.map((item, index) => {
-      const isLastRow = index === anggotaData.length - 1; // Menandai baris terakhir
-
-      return {
-        anggota: item.ANGGOTA,
-        mei: item.MEI === true ? '✔' : (item.MEI === false ? '-' : ''),
-        juni: item.JUNI === true ? '✔' : (item.JUNI === false ? '-' : ''),
-        juli: item.JULI === true ? '✔' : (item.JULI === false ? '-' : ''),
-        agustus: item.AGUSTUS === true ? '✔' : (item.AGUSTUS === false ? '-' : ''),
-        september: item.SEPTEMBER === true ? '✔' : (item.SEPTEMBER === false ? '-' : ''),
-        oktober: item.OKTOBER === true ? '✔' : (item.OKTOBER === false ? '-' : ''),
-        november: item.NOVEMBER === true ? '✔' : (item.NOVEMBER === false ? '-' : ''),
-        desember: item.DESEMBER === true ? '✔' : (item.DESEMBER === false ? '-' : ''),
-        jumlah: item.JUMLAH ? formatRupiah(item.JUMLAH) : '',
-        rowClass: index % 2 === 0 ? 'yellow-background' : '', // Menandai baris genap
-        isLastRow, // Menambahkan indikator untuk baris terakhir
-      };
-    });
-
-    // Tambahkan penandaan untuk baris JUMLAH PERBULAN dan JUMLAH TOTAL
-    iuranData.forEach((item) => {
-      if (item.anggota === 'JUMLAH PERBULAN' || item.anggota === 'JUMLAH TOTAL') {
-        item.rowClass = 'green-row'; // Tandai baris dengan kelas 'green-row'
-      }
-    });
-
-    return iuranData;
-  } catch (error) {
-    console.error("Error mengambil data iuran dari API eksternal:", error);
-    throw new Error("Error mengambil data iuran dari API eksternal");
-  }
-}
-
-// Fungsi format rupiah
-function formatRupiah(angka) {
-  if (typeof angka !== "number") {
-    angka = parseFloat(angka);
-  }
-  if (isNaN(angka)) {
-    return "-";
-  }
-  return "Rp" + angka.toLocaleString('id-ID');
-}
+const db = require("../config/firebase");
+const iuranModel = require('../models/iuranModel');
+const { validationResult } = require('express-validator');
 
 // Fungsi untuk mengambil data footer dari Firestore
 async function getFooterData() {
   try {
     const snapshotFooter = await db.collection("footer").get();
-    const footerData = snapshotFooter.docs.map(doc => doc.data())[0] || {}; // Ambil data footer pertama
+    const footerData = snapshotFooter.docs.map(doc => doc.data())[0] || {};
     return footerData;
   } catch (error) {
     console.error("Error mengambil data footer:", error);
@@ -70,17 +14,133 @@ async function getFooterData() {
   }
 }
 
+// Fungsi untuk mapping data iuran agar kolom bulan berisi '✔️' jika sudah dibayar
+function mapIuranDataForEjs(iuranData) {
+  const bulanList = ['mei','juni','juli','agustus','september','oktober','november','desember'];
+  return iuranData.map(item => {
+    const mapped = { ...item };
+    bulanList.forEach(bulan => {
+      if (item[bulan] && typeof item[bulan] === 'object') {
+        mapped[bulan] = item[bulan].checked ? '✔️' : '';
+      } else if (item[bulan] === true) {
+        mapped[bulan] = '✔️';
+      } else {
+        mapped[bulan] = '';
+      }
+    });
+    return mapped;
+  });
+}
+
 // Fungsi untuk merender halaman data-iuran dengan data iuran dan footer
 async function renderDataIuranPage(req, res) {
   try {
-    const iuranData = await getIuranData(); // Ambil data iuran dari API
-    const footerData = await getFooterData(); // Ambil data footer dari Firestore
-    res.render("data-iuran", { iuranData, footerData }); // Kirimkan data iuran dan footer ke template EJS
+    const iuranDataRaw = await iuranModel.getAllIuran();
+    const iuranData = mapIuranDataForEjs(iuranDataRaw);
+    const footerData = await getFooterData();
+    res.render("data-iuran", { iuranData, footerData });
   } catch (error) {
     res.status(500).send("Terjadi kesalahan pada server");
   }
 }
 
+// API endpoint: GET /api/iuran
+async function getIuran(req, res) {
+  try {
+    const data = await iuranModel.getAllIuran();
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+}
+
+// API endpoint: POST /api/iuran
+async function addIuran(req, res) {
+  // Validasi hasil express-validator
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+  try {
+    const data = req.body;
+    const bulanObj = enrichBulanWithTanggal(data);
+    const iuran = await iuranModel.addIuran({
+      anggota: data.anggota,
+      ...bulanObj,
+      jumlah: data.jumlah
+    });
+    res.json({ success: true, data: iuran });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+}
+
+// API endpoint: PUT /api/iuran/:id
+async function updateIuran(req, res) {
+  try {
+    const oldData = await iuranModel.getAllIuran();
+    const current = oldData.find(d => d.id === req.params.id) || {};
+    const data = req.body;
+    const bulanObj = enrichBulanWithTanggal(data, current);
+    const iuran = await iuranModel.updateIuran(req.params.id, {
+      anggota: data.anggota,
+      ...bulanObj,
+      jumlah: data.jumlah
+    });
+    res.json({ success: true, data: iuran });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+}
+
+// API endpoint: DELETE /api/iuran/:id
+async function deleteIuran(req, res) {
+  try {
+    if (!req.params.id) {
+      return res.status(400).json({ success: false, message: 'ID iuran tidak valid' });
+    }
+    await iuranModel.deleteIuran(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Gagal menghapus iuran:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+}
+
+function enrichBulanWithTanggal(data, oldData = {}) {
+  const bulanList = ['mei','juni','juli','agustus','september','oktober','november','desember'];
+  const today = new Date().toISOString().slice(0,10);
+  const result = {};
+  bulanList.forEach(bulan => {
+    let val = data[bulan];
+    let prev = oldData[bulan];
+    if (typeof val === 'object' && val !== null) {
+      // Sudah format baru
+      result[bulan] = {
+        checked: !!val.checked,
+        tanggal: val.checked ? (val.tanggal || today) : ''
+      };
+    } else if (val === true) {
+      // Baru dicentang, isi tanggal hari ini
+      result[bulan] = { checked: true, tanggal: today };
+    } else if (val === false) {
+      // Uncheck, kosongkan tanggal
+      result[bulan] = { checked: false, tanggal: '' };
+    } else if (prev && prev.checked) {
+      // Data lama, tetap pakai tanggal lama
+      result[bulan] = { checked: true, tanggal: prev.tanggal || today };
+    } else {
+      result[bulan] = { checked: false, tanggal: '' };
+    }
+  });
+  return result;
+}
+
 module.exports = {
   renderDataIuranPage,
+  getFooterData,
+  getIuran,
+  addIuran,
+  updateIuran,
+  deleteIuran
 };

@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Data User</h2>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Email</th>
+          <th>Nama</th>
+          <th>Role</th>
+          <th>Tanggal Daftar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (users.length === 0) { %>
+          <tr>
+            <td colspan="5" class="text-center">Belum ada user terdaftar.</td>
+          </tr>
+        <% } else { %>
+          <% users.forEach((user, i) => { %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= user.email %></td>
+              <td><%= user.nama || '-' %></td>
+              <td><%= user.role || '-' %></td>
+              <td><%= user.createdAt ? new Date(user.createdAt._seconds * 1000).toLocaleString() : '-' %></td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%- include('../partials/footer') %>
+<style>
+  .container { max-width: 900px; }
+  @media (max-width: 600px) {
+    .container { padding: 0 5px; }
+    table { font-size: 13px; }
+  }
+</style>

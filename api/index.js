@@ -24,11 +24,13 @@ const indexRoutes = require("../routes/index");
 const apiRoutes = require("../routes/api");
 const articleRoutes = require("../routes/articles");
 const beritaRoutes = require("../routes/berita");
+const cmsUserRoutes = require("../routes/cms-user");
 
 app.use("/", indexRoutes);
 app.use("/api", apiRoutes);
 app.use("/articles", articleRoutes);
 app.use("/berita", beritaRoutes);
+app.use(cmsUserRoutes);
 
 // Fungsi untuk mengambil data dengan cache
 const getCachedData = async (key, fetchFunction, duration = 60000) => {

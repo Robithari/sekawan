@@ -1,4 +1,9 @@
 const db = require("../config/firebase");
+const { generateSitemap } = require("../sitemap"); // Tambahkan import sitemap
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
 // Fungsi untuk mengambil data footer
 const getFooterData = async () => {
@@ -15,9 +20,10 @@ const getFooterData = async () => {
 exports.addBerita = async (req, res) => {
   try {
     const { title, content, photoUrl, caption, titleKeterangan } = req.body;
+    const sanitizedContent = DOMPurify.sanitize(content || '');
     const newBerita = {
       title,
-      content,
+      content: sanitizedContent,
       photoUrl,
       caption,
       titleKeterangan,
@@ -26,6 +32,8 @@ exports.addBerita = async (req, res) => {
     };
 
     const beritaRef = await db.collection("berita").add(newBerita);
+    // Update sitemap setelah tambah berita
+    generateSitemap().catch(e => console.error("Gagal update sitemap:", e));
 
     res.status(201).json({ id: beritaRef.id, message: "Berita berhasil ditambahkan" });
   } catch (error) {
@@ -72,7 +80,9 @@ exports.updateBerita = async (req, res) => {
   try {
     const { id } = req.params;
     const updatedData = req.body;
-
+    if (updatedData.content) {
+      updatedData.content = DOMPurify.sanitize(updatedData.content);
+    }
     const beritaRef = db.collection("berita").doc(id);
     const beritaDoc = await beritaRef.get();
 
@@ -81,6 +91,8 @@ exports.updateBerita = async (req, res) => {
     }
 
     await beritaRef.update(updatedData);
+    // Update sitemap setelah update berita
+    generateSitemap().catch(e => console.error("Gagal update sitemap:", e));
     res.status(200).json({ message: "Berita berhasil diperbarui!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -100,6 +112,8 @@ exports.deleteBerita = async (req, res) => {
     }
 
     await beritaRef.delete();
+    // Update sitemap setelah hapus berita
+    generateSitemap().catch(e => console.error("Gagal update sitemap:", e));
     res.status(200).json({ message: "Berita berhasil dihapus" });
   } catch (error) {
     res.status(500).json({ error: error.message });

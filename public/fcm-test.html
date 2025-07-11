@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FCM Test Panel</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .button { padding: 10px 15px; margin: 5px; background: #007cba; color: white; border: none; cursor: pointer; }
+        .button:hover { background: #005a87; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .log { background: #f5f5f5; padding: 10px; font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+        .status { padding: 10px; margin: 10px 0; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; border: 1px solid #ffeeba; }
+    </style>
+</head>
+<body>
+    <h1>🔥 FCM Debug & Test Panel</h1>
+    
+    <div class="section">
+        <h3>📱 Client-Side FCM Test</h3>
+        <button class="button" onclick="testClientFCM()">Test FCM Setup</button>
+        <button class="button" onclick="requestNotificationPermission()">Request Permission</button>
+        <button class="button" onclick="registerServiceWorker()">Register Service Worker</button>
+        <div id="client-status" class="status"></div>
+    </div>
+
+    <div class="section">
+        <h3>🖥️ Server-Side FCM Test</h3>
+        <button class="button" onclick="checkServerStatus()">Check Server Status</button>
+        <button class="button" onclick="sendTestNotification()">Send Test Notification</button>
+        <div id="server-status" class="status"></div>
+    </div>
+
+    <div class="section">
+        <h3>📝 Debug Logs</h3>
+        <button class="button" onclick="clearLogs()">Clear Logs</button>
+        <div id="logs" class="log"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        firebase.initializeApp({
+            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+            authDomain: "sekawan-fc-427414.firebaseapp.com",
+            projectId: "sekawan-fc-427414",
+            storageBucket: "sekawan-fc-427414.appspot.com",
+            messagingSenderId: "399174955835",
+            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+            measurementId: "G-CD0MHD1RBP",
+            databaseURL: "https://sekawan-fc-427414-default-rtdb.firebaseio.com/"
+        });
+
+        const messaging = firebase.messaging();
+        const VAPID_KEY = 'BLX08CbmRL0w_pWLoUhw3wRxMqgzzfpKY5JE5Tphw3cgNjPnQDW2gANdGaqT_VDLmt4NPF2NrwnSvstS8kHywcc';
+        let currentToken = null;
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logDiv = document.getElementById('logs');
+            logDiv.textContent += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function setStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').textContent = '';
+        }
+
+        async function requestNotificationPermission() {
+            log('🔔 Requesting notification permission...');
+            setStatus('client-status', 'Requesting permission...', 'warning');
+            
+            try {
+                const permission = await Notification.requestPermission();
+                log(`✅ Permission result: ${permission}`);
+                
+                if (permission === 'granted') {
+                    setStatus('client-status', 'Permission granted ✅', 'success');
+                } else {
+                    setStatus('client-status', 'Permission denied ❌', 'error');
+                }
+                
+                return permission === 'granted';
+            } catch (error) {
+                log(`❌ Permission error: ${error.message}`);
+                setStatus('client-status', 'Permission error ❌', 'error');
+                return false;
+            }
+        }
+
+        async function registerServiceWorker() {
+            log('🔧 Registering service worker...');
+            setStatus('client-status', 'Registering service worker...', 'warning');
+            
+            try {
+                if (!('serviceWorker' in navigator)) {
+                    throw new Error('Service workers not supported');
+                }
+
+                const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+                log(`✅ Service worker registered: ${registration.scope}`);
+                
+                const ready = await navigator.serviceWorker.ready;
+                log(`✅ Service worker ready: ${ready.scope}`);
+                
+                setStatus('client-status', 'Service worker ready ✅', 'success');
+                return registration;
+            } catch (error) {
+                log(`❌ Service worker error: ${error.message}`);
+                setStatus('client-status', 'Service worker error ❌', 'error');
+                return null;
+            }
+        }
+
+        async function testClientFCM() {
+            log('🚀 Starting client-side FCM test...');
+            setStatus('client-status', 'Testing FCM...', 'warning');
+            
+            try {
+                // Check permission
+                if (Notification.permission !== 'granted') {
+                    const granted = await requestNotificationPermission();
+                    if (!granted) {
+                        throw new Error('Notification permission denied');
+                    }
+                }
+
+                // Register service worker
+                const registration = await registerServiceWorker();
+                if (!registration) {
+                    throw new Error('Service worker registration failed');
+                }
+
+                // Get FCM token
+                log('🔑 Getting FCM token...');
+                currentToken = await messaging.getToken({ 
+                    vapidKey: VAPID_KEY,
+                    serviceWorkerRegistration: registration 
+                });
+
+                if (currentToken) {
+                    log(`✅ FCM token: ${currentToken.substring(0, 30)}...`);
+                    
+                    // Save token to backend
+                    log('💾 Saving token to backend...');
+                    const response = await fetch('/api/save-fcm-token', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            userId: 'test_user_' + Date.now(), 
+                            fcmToken: currentToken,
+                            nik: 'TEST_NIK'
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        log('✅ Token saved to backend successfully');
+                        setStatus('client-status', 'FCM setup complete ✅', 'success');
+                    } else {
+                        throw new Error(`Backend error: ${result.message}`);
+                    }
+                } else {
+                    throw new Error('Failed to get FCM token');
+                }
+
+            } catch (error) {
+                log(`❌ Client FCM test failed: ${error.message}`);
+                setStatus('client-status', 'FCM test failed ❌', 'error');
+            }
+        }
+
+        async function checkServerStatus() {
+            log('🖥️ Checking server FCM status...');
+            setStatus('server-status', 'Checking server...', 'warning');
+            
+            try {
+                const response = await fetch('/api/test-fcm-status');
+                const status = await response.json();
+                
+                log(`📊 Server status: ${JSON.stringify(status, null, 2)}`);
+                
+                if (status.firebaseInitialized && status.firestoreConnected) {
+                    setStatus('server-status', `Server OK - ${status.tokensCount} tokens found ✅`, 'success');
+                } else {
+                    setStatus('server-status', 'Server issues detected ⚠️', 'warning');
+                }
+            } catch (error) {
+                log(`❌ Server status check failed: ${error.message}`);
+                setStatus('server-status', 'Server check failed ❌', 'error');
+            }
+        }
+
+        async function sendTestNotification() {
+            log('📤 Sending test notification...');
+            setStatus('server-status', 'Sending notification...', 'warning');
+            
+            try {
+                const response = await fetch('/api/test-send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: 'Test Notification',
+                        body: 'This is a test notification from FCM debug panel'
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    log(`✅ Notification sent: ${result.result.successCount}/${result.result.totalTokens} successful`);
+                    setStatus('server-status', `Notification sent ✅ (${result.result.successCount}/${result.result.totalTokens})`, 'success');
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                log(`❌ Send notification failed: ${error.message}`);
+                setStatus('server-status', 'Send failed ❌', 'error');
+            }
+        }
+
+        // Listen for foreground messages
+        messaging.onMessage((payload) => {
+            log('🔥 FOREGROUND MESSAGE RECEIVED!');
+            log(`📧 Payload: ${JSON.stringify(payload, null, 2)}`);
+            
+            if (payload.notification) {
+                log('📢 Showing browser notification...');
+                const notification = new Notification(payload.notification.title, {
+                    body: payload.notification.body,
+                    icon: '/SekawanFC.jpg',
+                    requireInteraction: true
+                });
+                
+                notification.onclick = () => {
+                    log('🖱️ Notification clicked!');
+                    window.focus();
+                    notification.close();
+                };
+            }
+        });
+
+        // Auto-run basic checks on load
+        window.addEventListener('load', () => {
+            log('🔄 Page loaded, running initial checks...');
+            log(`📱 Notification permission: ${Notification.permission}`);
+            log(`🔧 Service worker support: ${'serviceWorker' in navigator}`);
+            log(`🔥 Firebase available: ${typeof firebase !== 'undefined'}`);
+            
+            setTimeout(() => {
+                checkServerStatus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

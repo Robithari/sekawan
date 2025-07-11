@@ -1,5 +1,5 @@
-const axios = require('axios'); // Untuk mengambil data dari Google Apps Script API
 const db = require("../config/firebase"); // Untuk mengambil data dari Firestore
+const kasModel = require('../models/kasModel');
 
 // Fungsi untuk memformat tanggal ke format yang diinginkan (DD-MM-YYYY)
 function formatTanggal(tanggal) {
@@ -33,45 +33,6 @@ function formatRupiah(angka) {
   return `Rp. ${angka.toLocaleString('id-ID')}`; 
 }
 
-// Fungsi untuk mengambil data kas dari Google Apps Script API
-async function getKasData() {
-  try {
-    const response = await axios.get('https://script.googleusercontent.com/macros/echo?user_content_key=2tlFh9Em-8BrR_JjPx3aQ-sDEIKEdwQg10yiCU4zf1Jm29nmzTv4VR3T4bxmPw6fVV-SfjjVjaVaquOJGIwOrRDz7Gy6GvlWm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnDQ3-UM55TGsEMEgUfElc6Of-3K5ZS9UOYTk0rvMmc-MD610LTi-I75zKPOseyOUEg7-xfGCRrZHesQ3EUd0MNPacrY_wOGqBA&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV');
-    
-    const kasData = response.data.KAS || [];
-    
-    // Jika data bukan array, pastikan kita mengonversinya menjadi array
-    if (!Array.isArray(kasData)) {
-      console.log("Data kas bukan array, memformat data menjadi array.");
-      return [kasData];
-    }
-    
-    // Format tanggal dan nominal sebelum mengirimkan data ke template
-    kasData.forEach(kas => {
-      if (kas.TANGGAL) {
-        kas.TANGGAL = formatTanggal(kas.TANGGAL); // Format tanggal menjadi DD-MM-YYYY
-      }
-      
-      if (kas.PEMASUKAN) {
-        kas.PEMASUKAN = formatRupiah(kas.PEMASUKAN); // Format pemasukan menjadi Rp.
-      }
-      
-      if (kas.PENGELUARAN) {
-        kas.PENGELUARAN = formatRupiah(kas.PENGELUARAN); // Format pengeluaran menjadi Rp.
-      }
-      
-      if (kas.SALDO) {
-        kas.SALDO = formatRupiah(kas.SALDO); // Format saldo menjadi Rp.
-      }
-    });
-    
-    return kasData;
-  } catch (error) {
-    console.error('Error mengambil data kas:', error);
-    throw new Error('Error mengambil data kas');
-  }
-}
-
 // Fungsi untuk mengambil data footer dari Firestore
 async function getFooterData() {
   try {
@@ -87,9 +48,13 @@ async function getFooterData() {
 // Endpoint untuk mengirimkan data kas dan footer ke view
 async function renderKasPage(req, res) {
   try {
-    const kasData = await getKasData(); // Ambil data kas dari API
+    let kasData = await kasModel.getAllKas(); // Ambil data kas dari Firestore
     const footerData = await getFooterData(); // Ambil data footer dari Firestore
-    res.render("kas", { kasData, footerData }); // Kirimkan data ke template EJS
+    const kodeCari = req.query.kode ? req.query.kode.trim().toLowerCase() : '';
+    if (kodeCari) {
+      kasData = kasData.filter(kas => kas.kode && kas.kode.toLowerCase().includes(kodeCari));
+    }
+    res.render("kas", { kasData, footerData, kodeCari }); // Kirimkan data ke template EJS
   } catch (error) {
     res.status(500).send("Terjadi kesalahan pada server");
   }
@@ -121,7 +86,51 @@ function applyTableStyles() {
   });
 }
 
+// API endpoint: GET /api/kas
+exports.getKas = async (req, res) => {
+  try {
+    const data = await kasModel.getAllKas();
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// API endpoint: POST /api/kas
+exports.addKas = async (req, res) => {
+  try {
+    const kas = await kasModel.addKas(req.body);
+    res.json({ success: true, data: kas });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// API endpoint: PUT /api/kas/:id
+exports.updateKas = async (req, res) => {
+  try {
+    const kas = await kasModel.updateKas(req.params.id, req.body);
+    res.json({ success: true, data: kas });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// API endpoint: DELETE /api/kas/:id
+exports.deleteKas = async (req, res) => {
+  try {
+    await kasModel.deleteKas(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 module.exports = {
   renderKasPage,
-  applyTableStyles
+  applyTableStyles,
+  getKas: exports.getKas,
+  addKas: exports.addKas,
+  updateKas: exports.updateKas,
+  deleteKas: exports.deleteKas
 };

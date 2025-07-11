@@ -1,21 +1,8 @@
-// Import Firebase dependencies
-import { 
-    getFirestore, collection, getDocs, deleteDoc, updateDoc, doc, query, getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js, dan firebase-config.js sudah di-load di index.ejs
 
-// Firebase Configuration
-import * as firebaseConfig from "../../firebase-config.js";
-
-// Initialize Firebase if not already initialized
-let app;
-if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-} else {
-    app = getApps()[0];
-}
-
-const db = getFirestore(app);
+// Referensi Firestore v8
+const db = firebase.firestore();
 
 // References to HTML elements
 const pertandinganCollectionRef = collection(db, "jadwalPertandingan");
@@ -159,3 +146,4 @@ cancelBtn.addEventListener("click", resetForm);
 
 // Load pertandingan when the DOM is ready
 document.addEventListener("DOMContentLoaded", fetchPertandingan);
+// Pastikan semua blok dan fungsi tertutup dengan benar

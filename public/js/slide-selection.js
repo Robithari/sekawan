@@ -1,87 +1,73 @@
-import { collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js"; // Import Storage
-import { db } from '../../firebase-config.js'; // pastikan file ini sudah benar
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Import Firebase Auth
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-auth.js, firebase-firestore.js, firebase-storage.js sudah di-load di index.ejs
 
-const storage = getStorage(); // Inisialisasi Storage
-const auth = getAuth(); // Inisialisasi Auth
+// Semua akses Firebase via window.firebase (CDN v8)
+var storage = window.firebase.storage ? window.firebase.storage() : null;
+var auth = window.firebase.auth ? window.firebase.auth() : null;
+var db = window.firebase.firestore ? window.firebase.firestore() : null;
 
 // Fungsi untuk memuat gambar carousel yang ada
-export async function loadCarouselContents() {
+window.loadCarouselContents = async function() {
     try {
-        const querySnapshot = await getDocs(collection(db, "carousel"));
+        const querySnapshot = await db.collection("carousel").get();
         const carouselSelection = document.getElementById('carousel-selection');
-        carouselSelection.innerHTML = ''; // Hapus konten lama
-
-        querySnapshot.forEach((doc) => {
+        carouselSelection.innerHTML = '';
+        querySnapshot.forEach(function(doc) {
             const data = doc.data();
             const imageUrl = data.imageUrl;
             const imageId = doc.id;
-
-            // Tambahkan item carousel
-            const carouselItem = `
-                <div class="carousel-item-admin" data-id="${imageId}">
-                    <img src="${imageUrl}" alt="Carousel Image" class="img-thumbnail" style="max-width: 150px;">
-                    <button class="btn btn-danger btn-sm delete-btn">Hapus</button>
-                </div>
-            `;
+            const carouselItem = '<div class="carousel-item-admin" data-id="' + imageId + '">' +
+                '<img src="' + imageUrl + '" alt="Carousel Image" class="img-thumbnail" style="max-width: 150px;">' +
+                '<button class="btn btn-danger btn-sm delete-btn">Hapus</button>' +
+                '</div>';
             carouselSelection.innerHTML += carouselItem;
         });
-
-        // Event listener untuk setiap tombol hapus
-        document.querySelectorAll('.delete-btn').forEach(button => {
+        document.querySelectorAll('.delete-btn').forEach(function(button) {
             button.addEventListener('click', async function (e) {
                 const itemId = e.target.closest('.carousel-item-admin').getAttribute('data-id');
-                await deleteCarouselImage(itemId);
+                await window.deleteCarouselImage(itemId);
             });
         });
-
     } catch (error) {
         console.error("Error loading carousel contents:", error);
     }
-}
+};
 
 // Fungsi untuk menambahkan gambar baru
-export async function addCarouselImage(e) {
-    e.preventDefault(); // Mencegah reload halaman
-    const fileInput = document.getElementById('fileInput'); // Ambil input file
-    const file = fileInput.files[0]; // Ambil file dari input
-
+window.addCarouselImage = async function(e) {
+    e.preventDefault();
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
     if (!file) {
         alert('Mohon pilih gambar untuk diunggah.');
         return;
     }
-
-    // Cek apakah pengguna terautentikasi
-    const user = auth.currentUser;
+    const user = auth && auth.currentUser;
     if (!user) {
         alert('Anda perlu login untuk mengupload gambar.');
         return;
     }
-
     try {
-        // Upload gambar ke Cloud Storage
-        const storageRef = ref(storage, 'carousel/' + file.name);
-        await uploadBytes(storageRef, file);
-
-        // Mendapatkan URL download setelah upload
-        const downloadURL = await getDownloadURL(storageRef);
-
-        // Menyimpan URL gambar ke Firestore
-        await addDoc(collection(db, "carousel"), { imageUrl: downloadURL });
-
-        document.getElementById('carouselForm').reset();
-        loadCarouselContents(); // Reload carousel setelah menambahkan gambar baru
+        var storageRef = storage.ref('carousel/' + file.name);
+        var uploadTask = storageRef.put(file);
+        uploadTask.on('state_changed', null, function(error) {
+            console.error("Error uploading image:", error);
+        }, async function() {
+            var downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+            await db.collection("carousel").add({ imageUrl: downloadURL });
+            document.getElementById('carouselForm').reset();
+            window.loadCarouselContents();
+        });
     } catch (error) {
         console.error("Error adding carousel image:", error);
     }
 }
 
 // Fungsi untuk menghapus gambar dari carousel
-export async function deleteCarouselImage(id) {
+window.deleteCarouselImage = async function(id) {
     try {
-        await deleteDoc(doc(db, "carousel", id));
-        loadCarouselContents(); // Reload carousel setelah menghapus gambar
+        await db.collection("carousel").doc(id).delete();
+        window.loadCarouselContents();
     } catch (error) {
         console.error("Error deleting carousel image:", error);
     }

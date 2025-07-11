@@ -1,13 +1,13 @@
 // profil-selection.js
 
-import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db } from '../../firebase-config.js';
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-auth.js, firebase-firestore.js sudah di-load di index.ejs
 
 // ID Dokumen Profil (gunakan 'main' atau sesuai kebutuhan)
 const profilDocId = "main";
 
 // Fungsi untuk memuat konten profil dari Firestore
-export async function loadProfilContent() {
+window.loadProfilContent = async function() {
     console.log("Function loadProfilContent called");
     const profilForm = document.getElementById('profilForm');
 
@@ -48,7 +48,7 @@ export async function loadProfilContent() {
 }
 
 // Fungsi untuk menyimpan konten profil ke Firestore
-export async function saveProfilContent(content) {
+window.saveProfilContent = async function(content) {
     const profilMessage = document.getElementById('profilMessage');
     try {
         const docRef = doc(db, "profil", profilDocId);
@@ -73,7 +73,7 @@ export async function saveProfilContent(content) {
 }
 
 // Event Listener untuk Formulir Profil (hanya di CMS)
-export function setupProfilForm() {
+window.setupProfilForm = function() {
     const profilForm = document.getElementById('profilForm');
     if (profilForm) {
         profilForm.addEventListener('submit', async function (e) {
@@ -109,13 +109,13 @@ export function setupProfilForm() {
 }
 
 // Inisialisasi Profil CMS
-export async function initializeProfilCMS() {
+window.initializeProfilCMS = async function() {
     await loadProfilContent();
     setupProfilForm();
 }
 
 // Inisialisasi Profil Publik
-export async function initializeProfilPublic() {
+window.initializeProfilPublic = async function() {
     await loadProfilContent();
 }
 

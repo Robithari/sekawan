@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick FCM Test</title>
+</head>
+<body>
+    <h1>🔥 Quick FCM Test</h1>
+    <button onclick="testStatus()">Test Status Endpoint</button>
+    <button onclick="testSend()">Test Send Endpoint</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function testStatus() {
+            const result = document.getElementById('result');
+            result.textContent = 'Testing /api/test-fcm-status...';
+            
+            try {
+                const response = await fetch('/api/test-fcm-status');
+                const data = await response.json();
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = 'ERROR: ' + error.message;
+            }
+        }
+
+        async function testSend() {
+            const result = document.getElementById('result');
+            result.textContent = 'Testing /api/test-send-notification...';
+            
+            try {
+                const response = await fetch('/api/test-send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: 'Quick Test',
+                        body: 'Test dari quick test page'
+                    })
+                });
+                const data = await response.json();
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = 'ERROR: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

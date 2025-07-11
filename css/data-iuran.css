@@ -1,0 +1,29 @@
+/* Background warna kuning untuk baris genap */
+.table-row-even {
+  background-color: #fff9c4 !important; /* kuning muda */
+}
+
+/* Background putih untuk baris ganjil */
+.table-row-odd {
+  background-color: #ffffff !important;
+}
+
+/* Background hijau untuk baris total */
+.total-row {
+  background-color: #c8e6c9 !important; /* hijau muda */
+  font-weight: bold !important;
+}
+
+/* Aturan khusus untuk container-data-donasi pada perangkat mobile */
+@media (max-width: 767px) {
+  .container-data-donasi {
+    margin-top: 200px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+.container-donasi {
+  padding: 20px;
+  margin-top: 50px;
+}

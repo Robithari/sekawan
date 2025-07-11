@@ -3,4 +3,4 @@ Allow: /
 Disallow: /cms/
 Disallow: /login-cms
 
-Sitemap: https://sekawanfc.fun/sitemap.xml
+Sitemap: https://sekawan.vercel.app/sitemap.xml

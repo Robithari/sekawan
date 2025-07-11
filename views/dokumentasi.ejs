@@ -124,35 +124,13 @@
             <table id="data-table">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
-                  <th>Pertandingan</th>
-                  <th>Link Foto</th>
-                  <th>Keterangan</th>
+                  <th style="width: 48px; text-align:center;">No.</th>
+                  <th style="min-width:180px;">Keterangan</th>
+                  <th style="min-width:120px;">Link Foto</th>
                 </tr>
               </thead>
-              <tbody>
-                <% dokumentasiData.forEach((record, index)=> { %>
-                  <tr class="<%= index % 2 === 0 ? 'gray-background' : '' %>">
-                    <td>
-                      <%= record.TANGGAL %>
-                    </td>
-                    <td>
-                      <%= record.PERTANDINGAN %>
-                    </td>
-                    <td>
-                      <% if (record["LINK FOTO"] && record["SUMBER LINK"]) { %>
-                        <a href="<%= record["SUMBER LINK"] %>" rel="noopener noreferrer">
-                          <%= record["LINK FOTO"] %>
-                        </a>
-                      <% } else { %>
-                        <%= record["LINK FOTO"] || '-' %>
-                      <% } %>
-                    </td>                    
-                    <td>
-                      <%= record.KETERANGAN || '-' %>
-                    </td>
-                  </tr>
-                  <% }) %>
+              <tbody id="dokumentasi-tbody">
+                <!-- Data dokumentasi akan diisi oleh JS dari Firestore -->
               </tbody>
             </table>
           </div>
@@ -218,6 +196,9 @@
     <script src="js/cek-login.js"></script>
     <script src="js/share-link.js"></script>
     <script src="js/loading.js"></script>
+
+    <!-- Dokumentasi publik: fetch data dari API -->
+    <script src="js/dokumentasi-public.js"></script>
 
   </div>
   <!-- END SCRIPTS -->

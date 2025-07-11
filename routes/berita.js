@@ -2,15 +2,26 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/firebase");
 const beritaController = require("../controllers/beritaController");
+const { body } = require('express-validator');
 
 // Rute API
-router.post("/", beritaController.addBerita);
+router.post(
+  "/",
+  [
+    body("judul").trim().notEmpty().withMessage("Judul wajib diisi").escape(),
+    body("slug").trim().notEmpty().withMessage("Slug wajib diisi").escape(),
+    body("konten").trim().notEmpty().withMessage("Konten wajib diisi"),
+    body("tanggalPembuatan").isISO8601().withMessage("Tanggal tidak valid")
+    // Tambahkan validasi field lain sesuai kebutuhan
+  ],
+  beritaController.addBerita
+);
 router.get("/", beritaController.getAllBerita);
 router.get("/:slug", beritaController.getBeritaBySlug);
 router.put("/:id", beritaController.updateBerita);  // Pastikan controller ini ada
 router.delete("/:id", beritaController.deleteBerita);
 
-// Rute untuk tampilan berita berdasarkan slug
+/* Rute untuk tampilan berita berdasarkan slug
 router.get("/view/:slug", async (req, res) => {
   try {
     const q = db.collection("berita").where("slug", "==", req.params.slug);
@@ -26,5 +37,6 @@ router.get("/view/:slug", async (req, res) => {
     res.status(500).render("error", { error });
   }
 });
+*/
 
 module.exports = router;

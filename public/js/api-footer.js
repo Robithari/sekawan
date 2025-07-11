@@ -1,4 +1,5 @@
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js sudah di-load di index.ejs
 import { db } from '../firebase-config.js';  // Naik satu level ke root
 
 

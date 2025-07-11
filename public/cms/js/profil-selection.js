@@ -1,126 +1,131 @@
-// profil-selection.js
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js sudah di-load di HTML
+var db = window.firebase.firestore();
 
-import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db } from '../../firebase-config.js';
+const PROFILE_DOC_ID = "main";
+let quillProfile;
 
-// ID Dokumen Profil (gunakan 'main' atau sesuai kebutuhan)
-const profilDocId = "main";
+// ========== Quill Editor Setup ==========
+const Font = Quill.import('formats/font');
+Font.whitelist = [
+    'arial', 'comic-sans', 'courier-new', 'georgia', 'helvetica', 'lucida', 'times-new-roman'
+];
+Quill.register(Font, true);
 
-// Fungsi untuk memuat konten profil dari Firestore
-export async function loadProfilContent() {
-    console.log("Function loadProfilContent called");
-    const profilForm = document.getElementById('profilForm');
+const toolbarOptions = [
+    [{ 'font': Font.whitelist }],
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'script': 'sub' }, { 'script': 'super' }],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'indent': '-1' }, { 'indent': '+1' }],
+    [{ 'direction': 'rtl' }],
+    [{ 'align': [] }],
+    ['undo', 'redo'],
+    ['link', 'image', 'video', 'formula'],
+    ['clean']
+];
 
+const icons = Quill.import('ui/icons');
+icons['undo'] = '<svg viewBox="0 0 18 18"><polygon class="ql-fill ql-stroke" points="6 10 4 12 2 10 6 10"></polygon><path class="ql-stroke" d="M14,4a6,6,0,0,0-8.5,1.5"></path></svg>';
+icons['redo'] = '<svg viewBox="0 0 18 18"><polygon class="ql-fill ql-stroke" points="12 10 14 12 16 10 12 10"></polygon><path class="ql-stroke" d="M4,4a6,6,0,0,1,8.5,1.5"></path></svg>';
+
+// ========== Load Profile Content ==========
+window.loadProfileContent = async function() {
+    const profileForm = document.getElementById('profilForm');
     try {
-        console.log("Loading profil content from Firestore...");
-        const docRef = doc(db, "profil", profilDocId);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
+        const docRef = db.collection("profil").doc(PROFILE_DOC_ID);
+        const docSnap = await docRef.get();
+        if (docSnap.exists) {
             const data = docSnap.data();
-            if (profilForm) {
-                const profilContent = document.getElementById('profilContent');
-                const profilPreview = document.getElementById('profil-preview');
-                if (profilContent && profilPreview) {
-                    profilContent.value = data.content;
-                    profilPreview.innerHTML = data.content;
-                }
+            if (profileForm && quillProfile) {
+                quillProfile.root.innerHTML = data.content;
+            }
+            const profileContent = document.getElementById('profilContent');
+            if (profileContent) {
+                profileContent.value = data.content;
             }
         } else {
-            await setDoc(doc(db, "profil", profilDocId), { content: "" });
-            if (profilForm) {
-                const profilContent = document.getElementById('profilContent');
-                const profilPreview = document.getElementById('profil-preview');
-                if (profilContent && profilPreview) {
-                    profilContent.value = "";
-                    profilPreview.innerHTML = "";
-                }
+            await db.collection("profil").doc(PROFILE_DOC_ID).set({ content: "" });
+            if (profileForm && quillProfile) {
+                quillProfile.root.innerHTML = "";
+            }
+            const profileContent = document.getElementById('profilContent');
+            if (profileContent) {
+                profileContent.value = "";
             }
         }
     } catch (error) {
-        console.error("Error loading profil content:", error);
-        const profilMessage = document.getElementById('profilMessage');
-        if (profilMessage) {
-            profilMessage.innerText = "Terjadi kesalahan saat memuat konten profil.";
-            profilMessage.className = "alert alert-danger";
-        }
+        showProfileMessage("Terjadi kesalahan saat memuat konten profil.", "danger");
+        console.error("Error loading profile content:", error);
     }
 }
 
-// Fungsi untuk menyimpan konten profil ke Firestore
-export async function saveProfilContent(content) {
-    const profilMessage = document.getElementById('profilMessage');
+// ========== Save Profile Content ==========
+async function saveProfileContent(content) {
     try {
-        const docRef = doc(db, "profil", profilDocId);
+        const docRef = doc(db, "profil", PROFILE_DOC_ID);
         await updateDoc(docRef, { content: content });
-
-        if (profilMessage) {
-            profilMessage.innerText = "Profil berhasil diperbarui.";
-            profilMessage.className = "alert alert-success";
-        }
-
-        const profilPreview = document.getElementById('profil-preview');
-        if (profilPreview) {
-            profilPreview.innerHTML = content;
-        }
+        showProfileMessage("Profil berhasil diperbarui.", "success");
     } catch (error) {
-        console.error("Error saving profil content:", error);
-        if (profilMessage) {
-            profilMessage.innerText = "Terjadi kesalahan saat menyimpan konten profil.";
-            profilMessage.className = "alert alert-danger";
-        }
+        showProfileMessage("Terjadi kesalahan saat menyimpan konten profil.", "danger");
+        console.error("Error saving profile content:", error);
     }
 }
 
-// Event Listener untuk Formulir Profil (hanya di CMS)
-export function setupProfilForm() {
-    const profilForm = document.getElementById('profilForm');
-    if (profilForm) {
-        profilForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const profilContent = document.getElementById('profilContent');
-            const content = profilContent ? profilContent.value : "";
-            await saveProfilContent(content);
+// ========== Setup Profile Form ==========
+function setupProfileForm() {
+    const profileForm = document.getElementById('profilForm');
+    const editBtn = document.getElementById('editProfilBtn');
+    const saveBtn = document.getElementById('saveProfilBtn');
+    const cancelBtn = document.getElementById('cancel-profil-btn');
+    if (profileForm && editBtn && saveBtn && cancelBtn) {
+        quillProfile = new Quill('#profilContentEditor', {
+            modules: {
+                toolbar: {
+                    container: toolbarOptions,
+                },
+                history: {
+                    delay: 1000,
+                    maxStack: 100,
+                    userOnly: true
+                }
+            },
+            theme: 'snow',
+            placeholder: 'Tulis konten profil di sini...'
         });
-
-        const cancelBtn = document.getElementById('cancel-profil-btn');
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', async function () {
-                await loadProfilContent();
-                const profilMessage = document.getElementById('profilMessage');
-                if (profilMessage) {
-                    profilMessage.innerText = "";
-                    profilMessage.className = "";
-                }
-            });
-        }
-
-        const profilContent = document.getElementById('profilContent');
-        if (profilContent) {
-            profilContent.addEventListener('input', function () {
-                const content = this.value;
-                const profilPreview = document.getElementById('profil-preview');
-                if (profilPreview) {
-                    profilPreview.innerHTML = content;
-                }
-            });
-        }
+        editBtn.addEventListener('click', () => {
+            profileForm.classList.remove('d-none');
+            editBtn.classList.add('d-none');
+        });
+        saveBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const content = quillProfile.root.innerHTML.trim();
+            await saveProfileContent(content);
+            profileForm.classList.add('d-none');
+            editBtn.classList.remove('d-none');
+        });
+        cancelBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            profileForm.classList.add('d-none');
+            editBtn.classList.remove('d-none');
+            loadProfileContent();
+        });
     }
 }
 
-// Inisialisasi Profil CMS
-export async function initializeProfilCMS() {
-    await loadProfilContent();
-    setupProfilForm();
+// ========== UI Helper ==========
+function showProfileMessage(text, type = "info") {
+    const profileMessage = document.getElementById('profilMessage');
+    if (profileMessage) {
+        profileMessage.innerText = text;
+        profileMessage.className = `alert alert-${type}`;
+    }
 }
 
-// Inisialisasi Profil Publik
-export async function initializeProfilPublic() {
-    await loadProfilContent();
-}
-
-// Listener untuk `DOMContentLoaded`
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM Content Loaded, initializing CMS...");
-    initializeProfilCMS();  // Panggil fungsi untuk inisialisasi CMS saat DOM siap
+// Initial load
+window.addEventListener('DOMContentLoaded', () => {
+    setupProfileForm();
+    loadProfileContent();
 });

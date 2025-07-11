@@ -1,21 +1,8 @@
-// Import Firebase dependencies
-import { 
-    getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, where, getDoc 
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js, dan firebase-config.js sudah di-load di index.ejs
 
-// Firebase Configuration
-import * as firebaseConfig from "../../firebase-config.js";
-
-// Initialize Firebase if not already initialized
-let app;
-if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-} else {
-    app = getApps()[0];
-}
-
-const db = getFirestore(app);
+// Referensi Firestore v8
+const db = firebase.firestore();
 
 // References to HTML elements
 const articleCollectionRef = collection(db, "articles");
@@ -130,7 +117,7 @@ function attachEventListeners() {
 
     document.querySelectorAll(".delete-btn").forEach((button) => {
         button.addEventListener("click", () => deleteArticle(button.dataset.id));
-    });
+    }); 
 }
 
 // Function to add a new article

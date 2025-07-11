@@ -1,42 +1,83 @@
-       /* Sidebar styling */
-       #sidebar {
-        min-width: 250px;
-        max-width: 400px;
-        min-height: 100vh;
-        background: #343a40;
-        color: #fff;
-        transition: all 0.3s;
-    }
+/* --- CMS Modern Responsive & Neuromarketing Optimized --- */
 
-    #sidebar .nav-link {
-        color: #fff;
-    }
+/* Sidebar styling */
+#sidebar {
+    min-width: 220px;
+    max-width: 340px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    color: #fff;
+    transition: all 0.3s;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.10);
+    border-radius: 0 18px 18px 0;
+    padding-top: 24px;
+}
 
-    #sidebar .nav-link:hover {
-        background: #495057;
-    }
+#sidebar .nav-link {
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background 0.2s, color 0.2s;
+    padding: 12px 22px;
+    font-size: 11px;
+    background: none;
+}
 
-    /* Content styling */
-    #page-content-wrapper {
-        width: 100%;
-        padding: 20px;
-    }
+#sidebar .nav-link.active {
+    background: #ffc107;
+    color: #232526;
+}
 
-    /* PREVIEW ARTIKEL */
+#sidebar .nav-link:hover:not(.active) {
+    background: #f3e2a3;
+    color: #232526;
+}
+
+/* Content styling */
+#page-content-wrapper {
+    width: 100%;
+    padding: 32px 18px 24px 18px;
+    background: #f7f8fa;
+    min-height: 100vh;
+}
+
+/* Card Modern - single definition, no duplicate */
 .card-body {
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
+    width: 100%;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1.5rem;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1.5rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: none;
+    overflow-x: auto;
+    /* Extra protection for horizontal overflow */
+}
+
+.card-body:active,
+.card-body:focus-within {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
+    transform: scale(1.01);
 }
 
 .card-title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-bottom: 0.75rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #232526;
+    letter-spacing: 0.2px;
 }
 
 .card-text {
     margin-bottom: 0.75rem;
+    color: #444;
+    font-size: 1.08rem;
+    line-height: 1.7;
 }
 
 .card-text strong {
@@ -44,134 +85,606 @@
 }
 
 .card-text.text-muted {
-    color: #6c757d; /* Warna teks muted */
+    color: #6c757d;
 }
 
 .mt-auto {
-    margin-top: auto; /* Menempatkan tombol di bagian bawah */
+    margin-top: auto;
     display: flex;
-    justify-content: center; /* Pusatkan secara horizontal */
-    align-items: center; /* Pusatkan secara vertikal jika diperlukan */
-    width: 100%; /* Memastikan grup tombol mengambil lebar penuh */
-    padding: 1rem 0; /* Tambah ruang di atas/bawah tombol */
-    gap: 5px; /* Jarak antar tombol atau elemen */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 0;
+    gap: 12px;
 }
 
-/* CSS untuk tombol */
+/* Button Modern - Neuroscience Touch */
 .btn {
     display: inline-block;
-    font-weight: 400; /* Sedikit lebih bold untuk keterbacaan */
+    font-weight: 700;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
-    border: 1px solid #ccc; /* Sedikit border agar terlihat */
-    padding: 0.4rem 0.8rem; /* Padding yang lebih seimbang */
-    font-size: 0.9rem; /* Ukuran font sedikit lebih kecil */
-    line-height: 1.2; /* Spasi antar baris */
-    border-radius: 0.3rem; /* Sudut lebih lembut */
-    background-color: #f8f9fa; /* Warna latar yang lembut */
-    color: #333; /* Warna teks */
-    width: auto; /* Tidak terlalu lebar, menyesuaikan konten */
-    max-width: 200px; /* Membatasi lebar maksimal */
-    height: auto; /* Tidak terlalu tinggi */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sedikit bayangan */
-    transition: background-color 0.3s, box-shadow 0.3s; /* Efek transisi */
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.12rem;
+    line-height: 1.2;
+    border-radius: 0.7rem;
+    background-color: #f8f9fa;
+    color: #333;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.10);
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s, transform 0.1s;
+    letter-spacing: 0.1px;
+    margin-bottom: 0.2rem;
+}
+
+.btn:active {
+    transform: scale(0.97);
+    background: #e2e6ea;
+}
+
+.btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
 }
 
 .btn:hover {
-    background-color: #e2e6ea; /* Warna latar saat hover */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Bayangan lebih jelas */
+    background-color: #e2e6ea;
+    color: #007bff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.13);
 }
-
 
 .btn-primary {
     color: #fff;
     background-color: #007bff;
-    border-color: #007bff;
-    margin-top: 8px;
+    border: none;
 }
 
 .btn-primary:hover {
     background-color: #0056b3;
-    border-color: #004085;
+    color: #fff;
 }
 
 .btn-warning {
-    color: #212529;
+    color: #232526;
     background-color: #ffc107;
-    border-color: #ffc107;
+    border: none;
 }
 
 .btn-warning:hover {
     background-color: #e0a800;
-    border-color: #d39e00;
+    color: #fff;
 }
 
 .btn-danger {
     color: #fff;
     background-color: #dc3545;
-    border-color: #dc3545;
+    border: none;
 }
 
 .btn-danger:hover {
     background-color: #c82333;
-    border-color: #bd2130;
 }
 
-    .custom-foto {
-        width: 100px;
+/* Alert Modern */
+.alert {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.2rem;
+    border-radius: 0.7rem;
+    font-size: 1.08rem;
+    font-weight: 700;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.09);
+    border: none;
+    display: block;
+    letter-spacing: 0.1px;
+    background: linear-gradient(90deg, #f8f9fa 60%, #eaf4fb 100%);
+}
+
+.alert-success {
+    background: linear-gradient(90deg, #e6f9ea 60%, #d4f5e9 100%);
+    color: #1e7e34;
+}
+
+.alert-danger {
+    background: linear-gradient(90deg, #fbeaea 60%, #f9dada 100%);
+    color: #c82333;
+}
+
+.alert-info {
+    background: linear-gradient(90deg, #eaf4fb 60%, #d6eaf8 100%);
+    color: #0c5460;
+}
+
+/* Loading Spinner */
+.spinner-border {
+    display: inline-block;
+    width: 2.2rem;
+    height: 2.2rem;
+    vertical-align: text-bottom;
+    border: 0.28em solid #e2e6ea;
+    border-right-color: #007bff;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spinner-border {
+    100% {
+        transform: rotate(360deg);
     }
-/* CSS untuk gambar agar berada di tengah secara horizontal */
+}
+
+/* Form Modern */
+.form-control {
+    display: block;
+    width: 40%;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.12rem;
+    color: #495057;
+    background-color: #fff;
+    border: 1.7px solid #ced4da;
+    border-radius: 0.7rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 1.3rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    outline: 0;
+    box-shadow: 0 0 0 0.18rem rgba(0, 123, 255, .13);
+}
+
+label {
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    color: #232526;
+    letter-spacing: 0.1px;
+    font-size: 12px;
+}
+
+/* Card Image Centered */
 .card-img-top {
-    width: 200px;
-    height: 200px;
+    width: 160px;
+    height: 160px;
     object-fit: cover;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 1rem; /* Spasi bawah antara gambar dan konten */
-    border-radius: 8px; /* Opsional: membuat sudut gambar melengkung */
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
 }
 
-        /* END PREVIEW ARTIKEL */
+/* Custom Foto */
+.custom-foto {
+    width: 80px;
+    display: block;
+    margin: 0 auto 1rem auto;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
 
-
-    /* Sidebar always visible on desktop */
-    @media (min-width: 768px) {
-        #menu-toggle {
-            display: none;
-        }
-
-        #sidebar {
-            margin-left: 0 !important;
-        }
-
-        #wrapper.toggled #sidebar {
-            margin-left: 0;
-        }
+/* Sidebar always visible on desktop */
+@media (min-width: 768px) {
+    #menu-toggle {
+        display: none;
     }
 
-    /* Toggle sidebar on mobile */
-    @media (max-width: 768px) {
-        #sidebar {
-            margin-left: -250px;
-        }
+    #sidebar {
+        margin-left: 0 !important;
+    }
+}
 
-        #wrapper.toggled #sidebar {
-            margin-left: 0;
-        }
+/* Toggle sidebar on mobile */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+        transition: margin-left 0.3s;
     }
 
-    /* Additional styling for smaller screens */
-    @media (max-width: 576px) {
-        #page-content-wrapper {
-            padding: 10px;
-        }
-
-        .sidebar-header h3 {
-            font-size: 18px;
-        }
-
-        #page-content-wrapper {
-            padding: 5px;
-        }
+    #sidebar.show {
+        margin-left: 0;
     }
+
+    #page-content-wrapper {
+        padding: 10px 2vw;
+    }
+
+    .card-body {
+        padding: 1.2rem 0.7rem;
+        border-radius: 14px;
+    }
+}
+
+/* Additional styling for smaller screens */
+@media (max-width: 576px) {
+    #page-content-wrapper {
+        padding: 5px;
+    }
+
+    .sidebar-header h3 {
+        font-size: 18px;
+    }
+
+    .card-body {
+        padding: 0.7rem 0.2rem;
+        border-radius: 8px;
+    }
+
+    .card-title {
+        font-size: 0.98rem;
+    }
+
+    .btn {
+        font-size: 0.98rem;
+        padding: 0.45rem 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .form-control {
+        font-size: 0.98rem;
+        padding: 0.45rem 0.5rem;
+        border-radius: 0.5rem;
+        width: 70%;
+    }
+
+    .alert {
+        font-size: 0.98rem;
+        border-radius: 0.5rem;
+    }
+}
+
+/* Responsive Container for CMS Section - update for better symmetry */
+.cms-container,
+.cms-section,
+.cms-main-content {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Utility Classes */
+.w-100 {
+    width: 100% !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.mt-2 {
+    margin-top: 1rem !important;
+}
+
+.mb-2 {
+    margin-bottom: 1rem !important;
+}
+
+/* Prevent image overflow in card */
+.card-body img,
+.card-img-top,
+.custom-foto {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+
+    .cms-container,
+    .cms-section,
+    .cms-main-content {
+        max-width: 100vw;
+        padding-left: 4vw;
+        padding-right: 4vw;
+    }
+
+    .card-body {
+        max-width: 98vw;
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .cms-container,
+    .cms-section,
+    .cms-main-content {
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+
+    .card-body {
+        max-width: 100vw;
+        padding-left: 0.5vw;
+        padding-right: 0.5vw;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .cms-container,
+    .cms-section,
+    .cms-main-content {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .card-body {
+        max-width: 100vw;
+        padding-left: 0;
+        padding-right: 0;
+        border-radius: 8px;
+    }
+
+    .card-title {
+        font-size: 0.98rem;
+    }
+
+    .btn,
+    .form-control,
+    .alert {
+        font-size: 0.98rem;
+        border-radius: 0.5rem;
+    }
+}
+
+/* Media query for desktop/PC to drastically reduce content size */
+@media (min-width: 992px) {
+
+    html,
+    body {
+        font-size: 8px !important;
+    }
+
+    #page-content-wrapper,
+    .cms-container,
+    .cms-section,
+    .cms-main-content {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin: 0 auto !important;
+    }
+
+    .card-body,
+    .card,
+    .form-control,
+    .form-select,
+    .btn,
+    .alert {
+        font-size: 11px !important;
+        padding: 0.5em 0.5em !important;
+        border-radius: 0.5em !important;
+    }
+
+    .btn.btn-secondary.dropdown-toggle {
+        font-size: 18px !important;
+        /* Ganti dengan ukuran yang kamu mau */
+    }
+
+
+    #sidebar {
+        min-width: 120px !important;
+        max-width: 160px !important;
+        font-size: 0.7em !important;
+        padding-top: 8px !important;
+    }
+
+    .sidebar-header h3,
+    .sidebar-header strong {
+        font-size: 11px !important;
+    }
+
+    .navbar,
+    .navbar .container-fluid {
+        font-size: 0.7em !important;
+        min-height: 32px !important;
+        padding: 0.2em 0.5em !important;
+    }
+
+    .form-control {
+        width: 30% !important;
+        min-width: 170px !important;
+        max-width: 100% !important;
+        font-size: 1.1em !important;
+        padding: 0.9em 1.2em !important;
+        border-radius: 0.7em !important;
+        margin-bottom: 1.2em !important;
+    }
+
+    label {
+        font-size: 1em !important;
+        margin-bottom: 0.4em !important;
+    }
+
+    .card-body {
+        max-width: 100% !important;
+        padding: 2.2rem 2rem !important;
+    }
+}
+
+/* Utility: force horizontal scroll prevention */
+body,
+html {
+    overflow-x: hidden;
+}
+
+/* --- End CMS Modern Responsive --- */
+
+/* Prevent image overflow in card */
+.card-body img,
+.cms-main-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Ensure no horizontal scroll on all containers */
+.cms-container,
+.cms-section,
+.cms-main-content,
+.card-body {
+    overflow-x: hidden;
+}
+
+/* Smoother transition for interactive elements */
+.btn,
+.card-body,
+.form-control,
+.alert {
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s, transform 0.1s, border-color 0.2s;
+}
+
+/* Remove double margin on card-body */
+.card-body {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Responsive fix for very small screens */
+@media (max-width: 400px) {
+
+    .cms-container,
+    .cms-section,
+    .cms-main-content,
+    .card-body {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .btn,
+    .form-control,
+    .alert {
+        font-size: 0.92rem;
+        padding: 0.35rem 0.3rem;
+    }
+}
+
+/* Tambahkan style untuk input link carousel jika diperlukan */
+.carousel-link-input {
+  margin-top: 0.7em;
+  font-size: 1.08em;
+  padding: 0.7em 1.2em;
+  border-radius: 0.7em;
+  border: 1.7px solid #ced4da;
+  width: 100%;
+  background: #fff;
+  color: #495057;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.carousel-link-input:focus {
+  border-color: #007bff;
+  outline: 0;
+  box-shadow: 0 0 0 0.18rem rgba(0,123,255,.13);
+}
+
+/* --- Iuran Section Enhancement (Improved Table Grouping & Borders) --- */
+.iuran-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  margin-bottom: 1.5rem;
+  font-size: 1.08rem;
+}
+.iuran-table th, .iuran-table td {
+  padding: 0.7em 0.5em;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: center;
+}
+.iuran-table th {
+  background: #f7f8fa;
+  color: #232526;
+  font-weight: 700;
+  font-size: 1.09em;
+}
+.iuran-table th.iuran-bulan-group {
+  border-right: 2.5px solid #b6b6b6;
+  border-left: 2.5px solid #b6b6b6;
+  background: #f3f6fa;
+  font-size: 1.08em;
+  color: #232526;
+  padding: 0.7em 0.2em 0.2em 0.2em;
+}
+.iuran-table th.iuran-bulan, .iuran-table th.iuran-tgl {
+  border-bottom: 1.5px solid #b6b6b6;
+  background: #f7f8fa;
+  font-size: 0.98em;
+  color: #444;
+  font-weight: 600;
+  padding: 0.3em 0.2em;
+}
+.iuran-table th.iuran-bulan {
+  border-right: none;
+  border-left: 1.5px solid #e0e0e0;
+  min-width: 48px;
+}
+.iuran-table th.iuran-tgl {
+  border-left: none;
+  border-right: 1.5px solid #e0e0e0;
+  min-width: 60px;
+}
+.iuran-table td.iuran-centang {
+  background: #f8fff8;
+  border-left: 1.5px solid #e0e0e0;
+  border-right: none;
+  color: #28a745;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+.iuran-table td.iuran-tanggal {
+  background: #f6f8fa;
+  border-right: 1.5px solid #e0e0e0;
+  border-left: none;
+  font-size: 0.93em;
+  color: #6c757d;
+}
+.iuran-table th.iuran-bulan-group:first-child {
+  border-left: none;
+}
+.iuran-table th.iuran-bulan-group:last-child {
+  border-right: none;
+}
+.iuran-table td, .iuran-table th {
+  vertical-align: middle;
+}
+.iuran-table th[rowspan], .iuran-table td[rowspan] {
+  background: #f7f8fa;
+  font-weight: 700;
+}
+@media (max-width: 991px) {
+  .iuran-table th.iuran-bulan, .iuran-table th.iuran-tgl {
+    font-size: 0.92em;
+    min-width: 36px;
+    padding: 0.2em 0.1em;
+  }
+  .iuran-table th.iuran-bulan-group {
+    font-size: 0.97em;
+    padding: 0.3em 0.1em 0.1em 0.1em;
+  }
+}
+@media (max-width: 768px) {
+  .iuran-table th, .iuran-table td {
+    padding: 0.35em 0.1em;
+    font-size: 0.92em;
+  }
+}
+/* --- End Iuran Section Enhancement --- */

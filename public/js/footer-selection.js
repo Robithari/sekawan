@@ -1,10 +1,10 @@
-import { collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db } from '../../firebase-config.js';
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-firestore.js sudah di-load di index.ejs
 
 let currentFooterEditId = null;
 
 // Fungsi untuk memuat konten footer dari Firestore
-export async function loadFooterContents() {
+window.loadFooterContents = async function() {
     try {
         console.log("Fungsi loadFooterContents dipanggil");
         const querySnapshot = await getDocs(collection(db, "footer"));

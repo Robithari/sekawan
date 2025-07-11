@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifikasi | Sekawan FC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <style>
+        .notif-card {
+            border-left: 5px solid #dc3545;
+            background: #fff;
+            transition: box-shadow 0.2s;
+        }
+        .notif-card.unread {
+            background: #fff8f8;
+            font-weight: 500;
+        }
+        .notif-card:hover {
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        .notif-time {
+            font-size: 0.9em;
+            color: #888;
+        }
+        .notif-empty {
+            color: #aaa;
+            text-align: center;
+            padding: 3rem 0;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-light bg-white shadow-sm sticky-top">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <i class="bi bi-arrow-left me-2"></i> Notifikasi
+            </a>
+        </div>
+    </nav>
+    <main class="container py-4">
+        <h2 class="mb-4"><i class="bi bi-bell-fill text-danger me-2"></i>Notifikasi Anda</h2>
+        <div id="notif-list">
+            <div class="notif-empty">Memuat notifikasi...</div>
+        </div>
+    </main>
+    <script>
+    // Ambil NIK user dari localStorage/session/user context (ganti sesuai implementasi login Anda)
+    function getUserNik() {
+      // Coba ambil dari localStorage, session, atau window.userNik
+      if (window.userNik) return window.userNik;
+      if (localStorage.getItem('userNik')) return localStorage.getItem('userNik');
+      // Tambahkan fallback lain jika perlu
+      return '';
+    }
+
+    async function fetchUserNotifications() {
+      const nik = getUserNik();
+      const notifList = document.getElementById('notif-list');
+      notifList.innerHTML = '<div class="notif-empty">Memuat notifikasi...</div>';
+      let url = nik ? `/api/user-notifikasi-histori?nik=${encodeURIComponent(nik)}` : '/api/user-notifikasi-histori';
+      console.log('[Notifikasi] Fetching from:', url, '| NIK:', nik);
+      try {
+        const res = await fetch(url);
+        console.log('[Notifikasi] Response status:', res.status, res.statusText);
+        const contentType = res.headers.get('content-type');
+        console.log('[Notifikasi] Content-Type:', contentType);
+        const data = await res.json();
+        console.log('[Notifikasi] Data:', data);
+        if (res.ok && Array.isArray(data.histori)) {
+          if (data.histori.length === 0) {
+            notifList.innerHTML = '<div class="notif-empty">Belum ada notifikasi.</div>';
+            return;
+          }
+          notifList.innerHTML = '';
+          data.histori.forEach(n => {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 notif-card';
+            card.innerHTML = `
+              <div class="card-body d-flex align-items-center">
+                <i class="bi bi-bell-fill text-danger me-3 fs-3"></i>
+                <div class="flex-grow-1">
+                  <div class="fw-bold mb-1">${n.judul ? n.judul : '(Tanpa Judul)'}</div>
+                  <div>${n.isi}</div>
+                  <div class="notif-time">${n.waktu ? new Date(n.waktu).toLocaleString('id-ID') : '-'}</div>
+                </div>
+                ${n.status === 'unread' ? '<span class="badge bg-danger ms-2">Baru</span>' : ''}
+              </div>
+            `;
+            notifList.appendChild(card);
+          });
+        } else {
+          notifList.innerHTML = '<div class="notif-empty text-danger">Gagal memuat notifikasi.</div>';
+          console.error('[Notifikasi] Format histori tidak array atau response error:', data);
+        }
+      } catch (err) {
+        notifList.innerHTML = `<div class="notif-empty text-danger">Gagal memuat notifikasi: ${err.message || err}`;
+        console.error('[Notifikasi] Error fetch:', err);
+      }
+    }
+    // Polling notifikasi setiap 10 detik agar selalu up-to-date, log waktu polling
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchUserNotifications();
+      setInterval(() => {
+        console.log('[Notifikasi] Polling at', new Date().toLocaleString('id-ID'));
+        fetchUserNotifications();
+      }, 10000);
+    });
+    </script>
+</body>
+</html>

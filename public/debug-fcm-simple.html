@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Debug Push Notification - Sekawan FC</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f5f5f5; 
+            padding: 20px; 
+            line-height: 1.6;
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 30px; 
+            text-align: center; 
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        
+        .content { padding: 30px; }
+        .step { 
+            margin-bottom: 30px; 
+            padding: 25px; 
+            border-radius: 10px; 
+            border-left: 5px solid #667eea;
+            background: #f8f9ff;
+        }
+        .step h3 { 
+            color: #667eea; 
+            margin-bottom: 15px; 
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+        }
+        .step-number { 
+            background: #667eea; 
+            color: white; 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-right: 15px; 
+            font-weight: bold;
+        }
+        
+        .button { 
+            background: #667eea; 
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 1em;
+            margin: 5px 10px 5px 0;
+            transition: all 0.3s ease;
+        }
+        .button:hover { 
+            background: #764ba2; 
+            transform: translateY(-2px);
+        }
+        .button:disabled { 
+            background: #ccc; 
+            cursor: not-allowed; 
+            transform: none;
+        }
+        
+        .status { 
+            padding: 15px; 
+            border-radius: 6px; 
+            margin: 15px 0; 
+            font-weight: 500;
+        }
+        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .status.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        
+        .logs { 
+            background: #1a1a1a; 
+            color: #00ff00; 
+            padding: 20px; 
+            border-radius: 6px; 
+            font-family: 'Courier New', monospace; 
+            font-size: 0.9em;
+            max-height: 400px; 
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 15px;
+        }
+        
+        .progress { 
+            background: #e9ecef; 
+            border-radius: 10px; 
+            height: 20px; 
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .progress-bar { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            height: 100%; 
+            width: 0%; 
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .icon { font-size: 1.2em; margin-right: 8px; }
+        .highlight { background: #fff3cd; padding: 2px 6px; border-radius: 3px; }
+        
+        .form-group { 
+            margin: 15px 0;
+        }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95em;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .container { margin: 10px; }
+            .header { padding: 20px; }
+            .header h1 { font-size: 2em; }
+            .content { padding: 20px; }
+            .step { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Debug Push Notification</h1>
+            <p>Panel untuk menguji dan memperbaiki sistem notifikasi Sekawan FC</p>
+        </div>
+        
+        <div class="content">
+            <!-- Progress Bar -->
+            <div>
+                <h3>📊 Progress Test</h3>
+                <div class="progress">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div id="progress-text">Belum dimulai - Klik tombol "Mulai Test Lengkap" untuk memulai</div>
+            </div>
+            
+            <!-- Quick Test -->
+            <div class="step">
+                <h3><span class="step-number">🚀</span>Test Cepat</h3>
+                <p>Klik tombol ini untuk menjalankan semua test secara otomatis:</p>
+                <button class="button" onclick="runFullTest()">
+                    <span class="icon">🎯</span>Mulai Test Lengkap
+                </button>
+                <div id="quick-status" class="status info" style="display:none;">
+                    Test akan berjalan otomatis...
+                </div>
+            </div>
+            
+            <!-- Step 1: Permission -->
+            <div class="step">
+                <h3><span class="step-number">1</span>Test Izin Notifikasi</h3>
+                <p>Browser memerlukan izin untuk menampilkan notifikasi push.</p>
+                <button class="button" onclick="testPermission()">
+                    <span class="icon">🔔</span>Test Izin Notifikasi
+                </button>
+                <div id="permission-status" class="status info">
+                    Status: <span class="highlight">Belum ditest</span>
+                </div>
+            </div>
+            
+            <!-- Step 2: Service Worker -->
+            <div class="step">
+                <h3><span class="step-number">2</span>Test Service Worker</h3>
+                <p>Service Worker diperlukan untuk menerima notifikasi di background.</p>
+                <button class="button" onclick="testServiceWorker()">
+                    <span class="icon">⚙️</span>Test Service Worker
+                </button>
+                <div id="sw-status" class="status info">
+                    Status: <span class="highlight">Belum ditest</span>
+                </div>
+            </div>
+            
+            <!-- Step 3: FCM Token -->
+            <div class="step">
+                <h3><span class="step-number">3</span>Test FCM Token</h3>
+                <p>FCM Token adalah "alamat" unik untuk mengirim notifikasi ke browser ini.</p>
+                <button class="button" onclick="testFCMToken()">
+                    <span class="icon">🔑</span>Generate FCM Token
+                </button>
+                <div id="token-status" class="status info">
+                    Status: <span class="highlight">Belum ditest</span>
+                </div>
+            </div>
+            
+            <!-- Step 4: Backend -->
+            <div class="step">
+                <h3><span class="step-number">4</span>Test Backend</h3>
+                <p>Test koneksi ke server dan database Firebase.</p>
+                <button class="button" onclick="testBackend()">
+                    <span class="icon">🖥️</span>Test Backend
+                </button>
+                <div id="backend-status" class="status info">
+                    Status: <span class="highlight">Belum ditest</span>
+                </div>
+            </div>
+            
+            <!-- Step 5: Send Notification -->
+            <div class="step">
+                <h3><span class="step-number">5</span>Test Kirim Notifikasi</h3>
+                <p>Test mengirim notifikasi ke browser ini. Notifikasi seharusnya muncul sebagai popup.</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="button" onclick="testSendNotificationWithDebounce()" id="send-btn" disabled>
+                        <span class="icon">📤</span>Kirim Test (Semua Token)
+                    </button>
+                    <button class="button" onclick="testSendNotificationDirectWithDebounce()" id="send-direct-btn" disabled style="background: #ff9800;">
+                        <span class="icon">🎯</span>Test Token Ini Saja
+                    </button>
+                    <button class="button" onclick="testSendNotificationCMSWithDebounce()" id="send-cms-btn" disabled style="background: #9c27b0;">
+                        <span class="icon">🏢</span>Test CMS Style
+                    </button>
+                </div>
+                <div id="send-status" class="status info">
+                    Status: <span class="highlight">Belum ditest - Selesaikan test lain dulu</span>
+                </div>
+            </div>
+            
+            <!-- Logs -->
+            <div class="step">
+                <h3><span class="step-number">📝</span>Log Debug</h3>
+                <p>Area ini menampilkan informasi detail tentang setiap langkah test:</p>
+                <button class="button" onclick="clearLogs()">
+                    <span class="icon">🗑️</span>Hapus Log
+                </button>
+                <div class="logs" id="debug-logs">Waiting for test to start...\n</div>
+            </div>
+
+            <!-- Bug Report Generator -->
+            <div class="step">
+                <h3><span class="step-number">🐛</span>Bug Report Generator</h3>
+                <p>Jika Anda menemukan masalah, gunakan fitur ini untuk menghasilkan laporan bug yang lengkap:</p>
+                
+                <div class="form-group" style="margin: 15px 0;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Deskripsi Masalah:</label>
+                    <textarea id="bug-description" rows="4" placeholder="Jelaskan masalah yang Anda alami secara detail..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;"></textarea>
+                </div>
+                
+                <div class="form-group" style="margin: 15px 0;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Langkah Reproduksi:</label>
+                    <textarea id="bug-steps" rows="3" placeholder="1. Buka halaman maintenance.html&#10;2. Klik tombol FCM Test&#10;3. Error muncul di console..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;"></textarea>
+                </div>
+                
+                <div class="form-group" style="margin: 15px 0;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Hasil yang Diharapkan vs Aktual:</label>
+                    <textarea id="bug-expected" rows="2" placeholder="Diharapkan: Notifikasi berhasil terkirim&#10;Aktual: Error 'FCM token invalid'" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0;">
+                    <button class="button" onclick="generateBugReport()" style="background: #dc3545;">
+                        <span class="icon">🐛</span>Generate Bug Report
+                    </button>
+                    <button class="button" onclick="copyBugReport()" id="copy-bug-btn" disabled style="background: #28a745;">
+                        <span class="icon">📋</span>Copy Report
+                    </button>
+                    <button class="button" onclick="downloadBugReport()" id="download-bug-btn" disabled style="background: #6f42c1;">
+                        <span class="icon">💾</span>Download Report
+                    </button>
+                </div>
+                
+                <div id="bug-report-status" class="status info" style="display: none;">
+                    Status: <span class="highlight">Siap untuk generate report</span>
+                </div>
+                
+                <div class="logs" id="bug-report-output" style="display: none; max-height: 300px;">
+                    Generated bug report akan muncul di sini...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+    
+    <script>
+        // Firebase Configuration
+        firebase.initializeApp({
+            apiKey: "AIzaSyDo2kyDl39c4t5DfxYycmmjHSbY5FXB9AA",
+            authDomain: "sekawan-fc-427414.firebaseapp.com",
+            projectId: "sekawan-fc-427414",
+            storageBucket: "sekawan-fc-427414.appspot.com",
+            messagingSenderId: "399174955835",
+            appId: "1:399174955835:web:c681f8681c474420e8fd1e",
+            measurementId: "G-CD0MHD1RBP",
+            databaseURL: "https://sekawan-fc-427414-default-rtdb.firebaseio.com/"
+        });
+
+        const messaging = firebase.messaging();
+        const VAPID_KEY = 'BLX08CbmRL0w_pWLoUhw3wRxMqgzzfpKY5JE5Tphw3cgNjPnQDW2gANdGaqT_VDLmt4NPF2NrwnSvstS8kHywcc';
+        
+        let currentToken = null;
+        let testResults = {
+            permission: false,
+            serviceWorker: false,
+            token: false,
+            backend: false
+        };
+        
+        // Prevent multiple executions
+        let isTestRunning = false;
+        let messageListenerAdded = false;
+
+        // Utility Functions
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logDiv = document.getElementById('debug-logs');
+            const emoji = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+            logDiv.textContent += `[${timestamp}] ${emoji} ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[FCM-DEBUG] ${message}`);
+        }
+
+        function setStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `Status: <span class="highlight">${message}</span>`;
+            element.className = `status ${type}`;
+        }
+
+        function updateProgress() {
+            const completed = Object.values(testResults).filter(Boolean).length;
+            const total = Object.keys(testResults).length;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = 
+                `${completed}/${total} test selesai (${Math.round(percentage)}%)`;
+            
+            // Enable send button if all tests pass
+            const sendBtn = document.getElementById('send-btn');
+            if (completed === total) {
+                sendBtn.disabled = false;
+                setStatus('send-status', 'Siap untuk test kirim notifikasi!', 'success');
+            }
+        }
+
+        function clearLogs() {
+            document.getElementById('debug-logs').textContent = 'Logs cleared.\n';
+        }
+
+        // Test Functions
+        async function testPermission() {
+            log('🔔 Memulai test izin notifikasi...');
+            setStatus('permission-status', 'Testing...', 'warning');
+            
+            try {
+                log(`Izin saat ini: ${Notification.permission}`);
+                
+                if (Notification.permission === 'denied') {
+                    log('Izin ditolak - harus diaktifkan manual di browser', 'error');
+                    setStatus('permission-status', 'DITOLAK - Aktifkan di pengaturan browser', 'error');
+                    return false;
+                }
+                
+                if (Notification.permission === 'default') {
+                    log('Meminta izin notifikasi dari user...');
+                    const permission = await Notification.requestPermission();
+                    log(`Hasil permintaan izin: ${permission}`);
+                    
+                    if (permission !== 'granted') {
+                        log('User menolak izin notifikasi', 'error');
+                        setStatus('permission-status', 'DITOLAK oleh user', 'error');
+                        return false;
+                    }
+                }
+                
+                log('✅ Izin notifikasi DIBERIKAN!', 'success');
+                setStatus('permission-status', 'DIBERIKAN ✅', 'success');
+                testResults.permission = true;
+                updateProgress();
+                return true;
+                
+            } catch (error) {
+                log(`Error saat test izin: ${error.message}`, 'error');
+                setStatus('permission-status', 'ERROR', 'error');
+                return false;
+            }
+        }
+
+        async function testServiceWorker() {
+            log('⚙️ Memulai test service worker...');
+            setStatus('sw-status', 'Testing...', 'warning');
+            
+            try {
+                if (!('serviceWorker' in navigator)) {
+                    log('Service worker tidak didukung browser ini', 'error');
+                    setStatus('sw-status', 'TIDAK DIDUKUNG', 'error');
+                    return false;
+                }
+                
+                log('Mendaftarkan service worker...');
+                const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+                log(`Service worker terdaftar: ${registration.scope}`);
+                
+                log('Menunggu service worker siap...');
+                const ready = await navigator.serviceWorker.ready;
+                log(`Service worker siap: ${ready.scope}`);
+                
+                if (ready.active) {
+                    log('✅ Service worker AKTIF dan siap!', 'success');
+                    setStatus('sw-status', 'AKTIF ✅', 'success');
+                    testResults.serviceWorker = true;
+                    updateProgress();
+                    return registration;
+                } else {
+                    log('Service worker terdaftar tapi belum aktif', 'warning');
+                    setStatus('sw-status', 'TERDAFTAR tapi belum aktif', 'warning');
+                    return false;
+                }
+                
+            } catch (error) {
+                log(`Error service worker: ${error.message}`, 'error');
+                setStatus('sw-status', 'ERROR', 'error');
+                return false;
+            }
+        }
+
+        async function testFCMToken() {
+            log('🔑 Memulai test FCM token...');
+            setStatus('token-status', 'Testing...', 'warning');
+            
+            try {
+                if (!testResults.permission) {
+                    log('Izin notifikasi harus diberikan dulu', 'error');
+                    setStatus('token-status', 'Perlu izin notifikasi dulu', 'error');
+                    return false;
+                }
+                
+                if (!testResults.serviceWorker) {
+                    log('Service worker harus aktif dulu', 'error');
+                    setStatus('token-status', 'Perlu service worker dulu', 'error');
+                    return false;
+                }
+                
+                log('Menggenerate FCM token...');
+                const registration = await navigator.serviceWorker.ready;
+                currentToken = await messaging.getToken({ 
+                    vapidKey: VAPID_KEY,
+                    serviceWorkerRegistration: registration 
+                });
+                
+                if (currentToken) {
+                    log(`✅ FCM token berhasil dibuat!`, 'success');
+                    log(`Token: ${currentToken.substring(0, 30)}...`);
+                    
+                    // Save token globally for direct test
+                    window.currentFCMToken = currentToken;
+                    
+                    // Save to backend - CHECK FOR DUPLICATES
+                    log('Menyimpan token ke backend...');
+                    const uniqueUserId = 'debug_user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    const response = await fetch('/api/save-fcm-token', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            userId: uniqueUserId, 
+                            fcmToken: currentToken,
+                            nik: 'DEBUG_TEST_' + Date.now(),
+                            preventDuplicate: true
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        log('✅ Token tersimpan ke backend!', 'success');
+                        setStatus('token-status', 'BERHASIL dibuat & disimpan ✅', 'success');
+                        testResults.token = true;
+                        updateProgress();
+                        
+                        // Enable direct test button
+                        document.getElementById('send-direct-btn').disabled = false;
+                        
+                        return true;
+                    } else {
+                        log(`Error simpan token: ${result.message}`, 'error');
+                        setStatus('token-status', 'Token dibuat tapi gagal disimpan', 'warning');
+                        return false;
+                    }
+                } else {
+                    log('Gagal membuat FCM token', 'error');
+                    setStatus('token-status', 'GAGAL membuat token', 'error');
+                    return false;
+                }
+                
+            } catch (error) {
+                log(`Error FCM token: ${error.message}`, 'error');
+                setStatus('token-status', 'ERROR', 'error');
+                return false;
+            }
+        }
+
+        async function testBackend() {
+            log('🖥️ Memulai test backend...');
+            setStatus('backend-status', 'Testing...', 'warning');
+            
+            try {
+                log('Mengecek status server FCM...');
+                const response = await fetch('/api/test-fcm-status');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const status = await response.json();
+                log(`Server response: ${JSON.stringify(status, null, 2)}`);
+                
+                if (status.firebaseInitialized && status.firestoreConnected) {
+                    log('✅ Backend FCM siap!', 'success');
+                    log(`Database: ${status.usersCount} users, ${status.tokensCount} tokens`);
+                    setStatus('backend-status', `SIAP ✅ (${status.tokensCount} tokens)`, 'success');
+                    testResults.backend = true;
+                    updateProgress();
+                    return true;
+                } else {
+                    log('Backend ada masalah', 'warning');
+                    setStatus('backend-status', 'Ada masalah di backend', 'warning');
+                    return false;
+                }
+                
+            } catch (error) {
+                log(`Error backend: ${error.message}`, 'error');
+                setStatus('backend-status', 'ERROR - Server tidak response', 'error');
+                return false;
+            }
+        }
+
+        async function testSendNotification() {
+            if (isTestRunning) {
+                log('⚠️ Test sedang berjalan, tunggu selesai dulu...', 'warning');
+                return false;
+            }
+            
+            isTestRunning = true;
+            log('📤 Memulai test kirim notifikasi...');
+            setStatus('send-status', 'Mengirim...', 'warning');
+            
+            try {
+                const response = await fetch('/api/test-send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: '🎉 Test Berhasil!',
+                        body: 'Notifikasi push Sekawan FC berfungsi dengan baik!'
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    log('✅ Notifikasi berhasil dikirim!', 'success');
+                    log(`Hasil: ${result.result.successCount}/${result.result.totalTokens} berhasil`);
+                    setStatus('send-status', '✅ BERHASIL! Cek apakah notifikasi muncul', 'success');
+                    
+                    // Show instructions
+                    setTimeout(() => {
+                        alert('🔔 Perhatikan:\n\n1. Apakah muncul notifikasi popup?\n2. Coba klik notifikasi jika muncul\n3. Seharusnya redirect ke halaman /notifikasi\n\nJika tidak muncul, cek log untuk error detail.');
+                    }, 1000);
+                    
+                    return true;
+                } else {
+                    log(`Error kirim: ${result.message}`, 'error');
+                    setStatus('send-status', 'GAGAL kirim notifikasi', 'error');
+                    return false;
+                }
+                
+            } catch (error) {
+                log(`Error send notification: ${error.message}`, 'error');
+                setStatus('send-status', 'ERROR', 'error');
+                return false;
+            } finally {
+                isTestRunning = false;
+            }
+        }
+
+        async function testSendNotificationDirect() {
+            if (isTestRunning) {
+                log('⚠️ Test sedang berjalan, tunggu selesai dulu...', 'warning');
+                return false;
+            }
+            
+            isTestRunning = true;
+            log('🎯 Memulai test direct ke token browser ini...');
+            setStatus('send-status', 'Mengirim ke token ini saja...', 'warning');
+            
+            if (!window.currentFCMToken) {
+                log('❌ Token FCM belum tersedia! Jalankan test token dulu.', 'error');
+                setStatus('send-status', 'ERROR - Token belum ada', 'error');
+                isTestRunning = false;
+                return false;
+            }
+            
+            try {
+                log(`🎯 Menggunakan token: ${window.currentFCMToken.substring(0, 50)}...`);
+                
+                const response = await fetch('/api/test-send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: '🎯 Test Direct Token',
+                        body: 'Test langsung ke token browser ini saja',
+                        directToken: window.currentFCMToken
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    log('✅ Test direct berhasil dikirim!', 'success');
+                    log(`Hasil: ${result.result.successCount}/${result.result.totalTokens} berhasil`);
+                    log(`Detail: ${JSON.stringify(result.result.details, null, 2)}`);
+                    setStatus('send-status', '✅ Test direct BERHASIL! Cek notifikasi', 'success');
+                    
+                    // Show instructions
+                    setTimeout(() => {
+                        alert('🎯 Test Direct Token:\n\n1. Apakah muncul notifikasi popup?\n2. Coba klik notifikasi jika muncul\n3. Periksa log server untuk detail error\n\nJika tidak muncul, ini adalah indikasi masalah FCM send di server.');
+                    }, 1000);
+                    
+                    return true;
+                } else {
+                    log(`❌ Error test direct: ${result.message}`, 'error');
+                    setStatus('send-status', 'GAGAL test direct', 'error');
+                    return false;
+                }
+                
+            } catch (error) {
+                log(`❌ Error test direct: ${error.message}`, 'error');
+                setStatus('send-status', 'ERROR test direct', 'error');
+                return false;
+            } finally {
+                isTestRunning = false;
+            }
+        }
+
+        async function testSendNotificationCMSStyle() {
+            if (isTestRunning) {
+                log('⚠️ Test sedang berjalan, tunggu selesai dulu...', 'warning');
+                return false;
+            }
+            
+            isTestRunning = true;
+            log('🏢 Memulai test dengan endpoint CMS...');
+            setStatus('send-status', 'Test CMS style...', 'warning');
+            
+            try {
+                log('🏢 Menggunakan endpoint /api/test-cms-notification (logic sama seperti CMS)');
+                
+                const response = await fetch('/api/test-cms-notification', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        judul: '🏢 Test CMS Style',
+                        isi: 'Test notifikasi dengan logic yang sama seperti CMS. Klik untuk test redirect!',
+                        keSemua: true,
+                        keTertentu: false,
+                        nik: ''
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    log('✅ Test CMS style berhasil dikirim!', 'success');
+                    setStatus('send-status', '✅ Test CMS BERHASIL! Cek notifikasi dan klik', 'success');
+                    
+                    // Show instructions
+                    setTimeout(() => {
+                        alert('🏢 Test CMS Style:\n\n1. Notifikasi dikirim dengan endpoint yang sama seperti CMS\n2. Apakah muncul notifikasi popup?\n3. KLIK notifikasi dan cek apakah redirect ke /notifikasi\n4. Bandingkan dengan test lainnya\n\nJika klik tidak bekerja, berarti masalah di payload CMS!');
+                    }, 1000);
+                    
+                    return true;
+                } else {
+                    log(`❌ Error test CMS: ${result.message}`, 'error');
+                    setStatus('send-status', 'GAGAL test CMS', 'error');
+                    return false;
+                }
+                
+            } catch (error) {
+                log(`❌ Error test CMS: ${error.message}`, 'error');
+                setStatus('send-status', 'ERROR test CMS', 'error');
+                return false;
+            } finally {
+                isTestRunning = false;
+            }
+        }
+
+        // SUPER STRONG DEBOUNCING WRAPPERS
+        let lastClickTime = 0;
+        const DEBOUNCE_TIME = 5000; // 5 seconds between clicks
+        
+        function testSendNotificationWithDebounce() {
+            const now = Date.now();
+            if (now - lastClickTime < DEBOUNCE_TIME) {
+                const remaining = Math.ceil((DEBOUNCE_TIME - (now - lastClickTime)) / 1000);
+                log(`⚠️ Tunggu ${remaining} detik lagi sebelum test ulang...`, 'warning');
+                return false;
+            }
+            
+            lastClickTime = now;
+            
+            // Disable button temporarily
+            const btn = document.getElementById('send-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="icon">⏳</span>Mengirim...';
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="icon">📤</span>Kirim Test (Semua Token)';
+            }, 3000);
+            
+            return testSendNotification();
+        }
+        
+        function testSendNotificationDirectWithDebounce() {
+            const now = Date.now();
+            if (now - lastClickTime < DEBOUNCE_TIME) {
+                const remaining = Math.ceil((DEBOUNCE_TIME - (now - lastClickTime)) / 1000);
+                log(`⚠️ Tunggu ${remaining} detik lagi sebelum test ulang...`, 'warning');
+                return false;
+            }
+            
+            lastClickTime = now;
+            
+            // Disable button temporarily  
+            const btn = document.getElementById('send-direct-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="icon">⏳</span>Mengirim...';
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="icon">🎯</span>Test Token Ini Saja';
+            }, 3000);
+            
+            return testSendNotificationDirect();
+        }
+        
+        function testSendNotificationCMSWithDebounce() {
+            const now = Date.now();
+            if (now - lastClickTime < DEBOUNCE_TIME) {
+                const remaining = Math.ceil((DEBOUNCE_TIME - (now - lastClickTime)) / 1000);
+                log(`⚠️ Tunggu ${remaining} detik lagi sebelum test ulang...`, 'warning');
+                return false;
+            }
+            
+            lastClickTime = now;
+            
+            // Disable button temporarily
+            const btn = document.getElementById('send-cms-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="icon">⏳</span>Mengirim...';
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="icon">🏢</span>Test CMS Style';
+            }, 3000);
+            
+            return testSendNotificationCMSStyle();
+        }
+
+        async function runFullTest() {
+            log('🚀 Memulai test lengkap FCM...');
+            setStatus('quick-status', 'Running full test...', 'warning');
+            document.getElementById('quick-status').style.display = 'block';
+            
+            clearLogs();
+            
+            // Reset progress
+            testResults = {
+                permission: false,
+                serviceWorker: false,
+                token: false,
+                backend: false
+            };
+            updateProgress();
+            
+            // Run tests sequentially
+            log('=== MULAI TEST OTOMATIS ===');
+            
+            const step1 = await testPermission();
+            if (!step1) {
+                setStatus('quick-status', '❌ GAGAL di test izin notifikasi', 'error');
+                return;
+            }
+            
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 sec
+            
+            const step2 = await testServiceWorker();
+            if (!step2) {
+                setStatus('quick-status', '❌ GAGAL di test service worker', 'error');
+                return;
+            }
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            const step3 = await testFCMToken();
+            if (!step3) {
+                setStatus('quick-status', '❌ GAGAL di test FCM token', 'error');
+                return;
+            }
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            const step4 = await testBackend();
+            if (!step4) {
+                setStatus('quick-status', '❌ GAGAL di test backend', 'error');
+                return;
+            }
+            
+            log('=== SEMUA TEST DASAR BERHASIL! ===');
+            setStatus('quick-status', '✅ Semua test berhasil! Siap test kirim notifikasi', 'success');
+            
+            // Auto-enable send buttons
+            document.getElementById('send-btn').disabled = false;
+            if (window.currentFCMToken) {
+                document.getElementById('send-direct-btn').disabled = false;
+            }
+            document.getElementById('send-cms-btn').disabled = false;
+        }
+
+        // Listen for foreground messages - PREVENT MULTIPLE LISTENERS
+        if (!messageListenerAdded) {
+            messaging.onMessage((payload) => {
+                log('🔥 NOTIFIKASI DITERIMA (foreground)!', 'success');
+                log(`Payload: ${JSON.stringify(payload, null, 2)}`);
+                
+                if (payload.notification) {
+                    const notification = new Notification(payload.notification.title, {
+                        body: payload.notification.body,
+                        icon: '/SekawanFC.jpg',
+                        requireInteraction: true
+                    });
+                    
+                    notification.onclick = () => {
+                        log('🖱️ Notifikasi diklik - redirect ke /notifikasi', 'success');
+                        window.focus();
+                        window.location.href = '/notifikasi';
+                        notification.close();
+                    };
+                }
+            });
+            messageListenerAdded = true;
+            log('🔧 Message listener terdaftar (hanya sekali)');
+        }
+
+        // Auto-check initial status
+        window.addEventListener('load', () => {
+            log('🔄 Halaman debug FCM loaded');
+            log(`Browser: ${navigator.userAgent}`);
+            log(`Permission awal: ${Notification.permission}`);
+            log(`Service Worker support: ${'serviceWorker' in navigator}`);
+            
+            // Show initial status
+            if (Notification.permission === 'granted') {
+                setStatus('permission-status', 'Sudah DIBERIKAN ✅', 'success');
+                testResults.permission = true;
+                updateProgress();
+            }
+        });
+
+        // Bug Report Generator Functions
+        let generatedBugReport = '';
+
+        function generateBugReport() {
+            log('🐛 Menggenerate bug report...');
+            document.getElementById('bug-report-status').style.display = 'block';
+            setStatus('bug-report-status', 'Mengumpulkan data sistem...', 'warning');
+
+            const description = document.getElementById('bug-description').value;
+            const steps = document.getElementById('bug-steps').value;
+            const expected = document.getElementById('bug-expected').value;
+
+            if (!description.trim()) {
+                setStatus('bug-report-status', 'ERROR: Deskripsi masalah harus diisi!', 'error');
+                return;
+            }
+
+            try {
+                // System Information
+                const systemInfo = {
+                    timestamp: new Date().toISOString(),
+                    browser: navigator.userAgent,
+                    url: window.location.href,
+                    screen: `${screen.width}x${screen.height}`,
+                    viewport: `${window.innerWidth}x${window.innerHeight}`,
+                    language: navigator.language,
+                    platform: navigator.platform,
+                    cookieEnabled: navigator.cookieEnabled,
+                    onlineStatus: navigator.onLine
+                };
+
+                // FCM Status
+                const fcmStatus = {
+                    notificationPermission: Notification.permission,
+                    serviceWorkerSupport: 'serviceWorker' in navigator,
+                    currentToken: window.currentFCMToken ? window.currentFCMToken.substring(0, 50) + '...' : 'Not generated',
+                    testResults: testResults
+                };
+
+                // Get current logs
+                const currentLogs = document.getElementById('debug-logs').textContent;
+
+                // Generate comprehensive report
+                generatedBugReport = `
+═══════════════════════════════════════════════════════
+🐛 BUG REPORT - SEKAWAN FC MAINTENANCE DASHBOARD
+═══════════════════════════════════════════════════════
+
+📅 TIMESTAMP: ${new Date().toLocaleString('id-ID')}
+🌐 URL: ${window.location.href}
+
+📝 DESKRIPSI MASALAH:
+${description}
+
+🔄 LANGKAH REPRODUKSI:
+${steps || 'Tidak diisi'}
+
+✅ HASIL DIHARAPKAN vs AKTUAL:
+${expected || 'Tidak diisi'}
+
+💻 INFORMASI SISTEM:
+─────────────────────────────────────────────────────
+Browser: ${systemInfo.browser}
+Platform: ${systemInfo.platform}
+Screen: ${systemInfo.screen}
+Viewport: ${systemInfo.viewport}
+Language: ${systemInfo.language}
+Online: ${systemInfo.onlineStatus}
+Cookies: ${systemInfo.cookieEnabled}
+
+🔥 STATUS FCM:
+─────────────────────────────────────────────────────
+Notification Permission: ${fcmStatus.notificationPermission}
+Service Worker Support: ${fcmStatus.serviceWorkerSupport}
+Current FCM Token: ${fcmStatus.currentToken}
+
+Test Results:
+- Permission Test: ${fcmStatus.testResults.permission ? '✅ PASS' : '❌ FAIL'}
+- Service Worker Test: ${fcmStatus.testResults.serviceWorker ? '✅ PASS' : '❌ FAIL'}
+- FCM Token Test: ${fcmStatus.testResults.token ? '✅ PASS' : '❌ FAIL'}
+- Backend Test: ${fcmStatus.testResults.backend ? '✅ PASS' : '❌ FAIL'}
+
+📋 CONSOLE LOGS:
+─────────────────────────────────────────────────────
+${currentLogs}
+
+🔧 MAINTENANCE DASHBOARD STATUS:
+─────────────────────────────────────────────────────
+Dashboard URL: ${window.location.origin}/maintenance.html
+Debug Tool URL: ${window.location.origin}/debug-fcm-simple.html
+
+📞 UNTUK DEVELOPER:
+─────────────────────────────────────────────────────
+Silakan copy seluruh report ini dan kirimkan kepada developer 
+untuk diagnosis dan perbaikan yang tepat.
+
+Informasi tambahan yang mungkin dibutuhkan:
+1. Screenshot error (jika ada)
+2. Network tab di DevTools (F12)
+3. Console errors (F12 → Console)
+4. Server logs (jika akses tersedia)
+
+═══════════════════════════════════════════════════════
+Generated by Sekawan FC Debug Tool v1.0
+═══════════════════════════════════════════════════════
+`;
+
+                // Display the report
+                document.getElementById('bug-report-output').style.display = 'block';
+                document.getElementById('bug-report-output').textContent = generatedBugReport;
+
+                // Enable action buttons
+                document.getElementById('copy-bug-btn').disabled = false;
+                document.getElementById('download-bug-btn').disabled = false;
+
+                setStatus('bug-report-status', '✅ Bug report berhasil digenerate!', 'success');
+                log('✅ Bug report digenerate dengan sukses!', 'success');
+
+            } catch (error) {
+                setStatus('bug-report-status', 'ERROR: Gagal generate report - ' + error.message, 'error');
+                log('❌ Error saat generate bug report: ' + error.message, 'error');
+            }
+        }
+
+        function copyBugReport() {
+            if (!generatedBugReport) {
+                alert('❌ Bug report belum digenerate! Klik "Generate Bug Report" dulu.');
+                return;
+            }
+
+            try {
+                navigator.clipboard.writeText(generatedBugReport).then(() => {
+                    setStatus('bug-report-status', '✅ Bug report berhasil dicopy ke clipboard!', 'success');
+                    log('✅ Bug report dicopy ke clipboard', 'success');
+                    
+                    // Show instruction
+                    setTimeout(() => {
+                        alert('📋 Bug Report Copied!\n\nBug report telah dicopy ke clipboard.\n\nCara melaporkan:\n1. Paste (Ctrl+V) di email/chat\n2. Kirim ke developer\n3. Atau save sebagai file .txt\n\nDeveloper akan menggunakan info ini untuk fix masalah.');
+                    }, 500);
+                }).catch(err => {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = generatedBugReport;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    setStatus('bug-report-status', '✅ Bug report berhasil dicopy (fallback method)!', 'success');
+                    log('✅ Bug report dicopy dengan fallback method', 'success');
+                });
+            } catch (error) {
+                setStatus('bug-report-status', 'ERROR: Gagal copy - ' + error.message, 'error');
+                log('❌ Error copy bug report: ' + error.message, 'error');
+            }
+        }
+
+        function downloadBugReport() {
+            if (!generatedBugReport) {
+                alert('❌ Bug report belum digenerate! Klik "Generate Bug Report" dulu.');
+                return;
+            }
+
+            try {
+                const blob = new Blob([generatedBugReport], { type: 'text/plain;charset=utf-8' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `sekawan-fc-bug-report-${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+                setStatus('bug-report-status', '✅ Bug report berhasil didownload!', 'success');
+                log('✅ Bug report didownload sebagai file', 'success');
+
+                // Show instruction
+                setTimeout(() => {
+                    alert('💾 Bug Report Downloaded!\n\nFile bug report telah didownload.\n\nSelanjutnya:\n1. Buka file yang didownload\n2. Copy seluruh isinya\n3. Kirim ke developer via email/chat\n4. Developer akan analyze dan fix masalah');
+                }, 500);
+
+            } catch (error) {
+                setStatus('bug-report-status', 'ERROR: Gagal download - ' + error.message, 'error');
+                log('❌ Error download bug report: ' + error.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

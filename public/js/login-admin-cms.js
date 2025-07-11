@@ -1,10 +1,9 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, where, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db } from "../firebase-config.js"; // Impor konfigurasi Firebase Anda
-
-// Initialize Firebase Auth dan Firestore sudah diinisialisasi di firebase-config.js
-const auth = getAuth();
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-auth.js, firebase-firestore.js sudah di-load di index.ejs
+// Semua operasi Firebase harus menggunakan window.firebase (CDN v8)
+// Pastikan firebase-app.js, firebase-auth.js, firebase-firestore.js, dan firebase-config.js sudah di-load
+const db = window.firebase.firestore();
+const auth = window.firebase.auth();
 const forgotPasswordLink = document.getElementById('forgotPasswordLink');
 
 // Switch between login and signup forms
@@ -32,14 +31,14 @@ loginForm.addEventListener("submit", async (e) => {
 
     try {
         // Check if the email is present in DataAdmin
-        const adminQuery = query(collection(db, "DataAdmin"), where("email", "==", email));
-        const adminSnapshot = await getDocs(adminQuery);
+        const adminQuery = db.collection("DataAdmin").where("email", "==", email);
+        const adminSnapshot = await adminQuery.get();
 
         if (adminSnapshot.empty) {
             alert("Login ditolak. Anda bukan admin.");
         } else {
             // Proceed with login if the email is found in DataAdmin
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
             const idToken = await user.getIdToken();
 
@@ -65,18 +64,24 @@ signupForm.addEventListener("submit", async (e) => {
 
     try {
         // Check if the admin code is valid
-        const adminCodeQuery = query(collection(db, "adminCodes"), where("code", "==", adminCode));
-        const adminCodeSnapshot = await getDocs(adminCodeQuery);
+        const adminCodeQuery = db.collection("adminCodes").where("code", "==", adminCode);
+        const adminCodeSnapshot = await adminCodeQuery.get();
 
         if (adminCodeSnapshot.empty) {
             alert("Kode admin tidak valid.");
         } else {
             // Proceed with sign up if admin code is valid
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
             // Save user data to Firestore in DataAdmin collection
-            await setDoc(doc(db, "DataAdmin", user.uid), {
+            await db.collection("DataAdmin").doc(user.uid).set({
+                name: name,
+                email: email,
+                adminCode: adminCode
+            });
+            // JUGA simpan ke koleksi cmsUsers agar backend login CMS selalu valid
+            await db.collection("cmsUsers").doc(user.uid).set({
                 name: name,
                 email: email,
                 adminCode: adminCode
@@ -90,20 +95,20 @@ signupForm.addEventListener("submit", async (e) => {
     }
 });
 
-// Handle Forgot Password with email validation
+// Handle Forgot Password dengan email validation
 forgotPasswordLink.addEventListener("click", async () => {
     const email = prompt("Masukkan email Anda untuk reset password:");
     if (email) {
         try {
             // Check if the email is registered in Firestore
-            const usersQuery = query(collection(db, "DataAdmin"), where("email", "==", email));
-            const querySnapshot = await getDocs(usersQuery);
+            const usersQuery = db.collection("DataAdmin").where("email", "==", email);
+            const querySnapshot = await usersQuery.get();
 
             if (querySnapshot.empty) {
                 alert("Email tidak terdaftar.");
             } else {
                 // Email exists, proceed with sending the reset password email
-                await sendPasswordResetEmail(auth, email);
+                await auth.sendPasswordResetEmail(email);
                 alert("Link reset password telah dikirim ke email Anda!");
             }
         } catch (error) {

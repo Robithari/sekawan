@@ -158,11 +158,49 @@ h1 {
     background-color: #5a6268;
 }
 
+/* Pewarnaan baris tabel iuran sesuai permintaan */
+.table-row-even {
+  background-color: #fff9c4 !important; /* kuning muda */
+}
+.table-row-odd {
+  background-color: #ffffff !important;
+}
+.total-row {
+  background-color: #c8e6c9 !important; /* hijau muda */
+  font-weight: bold !important;
+}
+
+/* Validasi error: tingkatkan kontras dan visibilitas untuk aksesibilitas */
+input.is-invalid, select.is-invalid, textarea.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.25rem rgba(220,53,69,.45) !important; /* lebih tebal dan kontras */
+    background-color: #fff6f6 !important; /* latar belakang merah muda lembut untuk visibilitas */
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+    display: block;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    background: #fff6f6;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
 /* Responsif untuk layar kecil */
 @media (max-width: 576px) {
     .search-container {
         padding: 6px;
         /* Mengurangi padding pada layar kecil */
+    }
+
+    .container-data-donasi {
+        margin-top: 50px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
     }
 
     .button-group .btn {
@@ -188,9 +226,6 @@ h1 {
     }
 }
 
-/* END kolom pencarian */
-
-
 @media (max-width: 768px) {
     .container-iuran {
         padding: 10px;
@@ -215,4 +250,19 @@ h1 {
 
 .table-responsive {
     margin-top: -25px !important;
+}
+
+  .container-data-donasi {
+    margin-top: 50px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+/* Aturan khusus untuk container-data-donasi pada perangkat mobile */
+@media (max-width: 767px) {
+  .container-data-donasi {
+    margin-top: 50px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
 }

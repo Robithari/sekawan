@@ -1,49 +1,79 @@
-const axios = require('axios'); // Untuk mengambil data dari Google Apps Script API
-const db = require("../config/firebase"); // Untuk mengambil data dari Firestore
 
-// Fungsi untuk mengambil data dokumentasi dari Google Apps Script API
-async function getDokumentasiData() {
+const dokumentasiModel = require('../models/dokumentasiModel');
+
+// Ambil semua dokumentasi
+async function getAllDokumentasi(req, res) {
   try {
-    const response = await axios.get('https://script.googleusercontent.com/macros/echo?user_content_key=CZfT4ukELTEw74U8y4_OVSdJA0MoRPTnbfrM_pEJnBf_yj0iY0f6c9xlI4u9RgHKuk3zOPedAt89EJiJW5Ng1pQVVtY5QfDsm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnFp8IpH6vIoxlz6z1vHvBGveIMkwE5hxhRZgrX7pPlQO98dtL__CtYPa3KdNnIXbUm9WnqK1sm1dRh5mrQJuQ_bE78tZtLS8jw&lib=MOgvvmbSEQE02bq4Gi45tbleS6DrsjUUV');
-    const dokumentasiData = response.data.DOKUMENTASI || [];
-
-    // Format data jika diperlukan
-    dokumentasiData.forEach(doc => {
-      if (doc.TANGGAL) {
-        doc.TANGGAL = new Date(doc.TANGGAL).toLocaleDateString(); // Format tanggal menjadi DD-MM-YYYY
-      }
-    });
-
-    return dokumentasiData;
-  } catch (error) {
-    console.error('Error mengambil data dokumentasi:', error);
-    throw new Error('Error mengambil data dokumentasi');
+    const data = await dokumentasiModel.getAllDokumentasi();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 }
 
-// Fungsi untuk mengambil data footer dari Firestore
-async function getFooterData() {
+// Tambah dokumentasi
+async function addDokumentasi(req, res) {
   try {
-    const snapshotFooter = await db.collection("footer").get();
-    const footerData = snapshotFooter.docs.map(doc => doc.data())[0] || {}; // Ambil data footer pertama
-    return footerData;
-  } catch (error) {
-    console.error("Error mengambil data footer:", error);
-    throw new Error('Error mengambil data footer');
+    // Ambil hanya field yang memang ada di form (keterangan, link_foto)
+    const { keterangan, link_foto, tanggal } = req.body;
+    // Validasi minimal field wajib
+    if (!keterangan || !link_foto) {
+      return res.status(400).json({ error: 'Keterangan dan Link Foto wajib diisi.' });
+    }
+    // Isi field tanggal dengan hari ini jika tidak ada
+    let tanggalFinal = tanggal;
+    if (!tanggalFinal) {
+      const now = new Date();
+      tanggalFinal = now.toISOString().slice(0, 10); // yyyy-mm-dd
+    }
+    const data = {
+      keterangan: keterangan,
+      'LINK FOTO': link_foto,
+      tanggal: tanggalFinal,
+      createdAt: new Date().toISOString()
+    };
+    const result = await dokumentasiModel.addDokumentasi(data);
+    res.json({ message: 'Dokumentasi berhasil ditambah', ...result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 }
 
-// Endpoint untuk mengirimkan data dokumentasi dan footer ke view
-async function renderDokumentasiPage(req, res) {
+// Update dokumentasi
+async function updateDokumentasi(req, res) {
   try {
-    const dokumentasiData = await getDokumentasiData(); // Ambil data dokumentasi dari API
-    const footerData = await getFooterData(); // Ambil data footer dari Firestore
-    res.render("dokumentasi", { dokumentasiData, footerData }); // Kirimkan data ke template EJS
-  } catch (error) {
-    res.status(500).send("Terjadi kesalahan pada server");
+    const { id } = req.params;
+    const { keterangan, link_foto } = req.body;
+    if (!keterangan || !link_foto) {
+      return res.status(400).json({ error: 'Keterangan dan Link Foto wajib diisi.' });
+    }
+    const data = {
+      keterangan: keterangan,
+      'LINK FOTO': link_foto,
+      updatedAt: new Date().toISOString()
+    };
+    const result = await dokumentasiModel.updateDokumentasi(id, data);
+    res.json({ message: 'Dokumentasi berhasil diupdate', ...result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+// Hapus dokumentasi
+async function deleteDokumentasi(req, res) {
+  try {
+    const { id } = req.params;
+    await dokumentasiModel.deleteDokumentasi(id);
+    res.json({ message: 'Dokumentasi berhasil dihapus', id });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 }
 
 module.exports = {
-  renderDokumentasiPage
+  getAllDokumentasi,
+  addDokumentasi,
+  updateDokumentasi,
+  deleteDokumentasi
 };
+

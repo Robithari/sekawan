@@ -32,9 +32,9 @@ router.get('/jadwal', (req, res) => {
   res.render('jadwal'); 
 });
 
-// Route untuk halaman dokumentasi
+// Route untuk halaman dokumentasi (hanya render EJS, backend dokumentasi sudah dihapus)
 router.get('/dokumentasi', (req, res) => {
-  res.render('dokumentasi'); 
+  res.render('dokumentasi');
 });
 
 // Route untuk halaman inventaris
@@ -55,6 +55,11 @@ router.get('/rangkuman-berita', (req, res) => {
 // Route untuk halaman artikel
 router.get('/rangkuman-artikel', (req, res) => {
   res.render('rangkuman-artikel'); 
+});
+
+// Route untuk halaman edit kas di CMS
+router.get('/cms/edit-kas', (req, res) => {
+  res.render('cms-edit-kas');
 });
 
 // Export router
